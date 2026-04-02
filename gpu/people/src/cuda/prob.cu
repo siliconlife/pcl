@@ -262,8 +262,8 @@ namespace pcl
 
       KernelCUDA_SelectLabel<<< grid, block >>>( labels, probabilities );
 
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );
     }
 
     /** \brief This will combine two probabilities according their weight **/
@@ -281,8 +281,8 @@ namespace pcl
       // CUDA kernel call
       KernelCUDA_CombineProb<<< grid, block >>>( probIn1, weight1, probIn2, weight2, probOut );
 
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );
     }
 
     /** \brief This will combine two probabilities according their weight **/
@@ -298,8 +298,8 @@ namespace pcl
       // CUDA kernel call
       KernelCUDA_WeightedSumProb<<< grid, block >>>( probIn, weight, probOut );
 
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );
     }
 
     /** \brief This will blur the input labelprobability with the given kernel **/
@@ -335,13 +335,13 @@ namespace pcl
       // CUDA kernel call Vertical
       KernelCUDA_GaussianBlurVer<<< grid, block >>>( probIn, kernel, kernel.size(), probTemp );
       //KernelCUDA_GaussianBlurVer<<< grid, block >>>( probIn, kernel, kernel.size(), probOut );
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );
 
       // CUDA kernel call Horizontal
       KernelCUDA_GaussianBlurHor<<< grid, block >>>( probTemp, kernel, kernel.size(), probOut );
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );
       return 1;
     }
   }

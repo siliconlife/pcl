@@ -72,8 +72,8 @@ pcl::device::ConnectedComponents::initEdges(int rows, int cols, DeviceArray2D<un
   dim3 grid(divUp(ecols, block.x), divUp(erows, block.y));
 
   fillInvalidEdges<<<grid, block>>>(edges);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -175,8 +175,8 @@ pcl::device::ConnectedComponents::computeEdges(const Labels& labels, const Depth
   dim3 grid(divUp(labels.cols(), block.x), divUp(labels.rows(), block.y));
  
   computeEdgesKernel<<<grid, block>>>(labels, depth, intr, num_parts, sq_radius, edges);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -373,7 +373,7 @@ namespace pcl
 //    {        
 //        static __device__ __forceinline__ void CG(int &val, int* ptr)
 //        {
-//          #if (__CUDA_ARCH__ >= 200)
+//          #if (__MUSA_ARCH__ >= 200)
 //            asm("ld.global.cg.s32 %0, [%1];" : "=r"(reinterpret_cast<int&>(val)) : _ASM_PTR_(ptr));
 //          #else
 //            val = *ptr;
@@ -399,7 +399,7 @@ namespace pcl
         return label;
     }
 
-    texture<unsigned char, 2, cudaReadModeElementType> edgesTex;
+    texture<unsigned char, 2, musaReadModeElementType> edgesTex;
     
     struct TilesMerge
     {           
@@ -527,8 +527,8 @@ void pcl::device::ConnectedComponents::labelComponents(const DeviceArray2D<unsig
   dim3 grid(divUp(edges.cols(), TILE_COLS), divUp(edges.rows(), TILE_ROWS));
   
   smemTilesKernel<<<grid, block>>>(edges, comps);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 
   TextureBinder binder(edges, edgesTex);
 
@@ -548,8 +548,8 @@ void pcl::device::ConnectedComponents::labelComponents(const DeviceArray2D<unsig
   grid.y = edges.rows()/(tm.tileSizeY * tm.tilesNumY);
   
   mergeKernel<<<grid, 768>>>(tm);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 
   //merge 5x5 -> 1x1 grid
   tm.tileSizeX = TILE_COLS * tm.tilesNumX;
@@ -561,12 +561,12 @@ void pcl::device::ConnectedComponents::labelComponents(const DeviceArray2D<unsig
   grid.y = edges.rows()/(tm.tileSizeY * tm.tilesNumY); 
 
   mergeKernel<<<grid, 1024>>>(tm);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 
   grid.x = divUp(edges.cols(), block.x);
   grid.y = divUp(edges.rows(), block.y);
   flattenTreesKernel<<<grid, block>>>(comps, edges);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }

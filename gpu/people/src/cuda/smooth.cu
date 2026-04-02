@@ -144,8 +144,8 @@ void pcl::device::smoothLabelImage(const Labels& src, const Depth& depth, Labels
   else
     throw std::exception(); //should instanciate another smoothKernel<N>
 
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }
 
 

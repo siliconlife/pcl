@@ -40,13 +40,13 @@
 
 
 #include <vector>
-#include <cuda_runtime.h>
+#include <musa_runtime.h>
 #include "NPP_staging.hpp"
 
 
-texture<Ncv8u,  1, cudaReadModeElementType> tex8u;
-texture<Ncv32u, 1, cudaReadModeElementType> tex32u;
-texture<uint2,  1, cudaReadModeElementType> tex64u;
+texture<Ncv8u,  1, musaReadModeElementType> tex8u;
+texture<Ncv32u, 1, musaReadModeElementType> tex32u;
+texture<uint2,  1, musaReadModeElementType> tex64u;
 
 
 //==============================================================================
@@ -56,19 +56,19 @@ texture<uint2,  1, cudaReadModeElementType> tex64u;
 //==============================================================================
 
 
-static cudaStream_t nppStream = 0;
+static musaStream_t nppStream = 0;
 
 
-cudaStream_t nppStGetActiveCUDAstream(void)
+musaStream_t nppStGetActiveCUDAstream(void)
 {
     return nppStream;
 }
 
 
 
-cudaStream_t nppStSetActiveCUDAstream(cudaStream_t cudaStream)
+musaStream_t nppStSetActiveCUDAstream(musaStream_t cudaStream)
 {
-    cudaStream_t tmp = nppStream;
+    musaStream_t tmp = nppStream;
     nppStream = cudaStream;
     return tmp;
 }
@@ -298,16 +298,16 @@ template <bool tbDoSqr, class T_in, class T_out>
 NCVStatus scanRowsWrapperDevice(T_in *d_src, Ncv32u srcStride,
                                 T_out *d_dst, Ncv32u dstStride, NcvSize32u roi)
 {
-    cudaChannelFormatDesc cfdTex;
+    musaChannelFormatDesc cfdTex;
     size_t alignmentOffset = 0;
     if (sizeof(T_in) == 1)
     {
-        cfdTex = cudaCreateChannelDesc<Ncv8u>();
-        ncvAssertCUDAReturn(cudaBindTexture(&alignmentOffset, tex8u, d_src, cfdTex, roi.height * srcStride), NPPST_TEXTURE_BIND_ERROR);
+        cfdTex = musaCreateChannelDesc<Ncv8u>();
+        ncvAssertCUDAReturn(musaBindTexture(&alignmentOffset, tex8u, d_src, cfdTex, roi.height * srcStride), NPPST_TEXTURE_BIND_ERROR);
         if (alignmentOffset > 0)
         {
-            ncvAssertCUDAReturn(cudaUnbindTexture(tex8u), NCV_CUDA_ERROR);
-            ncvAssertCUDAReturn(cudaBindTexture(&alignmentOffset, tex8u, d_src, cfdTex, alignmentOffset + roi.height * srcStride), NPPST_TEXTURE_BIND_ERROR);
+            ncvAssertCUDAReturn(musaUnbindTexture(tex8u), NCV_CUDA_ERROR);
+            ncvAssertCUDAReturn(musaBindTexture(&alignmentOffset, tex8u, d_src, cfdTex, alignmentOffset + roi.height * srcStride), NPPST_TEXTURE_BIND_ERROR);
         }
     }
     scanRows
@@ -452,7 +452,7 @@ NCVStatus ncvSquaredIntegralImage_device(Ncv8u *d_src, Ncv32u srcStep,
 }
 
 
-NCVStatus nppiStIntegralGetSize_8u32u(NcvSize32u roiSize, Ncv32u *pBufsize, cudaDeviceProp &devProp)
+NCVStatus nppiStIntegralGetSize_8u32u(NcvSize32u roiSize, Ncv32u *pBufsize, musaDeviceProp &devProp)
 {
     ncvAssertReturn(pBufsize != NULL, NPPST_NULL_POINTER_ERROR);
     ncvAssertReturn(roiSize.width > 0 && roiSize.height > 0, NPPST_INVALID_ROI);
@@ -470,7 +470,7 @@ NCVStatus nppiStIntegralGetSize_8u32u(NcvSize32u roiSize, Ncv32u *pBufsize, cuda
 }
 
 
-NCVStatus nppiStIntegralGetSize_32f32f(NcvSize32u roiSize, Ncv32u *pBufsize, cudaDeviceProp &devProp)
+NCVStatus nppiStIntegralGetSize_32f32f(NcvSize32u roiSize, Ncv32u *pBufsize, musaDeviceProp &devProp)
 {
     ncvAssertReturn(pBufsize != NULL, NPPST_NULL_POINTER_ERROR);
     ncvAssertReturn(roiSize.width > 0 && roiSize.height > 0, NPPST_INVALID_ROI);
@@ -488,7 +488,7 @@ NCVStatus nppiStIntegralGetSize_32f32f(NcvSize32u roiSize, Ncv32u *pBufsize, cud
 }
 
 
-NCVStatus nppiStSqrIntegralGetSize_8u64u(NcvSize32u roiSize, Ncv32u *pBufsize, cudaDeviceProp &devProp)
+NCVStatus nppiStSqrIntegralGetSize_8u64u(NcvSize32u roiSize, Ncv32u *pBufsize, musaDeviceProp &devProp)
 {
     ncvAssertReturn(pBufsize != NULL, NPPST_NULL_POINTER_ERROR);
     ncvAssertReturn(roiSize.width > 0 && roiSize.height > 0, NPPST_INVALID_ROI);
@@ -509,7 +509,7 @@ NCVStatus nppiStSqrIntegralGetSize_8u64u(NcvSize32u roiSize, Ncv32u *pBufsize, c
 NCVStatus nppiStIntegral_8u32u_C1R(Ncv8u *d_src, Ncv32u srcStep,
                                    Ncv32u *d_dst, Ncv32u dstStep,
                                    NcvSize32u roiSize, Ncv8u *pBuffer,
-                                   Ncv32u bufSize, cudaDeviceProp &devProp)
+                                   Ncv32u bufSize, musaDeviceProp &devProp)
 {
     NCVMemStackAllocator gpuAllocator(NCVMemoryTypeDevice, bufSize, static_cast<Ncv32u>(devProp.textureAlignment), pBuffer);
     ncvAssertReturn(gpuAllocator.isInitialized(), NPPST_MEM_INTERNAL_ERROR);
@@ -524,7 +524,7 @@ NCVStatus nppiStIntegral_8u32u_C1R(Ncv8u *d_src, Ncv32u srcStep,
 NCVStatus nppiStIntegral_32f32f_C1R(Ncv32f *d_src, Ncv32u srcStep,
                                     Ncv32f *d_dst, Ncv32u dstStep,
                                     NcvSize32u roiSize, Ncv8u *pBuffer,
-                                    Ncv32u bufSize, cudaDeviceProp &devProp)
+                                    Ncv32u bufSize, musaDeviceProp &devProp)
 {
     NCVMemStackAllocator gpuAllocator(NCVMemoryTypeDevice, bufSize, static_cast<Ncv32u>(devProp.textureAlignment), pBuffer);
     ncvAssertReturn(gpuAllocator.isInitialized(), NPPST_MEM_INTERNAL_ERROR);
@@ -539,7 +539,7 @@ NCVStatus nppiStIntegral_32f32f_C1R(Ncv32f *d_src, Ncv32u srcStep,
 NCVStatus nppiStSqrIntegral_8u64u_C1R(Ncv8u *d_src, Ncv32u srcStep,
                                       Ncv64u *d_dst, Ncv32u dstStep,
                                       NcvSize32u roiSize, Ncv8u *pBuffer,
-                                      Ncv32u bufSize, cudaDeviceProp &devProp)
+                                      Ncv32u bufSize, musaDeviceProp &devProp)
 {
     NCVMemStackAllocator gpuAllocator(NCVMemoryTypeDevice, bufSize, static_cast<Ncv32u>(devProp.textureAlignment), pBuffer);
     ncvAssertReturn(gpuAllocator.isInitialized(), NPPST_MEM_INTERNAL_ERROR);
@@ -743,22 +743,22 @@ static NCVStatus decimateWrapperDevice(T *d_src, Ncv32u srcStep,
     }
     else
     {
-        cudaChannelFormatDesc cfdTexSrc;
+        musaChannelFormatDesc cfdTexSrc;
 
         if (sizeof(T) == sizeof(Ncv32u))
         {
-            cfdTexSrc = cudaCreateChannelDesc<Ncv32u>();
+            cfdTexSrc = musaCreateChannelDesc<Ncv32u>();
 
             size_t alignmentOffset;
-            ncvAssertCUDAReturn(cudaBindTexture(&alignmentOffset, tex32u, d_src, cfdTexSrc, srcRoi.height * srcStep * sizeof(T)), NPPST_TEXTURE_BIND_ERROR);
+            ncvAssertCUDAReturn(musaBindTexture(&alignmentOffset, tex32u, d_src, cfdTexSrc, srcRoi.height * srcStep * sizeof(T)), NPPST_TEXTURE_BIND_ERROR);
             ncvAssertReturn(alignmentOffset==0, NPPST_TEXTURE_BIND_ERROR);
         }
         else
         {
-            cfdTexSrc = cudaCreateChannelDesc<uint2>();
+            cfdTexSrc = musaCreateChannelDesc<uint2>();
 
             size_t alignmentOffset;
-            ncvAssertCUDAReturn(cudaBindTexture(&alignmentOffset, tex64u, d_src, cfdTexSrc, srcRoi.height * srcStep * sizeof(T)), NPPST_TEXTURE_BIND_ERROR);
+            ncvAssertCUDAReturn(musaBindTexture(&alignmentOffset, tex64u, d_src, cfdTexSrc, srcRoi.height * srcStep * sizeof(T)), NPPST_TEXTURE_BIND_ERROR);
             ncvAssertReturn(alignmentOffset==0, NPPST_TEXTURE_BIND_ERROR);
         }
 
@@ -980,15 +980,15 @@ NCVStatus nppiStRectStdDev_32f_C1R(Ncv32u *d_sum, Ncv32u sumStep,
     }
     else
     {
-        cudaChannelFormatDesc cfdTexSrc;
-        cudaChannelFormatDesc cfdTexSqr;
-        cfdTexSrc = cudaCreateChannelDesc<Ncv32u>();
-        cfdTexSqr = cudaCreateChannelDesc<uint2>();
+        musaChannelFormatDesc cfdTexSrc;
+        musaChannelFormatDesc cfdTexSqr;
+        cfdTexSrc = musaCreateChannelDesc<Ncv32u>();
+        cfdTexSqr = musaCreateChannelDesc<uint2>();
 
         size_t alignmentOffset;
-        ncvAssertCUDAReturn(cudaBindTexture(&alignmentOffset, tex32u, d_sum, cfdTexSrc, (roi.height + rect.y + rect.height) * sumStep * sizeof(Ncv32u)), NPPST_TEXTURE_BIND_ERROR);
+        ncvAssertCUDAReturn(musaBindTexture(&alignmentOffset, tex32u, d_sum, cfdTexSrc, (roi.height + rect.y + rect.height) * sumStep * sizeof(Ncv32u)), NPPST_TEXTURE_BIND_ERROR);
         ncvAssertReturn(alignmentOffset==0, NPPST_TEXTURE_BIND_ERROR);
-        ncvAssertCUDAReturn(cudaBindTexture(&alignmentOffset, tex64u, d_sqsum, cfdTexSqr, (roi.height + rect.y + rect.height) * sqsumStep * sizeof(Ncv64u)), NPPST_TEXTURE_BIND_ERROR);
+        ncvAssertCUDAReturn(musaBindTexture(&alignmentOffset, tex64u, d_sqsum, cfdTexSqr, (roi.height + rect.y + rect.height) * sqsumStep * sizeof(Ncv64u)), NPPST_TEXTURE_BIND_ERROR);
         ncvAssertReturn(alignmentOffset==0, NPPST_TEXTURE_BIND_ERROR);
 
         rectStdDev_32f_C1R
@@ -1490,9 +1490,9 @@ NCVStatus compactVector_32u_device(Ncv32u *d_src, Ncv32u srcLen,
     //get number of dst elements
     if (dstLenPinned != NULL)
     {
-        ncvAssertCUDAReturn(cudaMemcpyAsync(dstLenPinned, d_numDstElements.ptr(), sizeof(Ncv32u),
-                                              cudaMemcpyDeviceToHost, nppStGetActiveCUDAstream()), NPPST_MEM_RESIDENCE_ERROR);
-        ncvAssertCUDAReturn(cudaStreamSynchronize(nppStGetActiveCUDAstream()), NPPST_MEM_RESIDENCE_ERROR);
+        ncvAssertCUDAReturn(musaMemcpyAsync(dstLenPinned, d_numDstElements.ptr(), sizeof(Ncv32u),
+                                              musaMemcpyDeviceToHost, nppStGetActiveCUDAstream()), NPPST_MEM_RESIDENCE_ERROR);
+        ncvAssertCUDAReturn(musaStreamSynchronize(nppStGetActiveCUDAstream()), NPPST_MEM_RESIDENCE_ERROR);
     }
 
     NCV_SKIP_COND_END
@@ -1501,7 +1501,7 @@ NCVStatus compactVector_32u_device(Ncv32u *d_src, Ncv32u srcLen,
 }
 
 
-NCVStatus nppsStCompactGetSize_32u(Ncv32u srcLen, Ncv32u *pBufsize, cudaDeviceProp &devProp)
+NCVStatus nppsStCompactGetSize_32u(Ncv32u srcLen, Ncv32u *pBufsize, musaDeviceProp &devProp)
 {
     ncvAssertReturn(pBufsize != NULL, NPPST_NULL_POINTER_ERROR);
 
@@ -1523,13 +1523,13 @@ NCVStatus nppsStCompactGetSize_32u(Ncv32u srcLen, Ncv32u *pBufsize, cudaDevicePr
 }
 
 
-NCVStatus nppsStCompactGetSize_32s(Ncv32u srcLen, Ncv32u *pBufsize, cudaDeviceProp &devProp)
+NCVStatus nppsStCompactGetSize_32s(Ncv32u srcLen, Ncv32u *pBufsize, musaDeviceProp &devProp)
 {
     return nppsStCompactGetSize_32u(srcLen, pBufsize, devProp);
 }
 
 
-NCVStatus nppsStCompactGetSize_32f(Ncv32u srcLen, Ncv32u *pBufsize, cudaDeviceProp &devProp)
+NCVStatus nppsStCompactGetSize_32f(Ncv32u srcLen, Ncv32u *pBufsize, musaDeviceProp &devProp)
 {
     return nppsStCompactGetSize_32u(srcLen, pBufsize, devProp);
 }
@@ -1538,7 +1538,7 @@ NCVStatus nppsStCompactGetSize_32f(Ncv32u srcLen, Ncv32u *pBufsize, cudaDevicePr
 NCVStatus nppsStCompact_32u(Ncv32u *d_src, Ncv32u srcLen,
                             Ncv32u *d_dst, Ncv32u *p_dstLen,
                             Ncv32u elemRemove, Ncv8u *pBuffer,
-                            Ncv32u bufSize, cudaDeviceProp &devProp)
+                            Ncv32u bufSize, musaDeviceProp &devProp)
 {
     NCVMemStackAllocator gpuAllocator(NCVMemoryTypeDevice, bufSize, static_cast<Ncv32u>(devProp.textureAlignment), pBuffer);
     ncvAssertReturn(gpuAllocator.isInitialized(), NPPST_MEM_INTERNAL_ERROR);
@@ -1554,7 +1554,7 @@ NCVStatus nppsStCompact_32u(Ncv32u *d_src, Ncv32u srcLen,
 NCVStatus nppsStCompact_32s(Ncv32s *d_src, Ncv32u srcLen,
                             Ncv32s *d_dst, Ncv32u *p_dstLen,
                             Ncv32s elemRemove, Ncv8u *pBuffer,
-                            Ncv32u bufSize, cudaDeviceProp &devProp)
+                            Ncv32u bufSize, musaDeviceProp &devProp)
 {
     return nppsStCompact_32u((Ncv32u *)d_src, srcLen, (Ncv32u *)d_dst, p_dstLen,
                              *(Ncv32u *)&elemRemove, pBuffer, bufSize, devProp);
@@ -1564,7 +1564,7 @@ NCVStatus nppsStCompact_32s(Ncv32s *d_src, Ncv32u srcLen,
 NCVStatus nppsStCompact_32f(Ncv32f *d_src, Ncv32u srcLen,
                             Ncv32f *d_dst, Ncv32u *p_dstLen,
                             Ncv32f elemRemove, Ncv8u *pBuffer,
-                            Ncv32u bufSize, cudaDeviceProp &devProp)
+                            Ncv32u bufSize, musaDeviceProp &devProp)
 {
     return nppsStCompact_32u((Ncv32u *)d_src, srcLen, (Ncv32u *)d_dst, p_dstLen,
                              *(Ncv32u *)&elemRemove, pBuffer, bufSize, devProp);
@@ -1624,8 +1624,8 @@ NCVStatus nppsStCompact_32f_host(Ncv32f *h_src, Ncv32u srcLen,
 //==============================================================================
 
 
-texture <float, 1, cudaReadModeElementType> texSrc;
-texture <float, 1, cudaReadModeElementType> texKernel;
+texture <float, 1, musaReadModeElementType> texSrc;
+texture <float, 1, musaReadModeElementType> texKernel;
 
 
 __forceinline__ __device__ float getValueMirrorRow(const int rowOffset,
@@ -1756,12 +1756,12 @@ NCVStatus nppiStFilterRowBorder_32f_C1R(const Ncv32f *pSrc,
         oROI.height = srcSize.height - oROI.y;
     }
 
-    cudaChannelFormatDesc floatChannel = cudaCreateChannelDesc <float> ();
+    musaChannelFormatDesc floatChannel = musaCreateChannelDesc <float> ();
     texSrc.normalized    = false;
     texKernel.normalized = false;
 
-    cudaBindTexture (0, texSrc, pSrc, floatChannel, srcSize.height * nSrcStep);
-    cudaBindTexture (0, texKernel, pKernel, floatChannel, nKernelSize * sizeof (Ncv32f));
+    musaBindTexture (0, texSrc, pSrc, floatChannel, srcSize.height * nSrcStep);
+    musaBindTexture (0, texKernel, pKernel, floatChannel, nKernelSize * sizeof (Ncv32f));
 
     dim3 ctaSize (32, 6);
     dim3 gridSize ((oROI.width + ctaSize.x - 1) / ctaSize.x,
@@ -1828,12 +1828,12 @@ NCVStatus nppiStFilterColumnBorder_32f_C1R(const Ncv32f *pSrc,
         oROI.height = srcSize.height - oROI.y;
     }
 
-    cudaChannelFormatDesc floatChannel = cudaCreateChannelDesc <float> ();
+    musaChannelFormatDesc floatChannel = musaCreateChannelDesc <float> ();
     texSrc.normalized    = false;
     texKernel.normalized = false;
 
-    cudaBindTexture (0, texSrc, pSrc, floatChannel, srcSize.height * nSrcStep);
-    cudaBindTexture (0, texKernel, pKernel, floatChannel, nKernelSize * sizeof (Ncv32f));
+    musaBindTexture (0, texSrc, pSrc, floatChannel, srcSize.height * nSrcStep);
+    musaBindTexture (0, texKernel, pKernel, floatChannel, nKernelSize * sizeof (Ncv32f));
 
     dim3 ctaSize (32, 6);
     dim3 gridSize ((oROI.width + ctaSize.x - 1) / ctaSize.x,
@@ -1871,8 +1871,8 @@ inline Ncv32u iDivUp(Ncv32u num, Ncv32u denom)
 }
 
 
-texture<float, 2, cudaReadModeElementType> tex_src1;
-texture<float, 2, cudaReadModeElementType> tex_src0;
+texture<float, 2, musaReadModeElementType> tex_src1;
+texture<float, 2, musaReadModeElementType> tex_src0;
 
 
 __global__ void BlendFramesKernel(const float *u, const float *v,   // forward flow
@@ -1932,20 +1932,20 @@ NCVStatus BlendFrames(const Ncv32f *src0,
                       Ncv32f theta,
                       Ncv32f *out)
 {
-    tex_src1.addressMode[0] = cudaAddressModeClamp;
-    tex_src1.addressMode[1] = cudaAddressModeClamp;
-    tex_src1.filterMode = cudaFilterModeLinear;
+    tex_src1.addressMode[0] = musaAddressModeClamp;
+    tex_src1.addressMode[1] = musaAddressModeClamp;
+    tex_src1.filterMode = musaFilterModeLinear;
     tex_src1.normalized = false;
 
-    tex_src0.addressMode[0] = cudaAddressModeClamp;
-    tex_src0.addressMode[1] = cudaAddressModeClamp;
-    tex_src0.filterMode = cudaFilterModeLinear;
+    tex_src0.addressMode[0] = musaAddressModeClamp;
+    tex_src0.addressMode[1] = musaAddressModeClamp;
+    tex_src0.filterMode = musaFilterModeLinear;
     tex_src0.normalized = false;
 
-    cudaChannelFormatDesc desc = cudaCreateChannelDesc <float> ();
+    musaChannelFormatDesc desc = musaCreateChannelDesc <float> ();
     const Ncv32u pitch = stride * sizeof (float);
-    ncvAssertCUDAReturn (cudaBindTexture2D (0, tex_src1, src1, desc, width, height, pitch), NPPST_TEXTURE_BIND_ERROR);
-    ncvAssertCUDAReturn (cudaBindTexture2D (0, tex_src0, src0, desc, width, height, pitch), NPPST_TEXTURE_BIND_ERROR);
+    ncvAssertCUDAReturn (musaBindTexture2D (0, tex_src1, src1, desc, width, height, pitch), NPPST_TEXTURE_BIND_ERROR);
+    ncvAssertCUDAReturn (musaBindTexture2D (0, tex_src0, src0, desc, width, height, pitch), NPPST_TEXTURE_BIND_ERROR);
 
     dim3 threads (32, 4);
     dim3 blocks (iDivUp (width, threads.x), iDivUp (height, threads.y));
@@ -2070,7 +2070,7 @@ NCVStatus nppiStInterpolateFrames(const NppStInterpolationState *pState)
 //==============================================================================
 
 
-#if __CUDA_ARCH__ < 200
+#if __MUSA_ARCH__ < 200
 
 // FP32 atomic add
 static __forceinline__ __device__ float _atomicAdd(float *addr, float val)
@@ -2326,7 +2326,7 @@ NCVStatus nppiStVectorWarp_PSF2x2_32f_C1(const Ncv32f *pSrc,
 //==============================================================================
 
 
-texture <float, 2, cudaReadModeElementType> texSrc2D;
+texture <float, 2, musaReadModeElementType> texSrc2D;
 
 
 __forceinline__
@@ -2540,7 +2540,7 @@ NCVStatus nppiStResize_32f_C1R(const Ncv32f *pSrc,
     if (interpolation == nppStSupersample)
     {
         // bind texture
-        cudaBindTexture (0, texSrc, pSrc, srcSize.height * nSrcStep);
+        musaBindTexture (0, texSrc, pSrc, srcSize.height * nSrcStep);
         // invoke kernel
         dim3 ctaSize (32, 6);
         dim3 gridSize ((dstROI.width  + ctaSize.x - 1) / ctaSize.x,
@@ -2551,13 +2551,13 @@ NCVStatus nppiStResize_32f_C1R(const Ncv32f *pSrc,
     }
     else if (interpolation == nppStBicubic)
     {
-        texSrc2D.addressMode[0] = cudaAddressModeMirror;
-        texSrc2D.addressMode[1] = cudaAddressModeMirror;
+        texSrc2D.addressMode[0] = musaAddressModeMirror;
+        texSrc2D.addressMode[1] = musaAddressModeMirror;
         texSrc2D.normalized = true;
 
-        cudaChannelFormatDesc desc = cudaCreateChannelDesc <float> ();
+        musaChannelFormatDesc desc = musaCreateChannelDesc <float> ();
 
-        cudaBindTexture2D (0, texSrc2D, pSrc, desc, srcSize.width, srcSize.height,
+        musaBindTexture2D (0, texSrc2D, pSrc, desc, srcSize.width, srcSize.height,
             nSrcStep);
 
         dim3 ctaSize (32, 6);

@@ -70,8 +70,8 @@ namespace pcl
 {
   namespace device
   {
-    texture<unsigned short, 2, cudaReadModeElementType> depthTex;
-    texture<char4, 2, cudaReadModeElementType> multilabelTex;
+    texture<unsigned short, 2, musaReadModeElementType> depthTex;
+    texture<char4, 2, musaReadModeElementType> multilabelTex;
 
     __constant__ int constFGThresh;
 
@@ -156,15 +156,15 @@ namespace pcl
     {
       labels.create( depth.rows(), depth.cols() );
 
-      depthTex.addressMode[0] = cudaAddressModeClamp;
+      depthTex.addressMode[0] = musaAddressModeClamp;
       TextureBinder binder(depth, depthTex);      
 
       dim3 block(32, 8);      
       dim3 grid(divUp(depth.cols(), block.x), divUp(depth.rows(), block.y) );      
 
       KernelCUDA_runTree<<< grid, block >>>( focal, treeHeight, numNodes, nodes, leaves, labels);
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );      
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );      
     }
 
     void CUDA_runMultiTreePass ( int   FGThresh,
@@ -178,7 +178,7 @@ namespace pcl
                                  MultiLabels& multilabel )
     {
       //std::cout << "(I) : CUDA_runMultiTreePass() called" << std::endl;
-      depthTex.addressMode[0] = cudaAddressModeClamp;
+      depthTex.addressMode[0] = musaAddressModeClamp;
       TextureBinder binder(depth, depthTex);                  
 
       dim3 block(32, 8);
@@ -191,14 +191,14 @@ namespace pcl
       }
       else
       {
-        cudaSafeCall( cudaMemcpyToSymbol(constFGThresh, &FGThresh,  sizeof(FGThresh)) );
+        cudaSafeCall( musaMemcpyToSymbol(constFGThresh, &FGThresh,  sizeof(FGThresh)) );
 
         KernelCUDA_MultiTreePass<true><<< grid, block >>>( treeId, focal, treeHeight, 
             numNodes, nodes_device, leaves_device, depth, multilabel);
       }
 
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );      
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );      
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -311,10 +311,10 @@ namespace pcl
       //std::cout << "(I) : CUDA_runMultiTreeMerge() called" << std::endl;
       labels.create(depth.rows(), depth.cols());
 
-      depthTex.addressMode[0] = cudaAddressModeClamp;
+      depthTex.addressMode[0] = musaAddressModeClamp;
       TextureBinder binder(depth, depthTex);                  
 
-      multilabelTex.addressMode[0] = cudaAddressModeClamp;
+      multilabelTex.addressMode[0] = musaAddressModeClamp;
       TextureBinder mlabels_binder(multilabel, multilabelTex);      
 
       dim3 block(32, 8);      
@@ -322,8 +322,8 @@ namespace pcl
 
       KernelCUDA_MultiTreeMerge<<< grid, block >>>( numTrees, labels );
 
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );            
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );            
     }
 
     /** \brief This will merge the votes from the different trees into one final vote, including probabilistic's */
@@ -336,10 +336,10 @@ namespace pcl
       std::cout << "(I) : CUDA_runMultiTreeProb() called" << std::endl;
 
       //labels.create(depth.rows(), depth.cols());
-      //depthTex.addressMode[0] = cudaAddressModeClamp;
+      //depthTex.addressMode[0] = musaAddressModeClamp;
       //TextureBinder binder(depth, depthTex);
 
-      multilabelTex.addressMode[0] = cudaAddressModeClamp;
+      multilabelTex.addressMode[0] = musaAddressModeClamp;
       TextureBinder mlabels_binder(multilabel, multilabelTex);
 
       dim3 block(32, 8);      
@@ -347,8 +347,8 @@ namespace pcl
 
       KernelCUDA_MultiTreeCreateProb<<< grid, block >>>( numTrees, probabilities);
 
-      cudaSafeCall( cudaGetLastError() );
-      cudaSafeCall( cudaThreadSynchronize() );            
+      cudaSafeCall( musaGetLastError() );
+      cudaSafeCall( musaThreadSynchronize() );            
     }
   }
 }

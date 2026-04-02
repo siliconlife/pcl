@@ -2,7 +2,7 @@
 #include <pcl/gpu/utils/safe_call.hpp>
 #include <pcl/gpu/utils/texture_binder.hpp>
 #include <pcl/gpu/utils/device/limits.hpp>
-#include "npp.h"
+#include "mupp.h"
 
 #include <stdio.h>
 
@@ -10,7 +10,7 @@ namespace pcl
 {
   namespace device
   {
-    texture<uchar4, cudaTextureType1D, cudaReadModeElementType> cmapTex;
+    texture<uchar4, musaTextureType1D, musaReadModeElementType> cmapTex;
 
     __global__ void colorKernel(const PtrStepSz<unsigned char> labels, PtrStep<uchar4> output)
     {
@@ -45,7 +45,7 @@ namespace pcl
 
 void pcl::device::colorLMap(const Labels& labels, const DeviceArray<uchar4>& map, Image& rgba)
 {
-  cmapTex.addressMode[0] = cudaAddressModeClamp;
+  cmapTex.addressMode[0] = musaAddressModeClamp;
   TextureBinder binder(map, cmapTex);
   
   dim3 block(32, 8);
@@ -53,21 +53,21 @@ void pcl::device::colorLMap(const Labels& labels, const DeviceArray<uchar4>& map
 
   colorKernel<<< grid, block >>>( labels, rgba );
 
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaThreadSynchronize() );  
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaThreadSynchronize() );  
 }
 
 void pcl::device::mixedColorMap(const Labels& labels, const DeviceArray<uchar4>& map, const Image& rgba, Image& output)
 {
-  cmapTex.addressMode[0] = cudaAddressModeClamp;
+  cmapTex.addressMode[0] = musaAddressModeClamp;
   TextureBinder binder(map, cmapTex);
 
   dim3 block(32, 8);
   dim3 grid(divUp(labels.cols(), block.x), divUp(labels.rows(), block.y));
 
   mixedColorKernel<<<grid, block>>>(labels, rgba, output);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ void pcl::device::mixedColorMap(const Labels& labels, const DeviceArray<uchar4>&
 
 #if defined(__GNUC__)
   #define nppSafeCall(expr)  pcl::gpu::___nppSafeCall(expr, __FILE__, __LINE__, __func__)    
-#else /* defined(__CUDACC__) || defined(__MSVC__) */
+#else /* defined(__MUSACC__) || defined(__MSVC__) */
   #define nppSafeCall(expr)  pcl::gpu::___nppSafeCall(expr, __FILE__, __LINE__)    
 #endif
 
@@ -99,10 +99,10 @@ namespace pcl
 
 void pcl::device::setZero(Mask& mask)
 {
-  NppiSize sz;
+  MUppiSize sz;
   sz.width  = mask.cols();
   sz.height = mask.rows();   
-  nppSafeCall( nppiSet_8u_C1R( 0, mask, (int)mask.step(), sz) );
+  nppSafeCall( muppiSet_8u_C1R( 0, mask, (int)mask.step(), sz) );
 }
 
 void pcl::device::Dilatation::prepareRect5x5Kernel(DeviceArray<unsigned char>& kernel)
@@ -119,20 +119,20 @@ void pcl::device::Dilatation::invoke(const Mask& src, const Kernel& kernel, Mask
   dst.create(src.rows(), src.cols());  
   setZero(dst);
 
-  NppiSize sz;
+  MUppiSize sz;
   sz.width  = src.cols() - KSIZE_X;
   sz.height = src.rows() - KSIZE_Y; 
 
-  NppiSize ksz;
+  MUppiSize ksz;
   ksz.width  = KSIZE_X;
   ksz.height = KSIZE_Y;
 
-  NppiPoint anchor;
+  MUppiPoint anchor;
   anchor.x = ANCH_X;
   anchor.y = ANCH_Y;
 
   // This one uses Nvidia performance primitives
-  nppSafeCall( nppiDilate_8u_C1R(src.ptr(ANCH_Y) + ANCH_X, (int)src.step(), 
+  nppSafeCall( muppiDilate_8u_C1R(src.ptr(ANCH_Y) + ANCH_X, (int)src.step(), 
                                  dst.ptr(ANCH_Y) + ANCH_X, (int)dst.step(), sz, kernel, ksz, anchor) );
 }
 
@@ -169,8 +169,8 @@ void pcl::device::prepareForeGroundDepth(const Depth& depth1, Mask& inverse_mask
 
   fgDepthKernel<<< grid, block >>>( depth1, inverse_mask, depth2 );
 
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaThreadSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaThreadSynchronize() );
 }
 
 
@@ -251,8 +251,8 @@ void pcl::device::computeHueWithNans(const Image& rgba, const Depth& depth, HueI
 
   computeHueKernel<<<grid, block>>>(rgba, depth, hue);
 
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }
 
 namespace pcl
@@ -294,6 +294,6 @@ void pcl::device::computeCloud(const Depth& depth, const Intr& intr, Cloud& clou
 
   reprojectDepthKenrel<<<grid, block>>>(depth, intr, cloud);
 
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }
