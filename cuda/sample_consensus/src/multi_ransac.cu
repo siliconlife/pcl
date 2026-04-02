@@ -43,15 +43,15 @@
 
 #include <pcl/pcl_exports.h>
 
-#include "pcl/cuda/sample_consensus/multi_ransac.h"
-#include "pcl/cuda/time_gpu.h"
+#include "pcl/musa/sample_consensus/multi_ransac.h"
+#include "pcl/musa/time_gpu.h"
 #include <stdio.h>
-#include <pcl/cuda/time_cpu.h>
+#include <pcl/musa/time_cpu.h>
 //CUPRINTF #include "cuPrintf.cu"
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
 
     int min_nr_in_shape = 1;
@@ -60,12 +60,12 @@ namespace pcl
     template <template <typename> class Storage> bool
     MultiRandomSampleConsensus<Storage>::computeModel (int debug_verbosity_level)
     {
-      double starttime = pcl::cuda::getTime ();
+      double starttime = pcl::musa::getTime ();
       int counter = 0;
       // Warn and exit if no threshold was set
       if (threshold_ == DBL_MAX)
       {
-        std::cerr << "[pcl::cuda::MultiRandomSampleConsensus::computeModel] No threshold set!" << std::endl;
+        std::cerr << "[pcl::musa::MultiRandomSampleConsensus::computeModel] No threshold set!" << std::endl;
         return (false);
       }
 
@@ -110,7 +110,7 @@ namespace pcl
       ScopeTimeCPU t ("ALLLLLLLLLLL");
       do  // multiple models ..
       {
-        double now = pcl::cuda::getTime ();
+        double now = pcl::musa::getTime ();
         if ((now - starttime) > 1)
         {
           std::cout << "SLOW FRAME " << counter++ <<  std::endl;
@@ -189,7 +189,7 @@ namespace pcl
               k = log (1.0f - probability_) / log (p_no_outliers);
           }
 
-          //fprintf (stderr, "[pcl::cuda::MultiRandomSampleConsensus::computeModel] Trial %d out of %f: %d inliers (best is: %d so far).\n",
+          //fprintf (stderr, "[pcl::musa::MultiRandomSampleConsensus::computeModel] Trial %d out of %f: %d inliers (best is: %d so far).\n",
           //    cur_iteration, k, n_inliers_count, n_best_inliers_count);
           // check if we found a valid model
 

@@ -35,14 +35,14 @@
  *
  */
 
-#include <pcl/cuda/point_cloud.h>
-#include "pcl/cuda/io/host_device.h"
+#include <pcl/musa/point_cloud.h>
+#include "pcl/musa/io/host_device.h"
 
 #include <pcl/pcl_exports.h>
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
   
     template <template <typename> class Storage, template <typename> class OtherStorage>

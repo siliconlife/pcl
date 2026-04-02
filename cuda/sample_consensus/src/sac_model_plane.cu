@@ -35,8 +35,8 @@
  *
  */
 
-#include "pcl/cuda/sample_consensus/sac_model_plane.h"
-#include "pcl/cuda/cutil_math.h"
+#include "pcl/musa/sample_consensus/sac_model_plane.h"
+#include "pcl/musa/cutil_math.h"
 
 #include <vector_types.h>
 #include <thrust/copy.h>
@@ -48,7 +48,7 @@
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
     //////////////////////////////////////////////////////////////////////////
     template <template <typename> class Storage> 
@@ -232,7 +232,7 @@ namespace pcl
       // Needs a valid set of model coefficients
       if (model_coefficients.size () != 4)
       {
-        fprintf (stderr, "[pcl::cuda::SampleConsensusModelPlane::countWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
+        fprintf (stderr, "[pcl::musa::SampleConsensusModelPlane::countWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
         return 0;
       }
 
@@ -275,7 +275,7 @@ namespace pcl
       // Needs a valid set of model coefficients
       if (model_coefficients.size () != 4)
       {
-        fprintf (stderr, "[pcl::cuda::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
+        fprintf (stderr, "[pcl::musa::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
         return 0;
       }
 
@@ -321,7 +321,7 @@ namespace pcl
       // Needs a valid set of model coefficients
     /*  if (model_coefficients.size () != 4)
       {
-        fprintf (stderr, "[pcl::cuda::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
+        fprintf (stderr, "[pcl::musa::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
         return;
       }*/
 
@@ -366,7 +366,7 @@ namespace pcl
       // Needs a valid set of model coefficients
     /*  if (model_coefficients.size () != 4)
       {
-        fprintf (stderr, "[pcl::cuda::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
+        fprintf (stderr, "[pcl::musa::SampleConsensusModelPlane::selectWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
         return;
       }*/
 

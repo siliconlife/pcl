@@ -4,7 +4,7 @@ set(SUBSYS_DEPS )
 
 OPTION(BUILD_CUDA "Build the CUDA-related subsystems" ${DEFAULT})
 
-if(BUILD_CUDA AND CUDA_FOUND)
+if(BUILD_CUDA AND (CUDA_FOUND OR MUSA_FOUND))
 
     if(CMAKE_COMPILER_IS_GNUCXX)
         string(REPLACE "-Wold-style-cast" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")

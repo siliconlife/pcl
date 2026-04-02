@@ -37,9 +37,9 @@
 
 #include <pcl/pcl_exports.h>
 
-#include <pcl/cuda/sample_consensus/sac_model_1point_plane.h>
-#include <pcl/cuda/common/eigen.h>
-#include <pcl/cuda/cutil_math.h>
+#include <pcl/musa/sample_consensus/sac_model_1point_plane.h>
+#include <pcl/musa/common/eigen.h>
+#include <pcl/musa/cutil_math.h>
 
 #include <thrust/copy.h>
 #include <thrust/count.h>
@@ -55,7 +55,7 @@
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
 
     //////////////////////////////////////////////////////////////////////////
@@ -551,7 +551,7 @@ namespace pcl
       // Needs a valid set of model coefficients
       if (model_coefficients.size () != 4)
       {
-        fprintf (stderr, "[pcl::cuda::SampleConsensusModel1PointPlane::countWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
+        fprintf (stderr, "[pcl::musa::SampleConsensusModel1PointPlane::countWithinDistance] Invalid number of model coefficients given (%lu)!\n", (unsigned long) model_coefficients.size ());
         return 0;
       }
 

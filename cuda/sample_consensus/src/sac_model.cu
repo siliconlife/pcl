@@ -41,8 +41,8 @@
 
 #include <pcl/pcl_exports.h>
 
-#include "pcl/cuda/sample_consensus/sac_model.h"
-#include "pcl/cuda/time_gpu.h"
+#include "pcl/musa/sample_consensus/sac_model.h"
+#include "pcl/musa/time_gpu.h"
 
 #include <thrust/replace.h>
 #include <thrust/copy.h>
@@ -52,7 +52,7 @@
 
 namespace pcl
 {
-  namespace cuda 
+  namespace musa 
   {
 
     template <template <typename> class Storage>

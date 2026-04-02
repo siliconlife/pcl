@@ -41,13 +41,13 @@
 # include <windows.h>
 #endif
 
-#include "pcl/cuda/sample_consensus/ransac.h"
-#include "pcl/cuda/time_gpu.h"
+#include "pcl/musa/sample_consensus/ransac.h"
+#include "pcl/musa/time_gpu.h"
 #include <stdio.h>
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
     //////////////////////////////////////////////////////////////////////////
     template <template <typename> class Storage> bool
@@ -56,7 +56,7 @@ namespace pcl
       // Warn and exit if no threshold was set
       if (threshold_ == DBL_MAX)
       {
-        std::cerr << "[pcl::cuda::RandomSampleConsensus::computeModel] No threshold set!" << std::endl;
+        std::cerr << "[pcl::musa::RandomSampleConsensus::computeModel] No threshold set!" << std::endl;
         return (false);
       }
 
@@ -85,7 +85,7 @@ namespace pcl
 
         if (selection.empty ()) 
         {
-          std::cerr << "[pcl::cuda::RandomSampleConsensus::computeModel] No samples could be selected!" << std::endl;
+          std::cerr << "[pcl::musa::RandomSampleConsensus::computeModel] No samples could be selected!" << std::endl;
           break;
         }
 
@@ -141,17 +141,17 @@ namespace pcl
 
         ++iterations_;
         if (debug_verbosity_level > 1)
-          fprintf (stderr, "[pcl::cuda::RandomSampleConsensus::computeModel] Trial %d out of %f: %d inliers (best is: %d so far).\n", iterations_, k, n_inliers_count, n_best_inliers_count);
+          fprintf (stderr, "[pcl::musa::RandomSampleConsensus::computeModel] Trial %d out of %f: %d inliers (best is: %d so far).\n", iterations_, k, n_inliers_count, n_best_inliers_count);
         if (iterations_ > max_iterations_)
         {
           if (debug_verbosity_level > 0)
-            std::cerr << "[pcl::cuda::RandomSampleConsensus::computeModel] RANSAC reached the maximum number of trials." << std::endl;
+            std::cerr << "[pcl::musa::RandomSampleConsensus::computeModel] RANSAC reached the maximum number of trials." << std::endl;
           break;
         }
       }
 
       if (debug_verbosity_level > 0)
-        fprintf (stderr, "[pcl::cuda::RandomSampleConsensus::computeModel] Model: %lu size, %d inliers.\n", (unsigned long) model_.size (), n_best_inliers_count);
+        fprintf (stderr, "[pcl::musa::RandomSampleConsensus::computeModel] Model: %lu size, %d inliers.\n", (unsigned long) model_.size (), n_best_inliers_count);
 
     //  if (model_.empty ())
     //  {

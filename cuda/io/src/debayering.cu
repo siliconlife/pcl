@@ -37,15 +37,15 @@
 
 #include <pcl/pcl_exports.h>
 
-#include <pcl/cuda/io/debayering.h>
+#include <pcl/musa/io/debayering.h>
 #include <iostream>
-#include <pcl/cuda/time_cpu.h>
-#include <pcl/cuda/thrust.h>
+#include <pcl/musa/time_cpu.h>
+#include <pcl/musa/thrust.h>
 
 #define ABS(x) ((x)>0)?(x):(-(x))
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
     template <template <typename> class Storage>
     YUV2RGBKernel<Storage>::YUV2RGBKernel
@@ -92,21 +92,21 @@ namespace pcl
       if (dataSize < bayer_image->getWidth () * bayer_image->getHeight ())
     	{
     		if (!global_data)
-    			cudaFree (global_data);
+    			musaFree (global_data);
     		dataSize = bayer_image->getWidth () * bayer_image->getHeight ();
-    		cudaError_t status = cudaMalloc( &data, dataSize );
-    		if (status != cudaSuccess )	std::cout << "malloc failed!" << std::endl;
+    		musaError_t status = musaMalloc( &data, dataSize );
+    		if (status != musaSuccess )	std::cout << "malloc failed!" << std::endl;
     		
     		data = global_data;
     	}
     	*/
     	
     /*	thrust::device_vector<unsigned char>* data;
-    	cudaError_t status = cudaMemcpy(data, (void*)(bayer_image->getMetaData().Data()), bayer_image->getMetaData().DataSize(), cudaMemcpyHostToDevice);
-    	if (status != cudaSuccess )
+    	musaError_t status = musaMemcpy(data, (void*)(bayer_image->getMetaData().Data()), bayer_image->getMetaData().DataSize(), musaMemcpyHostToDevice);
+    	if (status != musaSuccess )
     	{
     		 std::cout << "memcpy failed! : " << status << std::endl;
-    		 //std::cout << cudaErrorInvalidValue << " , " << cudaErrorInvalidDevicePointer << " , " << cudaErrorInvalidMemcpyDirection << std::endl;
+    		 //std::cout << musaErrorInvalidValue << " , " << musaErrorInvalidDevicePointer << " , " << musaErrorInvalidMemcpyDirection << std::endl;
     	}*/
     }
     
@@ -171,25 +171,25 @@ namespace pcl
     	if (dataSize < bayer_image->getWidth () * bayer_image->getHeight ())
     	{
     		if (!global_data)
-    			cudaFree (global_data);
+    			musaFree (global_data);
     		dataSize = bayer_image->getWidth () * bayer_image->getHeight ();
-    		cudaError_t status = cudaMalloc( &data, dataSize );
-    		if (status != cudaSuccess )	std::cout << "malloc failed!" << std::endl;
+    		musaError_t status = musaMalloc( &data, dataSize );
+    		if (status != musaSuccess )	std::cout << "malloc failed!" << std::endl;
     		
     		data = global_data;
     	}
     	
-    	cudaError_t status = cudaMemcpy(data, (void*)(bayer_image->getMetaData().Data()), bayer_image->getMetaData().DataSize(), cudaMemcpyHostToDevice);
-    	if (status != cudaSuccess )
+    	musaError_t status = musaMemcpy(data, (void*)(bayer_image->getMetaData().Data()), bayer_image->getMetaData().DataSize(), musaMemcpyHostToDevice);
+    	if (status != musaSuccess )
     	{
     		 std::cout << "memcpy failed! : " << status << std::endl;
-    		 //std::cout << cudaErrorInvalidValue << " , " << cudaErrorInvalidDevicePointer << " , " << cudaErrorInvalidMemcpyDirection << std::endl;
+    		 //std::cout << musaErrorInvalidValue << " , " << musaErrorInvalidDevicePointer << " , " << musaErrorInvalidMemcpyDirection << std::endl;
     	}
     }
     
     DebayerEdgeAware::~DebayerEdgeAware ()
     {
-    	//cudaFree (data);
+    	//musaFree (data);
     }
     
     OpenNIRGB DebayerEdgeAware::operator () (int index) const

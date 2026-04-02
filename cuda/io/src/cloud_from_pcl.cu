@@ -37,12 +37,12 @@
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
-#include "pcl/cuda/io/cloud_to_pcl.h"
+#include "pcl/musa/io/cloud_to_pcl.h"
 
 
 namespace pcl
 {
-namespace cuda
+namespace musa
 {
 
 void

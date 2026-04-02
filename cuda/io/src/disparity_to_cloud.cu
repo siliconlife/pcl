@@ -35,10 +35,10 @@
  *
  */
 
-#include "pcl/cuda/io/disparity_to_cloud.h"
-#include "pcl/cuda/io/debayering.h"
-#include "pcl/cuda/io/cloud_to_pcl.h"
-#include "pcl/cuda/io/kinect_smoothing.h"
+#include "pcl/musa/io/disparity_to_cloud.h"
+#include "pcl/musa/io/debayering.h"
+#include "pcl/musa/io/cloud_to_pcl.h"
+#include "pcl/musa/io/kinect_smoothing.h"
 
 #include <pcl/io/openni_camera/openni_image.h>
 #include <pcl/io/openni_camera/openni_depth_image.h>
@@ -51,7 +51,7 @@
 
 namespace pcl
 {
-namespace cuda
+namespace musa
 {
 
 

@@ -35,7 +35,7 @@
  *
  */
 
-#include "pcl/cuda/io/kinect_smoothing.h"
+#include "pcl/musa/io/kinect_smoothing.h"
 #include <thrust/iterator/constant_iterator.h>
 #include <string>
 #include <iostream>
@@ -43,7 +43,7 @@
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
   
     //////////////////////////////////////////////////////////////////////////

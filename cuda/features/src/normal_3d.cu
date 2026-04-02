@@ -35,11 +35,11 @@
  *
  */
 
-#include "pcl/cuda/features/normal_3d_kernels.h"
+#include "pcl/musa/features/normal_3d_kernels.h"
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
 
     template <typename InputIteratorT, typename OutputIteratorT, template <typename> class Storage>

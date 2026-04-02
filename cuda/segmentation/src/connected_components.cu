@@ -37,8 +37,8 @@
 
 #include <pcl/pcl_exports.h>
 
-#include <pcl/cuda/point_cloud.h>
-//#include <pcl/cuda/segmentation/connected_components.h>
+#include <pcl/musa/point_cloud.h>
+//#include <pcl/musa/segmentation/connected_components.h>
 #include <thrust/transform.h>
 
 //struct ConnectedComponentSegmentation
@@ -51,7 +51,7 @@
 
 namespace pcl
 {
-  namespace cuda
+  namespace musa
   {
     struct InlierLabeling
     {

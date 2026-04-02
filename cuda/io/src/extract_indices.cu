@@ -37,14 +37,14 @@
 
 #include <pcl/pcl_exports.h>
 
-#include <pcl/cuda/point_cloud.h>
-//#include <pcl/cuda/io/extract_indices.h>
-#include <pcl/cuda/io/predicate.h>
-#include <pcl/cuda/thrust.h>
+#include <pcl/musa/point_cloud.h>
+//#include <pcl/musa/io/extract_indices.h>
+#include <pcl/musa/io/predicate.h>
+#include <pcl/musa/thrust.h>
 
 namespace pcl
 {
-namespace cuda
+namespace musa
 {
 
 template <template <typename> class Storage, class T>
