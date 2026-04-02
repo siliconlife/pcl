@@ -40,7 +40,19 @@
 #ifndef PCL_IO_PLY_BYTE_ORDER_H
 #define PCL_IO_PLY_BYTE_ORDER_H
 
-#include <boost/detail/endian.hpp>
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  #define BOOST_BIG_ENDIAN
+#elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  #define BOOST_LITTLE_ENDIAN
+#elif defined(__BIG_ENDIAN__)
+  #define BOOST_BIG_ENDIAN
+#elif defined(__LITTLE_ENDIAN__)
+  #define BOOST_LITTLE_ENDIAN
+#elif defined(_BIG_ENDIAN)
+  #define BOOST_BIG_ENDIAN
+#elif defined(_LITTLE_ENDIAN)
+  #define BOOST_LITTLE_ENDIAN
+#endif
 
 namespace pcl
 {

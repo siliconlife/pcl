@@ -37,7 +37,7 @@
 #include <pcl/gpu/containers/initialization.h>
 #include <pcl/gpu/utils/safe_call.hpp>
 
-#include "cuda.h"
+#include "musa.h"
 #include <stdio.h>
 
 #define HAVE_CUDA
@@ -59,12 +59,12 @@ void pcl::gpu::printShortCudaDeviceInfo(int /*device*/) { throw_nogpu(); }
 int pcl::gpu::getCudaEnabledDeviceCount()
 {
     int count;
-    cudaError_t error = cudaGetDeviceCount( &count );
+    musaError_t error = musaGetDeviceCount( &count );
 
-    if (error == cudaErrorInsufficientDriver)
+    if (error == musaErrorInsufficientDriver)
         return -1;
 
-    if (error == cudaErrorNoDevice)
+    if (error == musaErrorNoDevice)
         return 0;
 
     cudaSafeCall(error);
@@ -73,13 +73,13 @@ int pcl::gpu::getCudaEnabledDeviceCount()
 
 void pcl::gpu::setDevice(int device)
 {
-    cudaSafeCall( cudaSetDevice( device ) );
+    cudaSafeCall( musaSetDevice( device ) );
 }
 
 std::string pcl::gpu::getDeviceName(int device)
 {
-    cudaDeviceProp prop;
-    cudaSafeCall( cudaGetDeviceProperties(&prop, device) );
+    musaDeviceProp prop;
+    cudaSafeCall( musaGetDeviceProperties(&prop, device) );
 
     return prop.name;
 }
@@ -87,20 +87,20 @@ std::string pcl::gpu::getDeviceName(int device)
 bool pcl::gpu::checkIfPreFermiGPU(int device)
 {
   if (device < 0)
-    cudaSafeCall( cudaGetDevice(&device) );
+    cudaSafeCall( musaGetDevice(&device) );
 
-  cudaDeviceProp prop;
-  cudaSafeCall( cudaGetDeviceProperties(&prop, device) );
+  musaDeviceProp prop;
+  cudaSafeCall( musaGetDeviceProperties(&prop, device) );
   return prop.major < 2; // CC == 1.x
 }
 
 namespace 
 {
-    template <class T> inline void getCudaAttribute(T *attribute, CUdevice_attribute device_attribute, int device)
+    template <class T> inline void getCudaAttribute(T *attribute, MUdevice_attribute device_attribute, int device)
     {
         *attribute = T();
-        CUresult error = CUDA_SUCCESS;// = cuDeviceGetAttribute( attribute, device_attribute, device );
-        if( CUDA_SUCCESS == error ) 
+        MUresult error = MUSA_SUCCESS;// = cuDeviceGetAttribute( attribute, device_attribute, device );
+        if( MUSA_SUCCESS == error ) 
             return;        
 
         printf("Driver API error = %04d\n", error);
@@ -141,22 +141,22 @@ void pcl::gpu::printCudaDeviceInfo(int device)
     printf("Device count: %d\n", count);
 
     int driverVersion = 0, runtimeVersion = 0;
-    cudaSafeCall( cudaDriverGetVersion(&driverVersion) );
-    cudaSafeCall( cudaRuntimeGetVersion(&runtimeVersion) );
+    cudaSafeCall( musaDriverGetVersion(&driverVersion) );
+    cudaSafeCall( musaRuntimeGetVersion(&runtimeVersion) );
 
     const char *computeMode[] = {
-        "Default (multiple host threads can use ::cudaSetDevice() with device simultaneously)",
-        "Exclusive (only one host thread in one process is able to use ::cudaSetDevice() with this device)",
-        "Prohibited (no host thread can use ::cudaSetDevice() with this device)",
-        "Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device)",
+        "Default (multiple host threads can use ::musaSetDevice() with device simultaneously)",
+        "Exclusive (only one host thread in one process is able to use ::musaSetDevice() with this device)",
+        "Prohibited (no host thread can use ::musaSetDevice() with this device)",
+        "Exclusive Process (many threads in one process is able to use ::musaSetDevice() with this device)",
         "Unknown",
         NULL
     };
 
     for(int dev = beg; dev < end; ++dev)
     {                
-        cudaDeviceProp prop;
-        cudaSafeCall( cudaGetDeviceProperties(&prop, dev) );
+        musaDeviceProp prop;
+        cudaSafeCall( musaGetDeviceProperties(&prop, dev) );
 
         int sm_cores = convertSMVer2Cores(prop.major, prop.minor);
 
@@ -234,13 +234,13 @@ void pcl::gpu::printShortCudaDeviceInfo(int device)
     int end = valid ? device+1 : count;
 
     int driverVersion = 0, runtimeVersion = 0;
-    cudaSafeCall( cudaDriverGetVersion(&driverVersion) );
-    cudaSafeCall( cudaRuntimeGetVersion(&runtimeVersion) );
+    cudaSafeCall( musaDriverGetVersion(&driverVersion) );
+    cudaSafeCall( musaRuntimeGetVersion(&runtimeVersion) );
 
     for(int dev = beg; dev < end; ++dev)
     {                
-        cudaDeviceProp prop;
-        cudaSafeCall( cudaGetDeviceProperties(&prop, dev) );
+        musaDeviceProp prop;
+        cudaSafeCall( musaGetDeviceProperties(&prop, dev) );
 
         const char *arch_str = prop.major < 2 ? " (pre-Fermi)" : "";
         printf("[pcl::gpu::printShortCudaDeviceInfo] : Device %d:  \"%s\"  %.0fMb", dev, prop.name, (float)prop.totalGlobalMem/1048576.0f);

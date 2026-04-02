@@ -37,7 +37,7 @@
 #include <pcl/gpu/containers/device_memory.h>
 #include <pcl/gpu/utils/safe_call.hpp>
 
-#include "cuda_runtime_api.h"
+#include "musa_runtime_api.h"
 #include "assert.h"
 
 #define HAVE_CUDA
@@ -146,7 +146,7 @@ void pcl::gpu::DeviceMemory::create(size_t sizeBytes_arg)
 
         sizeBytes_ = sizeBytes_arg;
                         
-        cudaSafeCall( cudaMalloc(&data_, sizeBytes_) );
+        cudaSafeCall( musaMalloc(&data_, sizeBytes_) );
         
         //refcount_ = (int*)cv::fastMalloc(sizeof(*refcount_));
         refcount_ = new int;
@@ -161,8 +161,8 @@ void pcl::gpu::DeviceMemory::copyTo(DeviceMemory& other) const
     else
     {    
         other.create(sizeBytes_);    
-        cudaSafeCall( cudaMemcpy(other.data_, data_, sizeBytes_, cudaMemcpyDeviceToDevice) );
-        cudaSafeCall( cudaDeviceSynchronize() );
+        cudaSafeCall( musaMemcpy(other.data_, data_, sizeBytes_, musaMemcpyDeviceToDevice) );
+        cudaSafeCall( musaDeviceSynchronize() );
     }
 }
 
@@ -172,7 +172,7 @@ void pcl::gpu::DeviceMemory::release()
     {
         //cv::fastFree(refcount);
         delete refcount_;
-        cudaSafeCall( cudaFree(data_) );
+        cudaSafeCall( musaFree(data_) );
     }
     data_ = 0;
     sizeBytes_ = 0;
@@ -182,14 +182,14 @@ void pcl::gpu::DeviceMemory::release()
 void pcl::gpu::DeviceMemory::upload(const void *host_ptr_arg, size_t sizeBytes_arg)
 {
     create(sizeBytes_arg);
-    cudaSafeCall( cudaMemcpy(data_, host_ptr_arg, sizeBytes_, cudaMemcpyHostToDevice) );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaMemcpy(data_, host_ptr_arg, sizeBytes_, musaMemcpyHostToDevice) );
+    cudaSafeCall( musaDeviceSynchronize() );
 }
 
 void pcl::gpu::DeviceMemory::download(void *host_ptr_arg) const
 {    
-    cudaSafeCall( cudaMemcpy(host_ptr_arg, data_, sizeBytes_, cudaMemcpyDeviceToHost) );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaMemcpy(host_ptr_arg, data_, sizeBytes_, musaMemcpyDeviceToHost) );
+    cudaSafeCall( musaDeviceSynchronize() );
 }          
 
 void pcl::gpu::DeviceMemory::swap(DeviceMemory& other_arg)
@@ -257,7 +257,7 @@ void pcl::gpu::DeviceMemory2D::create(int rows_arg, int colsBytes_arg)
         colsBytes_ = colsBytes_arg;
         rows_ = rows_arg;
                         
-        cudaSafeCall( cudaMallocPitch( (void**)&data_, &step_, colsBytes_, rows_) );        
+        cudaSafeCall( musaMallocPitch( (void**)&data_, &step_, colsBytes_, rows_) );        
 
         //refcount = (int*)cv::fastMalloc(sizeof(*refcount));
         refcount_ = new int;
@@ -271,7 +271,7 @@ void pcl::gpu::DeviceMemory2D::release()
     {
         //cv::fastFree(refcount);
         delete refcount_;
-        cudaSafeCall( cudaFree(data_) );
+        cudaSafeCall( musaFree(data_) );
     }
 
     colsBytes_ = 0;
@@ -288,22 +288,22 @@ void pcl::gpu::DeviceMemory2D::copyTo(DeviceMemory2D& other) const
     else
     {
         other.create(rows_, colsBytes_);    
-        cudaSafeCall( cudaMemcpy2D(other.data_, other.step_, data_, step_, colsBytes_, rows_, cudaMemcpyDeviceToDevice) );
-        cudaSafeCall( cudaDeviceSynchronize() );
+        cudaSafeCall( musaMemcpy2D(other.data_, other.step_, data_, step_, colsBytes_, rows_, musaMemcpyDeviceToDevice) );
+        cudaSafeCall( musaDeviceSynchronize() );
     }
 }
 
 void pcl::gpu::DeviceMemory2D::upload(const void *host_ptr_arg, size_t host_step_arg, int rows_arg, int colsBytes_arg)
 {
     create(rows_arg, colsBytes_arg);
-    cudaSafeCall( cudaMemcpy2D(data_, step_, host_ptr_arg, host_step_arg, colsBytes_, rows_, cudaMemcpyHostToDevice) );        
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaMemcpy2D(data_, step_, host_ptr_arg, host_step_arg, colsBytes_, rows_, musaMemcpyHostToDevice) );        
+    cudaSafeCall( musaDeviceSynchronize() );
 }
 
 void pcl::gpu::DeviceMemory2D::download(void *host_ptr_arg, size_t host_step_arg) const
 {    
-    cudaSafeCall( cudaMemcpy2D(host_ptr_arg, host_step_arg, data_, step_, colsBytes_, rows_, cudaMemcpyDeviceToHost) );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaMemcpy2D(host_ptr_arg, host_step_arg, data_, step_, colsBytes_, rows_, musaMemcpyDeviceToHost) );
+    cudaSafeCall( musaDeviceSynchronize() );
 }      
 
 void pcl::gpu::DeviceMemory2D::swap(DeviceMemory2D& other_arg)

@@ -8,7 +8,21 @@
 #include <string>
 #include <vector>
 #include <ostream>
-#include <boost/detail/endian.hpp>
+#include <cstdint>
+
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+  #define BOOST_BIG_ENDIAN
+#elif defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+  #define BOOST_LITTLE_ENDIAN
+#elif defined(__BIG_ENDIAN__)
+  #define BOOST_BIG_ENDIAN
+#elif defined(__LITTLE_ENDIAN__)
+  #define BOOST_LITTLE_ENDIAN
+#elif defined(_BIG_ENDIAN)
+  #define BOOST_BIG_ENDIAN
+#elif defined(_LITTLE_ENDIAN)
+  #define BOOST_LITTLE_ENDIAN
+#endif
 
 // Include the correct Header path here
 #include <pcl/PCLHeader.h>

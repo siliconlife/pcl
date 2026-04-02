@@ -279,6 +279,10 @@ macro(PCL_CUDA_ADD_LIBRARY _name _component)
             -I${PROJECT_SOURCE_DIR}/common/include
             -I${PROJECT_BINARY_DIR}/common/include
             -I${CMAKE_CURRENT_SOURCE_DIR}/include
+            -I${PROJECT_SOURCE_DIR}/gpu/containers/include
+            -I${PROJECT_SOURCE_DIR}/gpu/features/src
+            -I${PROJECT_SOURCE_DIR}/gpu/utils/include
+            -isystem /usr/include/eigen3
         )
         
         foreach(cu_src ${cu_sources})
@@ -287,7 +291,7 @@ macro(PCL_CUDA_ADD_LIBRARY _name _component)
             set(obj_file "${CMAKE_CURRENT_BINARY_DIR}/${cu_name}.o")
             add_custom_command(OUTPUT ${obj_file}
                 COMMAND mcc -c ${cu_abs_src} -o ${obj_file} 
-                    -mtgpu ${MUSA_ARCH_FLAG}
+                    -mtgpu ${MUSA_ARCH_FLAG} -fPIC
                     ${MUSA_CUDA_INCLUDE_PATHS}
                 DEPENDS ${cu_abs_src}
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

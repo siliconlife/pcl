@@ -5,7 +5,7 @@ set(SUBSYS_DEPS cuda_common io common)
 
 # ---[ Point Cloud Library - pcl/cuda/io
 
-set(build TRUE)
+set(build FALSE)
 PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
 mark_as_advanced("BUILD_${SUBSYS_NAME}")
 PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
@@ -22,7 +22,7 @@ if (build)
         )
 
     set(LIB_NAME "pcl_${SUBSYS_NAME}")
-    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_SOURCE_DIR}/common/include" "${CMAKE_SOURCE_DIR}/build_musa/common/include")
     PCL_CUDA_ADD_LIBRARY("${LIB_NAME}" "${SUBSYS_NAME}" ${srcs} ${incs})
 
     set(EXT_DEPS "")

@@ -37,7 +37,7 @@
 #ifndef _PCL_CUDA_TIMERS_HPP_
 #define _PCL_CUDA_TIMERS_HPP_
 
-#include <cuda_runtime_api.h>
+#include <musa_runtime_api.h>
 #include <cstdio>
 
 namespace pcl

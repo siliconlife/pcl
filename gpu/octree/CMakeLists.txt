@@ -3,7 +3,7 @@ set(SUBSYS_PATH gpu/octree)
 set(SUBSYS_DESC "Octree GPU")
 set(SUBSYS_DEPS common gpu_containers gpu_utils)
 
-set(build TRUE)
+set(build FALSE)
 PCL_SUBSYS_OPTION(build "${SUBSYS_NAME}" "${SUBSYS_DESC}" ON)
 mark_as_advanced("BUILD_${SUBSYS_NAME}")
 PCL_SUBSYS_DEPEND(build "${SUBSYS_NAME}" DEPS ${SUBSYS_DEPS})
@@ -23,7 +23,7 @@ if(build)
 	LIST(APPEND srcs ${utils} ${cuda})
 
 	set(LIB_NAME "pcl_${SUBSYS_NAME}")
-	include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE_DIR}/src/utils")
+	include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/src" "${CMAKE_CURRENT_SOURCE_DIR}/src/utils" "${CMAKE_CURRENT_SOURCE_DIR}/src/cuda" "${CMAKE_SOURCE_DIR}/gpu/features/src" "${CMAKE_SOURCE_DIR}/gpu/utils/include" "${CMAKE_SOURCE_DIR}/gpu/containers/include" "${CMAKE_SOURCE_DIR}/common/include")
 	PCL_CUDA_ADD_LIBRARY("${LIB_NAME}" "${SUBSYS_NAME}" ${srcs} ${incs})
 	target_link_libraries("${LIB_NAME}" pcl_gpu_containers)
 
