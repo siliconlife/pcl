@@ -227,6 +227,6 @@ pcl::device::findCoresp (const MapArr& vmap_g_curr, const MapArr& nmap_g_curr,
 
   corespKernel<<<grid, block>>>(cs);
 
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }

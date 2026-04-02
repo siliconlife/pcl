@@ -1,11 +1,10 @@
 set(SUBSYS_NAME gpu_kinfu)
 set(SUBSYS_PATH gpu/kinfu)
-set(SUBSYS_DESC "Kinect Fusion implementation")
+set(SUBSYS_DESC "Kinect Fusion implementation (MUSA)")
 set(SUBSYS_DEPS common io gpu_containers geometry search visualization)
 
 set(build FALSE)
 
-# OpenNI found?
 if(NOT WITH_OPENNI)
     set(DEFAULT FALSE)
     set(REASON "OpenNI was not found or was disabled by the user.")
@@ -21,56 +20,44 @@ mark_as_advanced("BUILD_${SUBSYS_NAME}")
 
 if (build)
     REMOVE_VTK_DEFINITIONS()
+    
+    set(MUSA_ARCH_FLAG "--offload-arch=mp_22")
+    set(MUSA_LIB_DIR "/usr/local/musa/lib")
+    
     FILE(GLOB incs include/pcl/gpu/kinfu/*.h*)
     FILE(GLOB srcs src/*.cpp src/*.h*)
     FILE(GLOB cuda src/cuda/*.cu src/cuda/*.h*)
-    #FILE(GLOB tsdf src/cuda/tsdf_volume.cu)
-    #FILE(GLOB est src/cuda/estimate_tranform.cu)
 
     source_group("Source Files\\cuda" FILES ${cuda} )
     source_group("Source Files" FILES ${srcs} )
 
     set(LIB_NAME "pcl_${SUBSYS_NAME}")
-    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" "${CMAKE_CURRENT_SOURCE_DIR}/src" ${CUDA_INCLUDE_DIRS})
+    include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include" 
+                       "${CMAKE_CURRENT_SOURCE_DIR}/src" 
+                       "${MUSA_LIB_DIR}/../include")
 
     if (UNIX OR APPLE)
-        set (CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}  "-Xcompiler;-fPIC;")
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
     endif()
 
     if(NOT UNIX OR APPLE)
         add_definitions(-DPCLAPI_EXPORTS)
     endif()
 
-    #set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode;arch=compute_11,code=compute_11;-gencode;arch=compute_12,code=compute_12")
+    set_source_files_properties(${cuda} PROPERTIES 
+        COMPILE_FLAGS "-mtgpu ${MUSA_ARCH_FLAG}"
+        LANGUAGE CXX)
 
-    if(TRUE)
-        #list(REMOVE_ITEM cuda ${est})
-        #CUDA_COMPILE(est_objs ${est})
-
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "--ftz=true;--prec-div=false;--prec-sqrt=false")
-        CUDA_COMPILE(cuda_objs ${cuda})
-
-        #LIST(APPEND cuda ${est})
-        #LIST(APPEND cuda_objs ${est_objs})
-
-    else()
-        list(REMOVE_ITEM cuda ${tsdf})
-        CUDA_COMPILE(cuda_objs ${cuda})
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS}  "--ftz=true;--prec-div=false;--prec-sqrt=false")
-        CUDA_COMPILE(tsdf_obj ${tsdf})
-
-        LIST(APPEND cuda ${tsdf})
-        LIST(APPEND cuda_objs ${tsdf_obj})
-    endif()
-
-    PCL_ADD_LIBRARY("${LIB_NAME}" "${SUBSYS_NAME}" ${srcs} ${incs} ${cuda} ${cuda_objs})
-    target_link_libraries("${LIB_NAME}" pcl_gpu_containers)
+    PCL_ADD_LIBRARY("${LIB_NAME}" "${SUBSYS_NAME}" ${srcs} ${incs} ${cuda})
+    target_link_libraries("${LIB_NAME}" 
+        pcl_gpu_containers 
+        ${MUSA_LIB_DIR}/libmusart.so
+    )
+    target_link_directories("${LIB_NAME}" PRIVATE ${MUSA_LIB_DIR})
 
     set(EXT_DEPS "")
-    #set(EXT_DEPS CUDA)
     PCL_MAKE_PKGCONFIG("${LIB_NAME}" "${SUBSYS_NAME}" "${SUBSYS_DESC}" "${SUBSYS_DEPS}" "${EXT_DEPS}" "" "" "")
 
-    # Install include files
     PCL_ADD_INCLUDES("${SUBSYS_NAME}" "${SUBSYS_PATH}" ${incs})
 
     if (BUILD_visualization)

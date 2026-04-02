@@ -47,26 +47,26 @@ namespace pcl
 {
   namespace device
   {
-    //texture<int, 1, cudaReadModeElementType> edgeTex;
-    texture<int, 1, cudaReadModeElementType> triTex;
-    texture<int, 1, cudaReadModeElementType> numVertsTex;
+    //texture<int, 1, musaReadModeElementType> edgeTex;
+    texture<int, 1, musaReadModeElementType> triTex;
+    texture<int, 1, musaReadModeElementType> numVertsTex;
   }
 }
 
 void
 pcl::device::bindTextures (const int */*edgeBuf*/, const int *triBuf, const int *numVertsBuf)
 {
-  cudaChannelFormatDesc desc = cudaCreateChannelDesc<int>();
-  //cudaSafeCall(cudaBindTexture(0, edgeTex, edgeBuf, desc) );
-  cudaSafeCall (cudaBindTexture (0, triTex, triBuf, desc) );
-  cudaSafeCall (cudaBindTexture (0, numVertsTex, numVertsBuf, desc) );
+  musaChannelFormatDesc desc = musaCreateChannelDesc<int>();
+  //cudaSafeCall(musaBindTexture(0, edgeTex, edgeBuf, desc) );
+  cudaSafeCall (musaBindTexture (0, triTex, triBuf, desc) );
+  cudaSafeCall (musaBindTexture (0, numVertsTex, numVertsBuf, desc) );
 }
 void
 pcl::device::unbindTextures ()
 {
-  //cudaSafeCall( cudaUnbindTexture(edgeTex) );
-  cudaSafeCall ( cudaUnbindTexture (numVertsTex) );
-  cudaSafeCall ( cudaUnbindTexture (triTex) );
+  //cudaSafeCall( musaUnbindTexture(edgeTex) );
+  cudaSafeCall ( musaUnbindTexture (numVertsTex) );
+  cudaSafeCall ( musaUnbindTexture (triTex) );
 }
 
 namespace pcl
@@ -138,12 +138,12 @@ namespace pcl
         int x = threadIdx.x + blockIdx.x * CTA_SIZE_X;
         int y = threadIdx.y + blockIdx.y * CTA_SIZE_Y;
 
-#if __CUDA_ARCH__ < 200
+#if __MUSA_ARCH__ < 200
         __shared__ int cta_buffer[CTA_SIZE];
 #endif
 
 
-#if __CUDA_ARCH__ >= 120
+#if __MUSA_ARCH__ >= 120
         if (__all (x >= VOLUME_X) || __all (y >= VOLUME_Y))
           return;
 #else        
@@ -169,7 +169,7 @@ namespace pcl
             // read number of vertices from texture
             numVerts = (cubeindex == 0 || cubeindex == 255) ? 0 : tex1Dfetch (numVertsTex, cubeindex);
           }
-#if __CUDA_ARCH__ >= 200
+#if __MUSA_ARCH__ >= 200
           int total = __popc (__ballot (numVerts > 0));
 #else
           int total = __popc (Emulation::Ballot(numVerts > 0, cta_buffer));
@@ -184,7 +184,7 @@ namespace pcl
           }
           int old_global_voxels_count = warps_buffer[warp_id];
 
-#if __CUDA_ARCH__ >= 200
+#if __MUSA_ARCH__ >= 200
           int offs = Warp::binaryExclScan (__ballot (numVerts > 0));
 #else          
           int offs = Warp::binaryExclScan(Emulation::Ballot(numVerts > 0, cta_buffer));
@@ -238,15 +238,15 @@ pcl::device::getOccupiedVoxels (const PtrStep<short2>& volume, DeviceArray2D<int
   dim3 block (OccupiedVoxels::CTA_SIZE_X, OccupiedVoxels::CTA_SIZE_Y);
   dim3 grid (divUp (VOLUME_X, block.x), divUp (VOLUME_Y, block.y));
 
-  //cudaFuncSetCacheConfig(getOccupiedVoxelsKernel, cudaFuncCachePreferL1);
+  //musaFuncSetCacheConfig(getOccupiedVoxelsKernel, musaFuncCachePreferL1);
   //printFuncAttrib(getOccupiedVoxelsKernel);
 
   getOccupiedVoxelsKernel<<<grid, block>>>(ov);
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 
   int size;
-  cudaSafeCall ( cudaMemcpyFromSymbol (&size, output_count, sizeof(size)) );
+  cudaSafeCall ( musaMemcpyFromSymbol (&size, output_count, sizeof(size)) );
   return size;
 }
 
@@ -277,7 +277,7 @@ namespace pcl
   {
     struct TrianglesGenerator : public CubeIndexEstimator
     {
-#if __CUDA_ARCH__ >= 200
+#if __MUSA_ARCH__ >= 200
       enum { CTA_SIZE = 256, MAX_GRID_SIZE_X = 65536 };
 #else
       enum { CTA_SIZE = 96, MAX_GRID_SIZE_X = 65536 };
@@ -393,10 +393,10 @@ void
 pcl::device::generateTriangles (const PtrStep<short2>& volume, const DeviceArray2D<int>& occupied_voxels, const float3& volume_size, DeviceArray<PointType>& output)
 {   
   int device;
-  cudaSafeCall( cudaGetDevice(&device) );
+  cudaSafeCall( musaGetDevice(&device) );
 
-  cudaDeviceProp prop;
-  cudaSafeCall( cudaGetDeviceProperties(&prop, device) );
+  musaDeviceProp prop;
+  cudaSafeCall( musaGetDeviceProperties(&prop, device) );
   
   int block_size = prop.major < 2 ? 96 : 256; // please see TrianglesGenerator::CTA_SIZE
 
@@ -418,6 +418,6 @@ pcl::device::generateTriangles (const PtrStep<short2>& volume, const DeviceArray
   dim3 grid(min(blocks_num, Tg::MAX_GRID_SIZE_X), divUp(blocks_num, Tg::MAX_GRID_SIZE_X));
 
   trianglesGeneratorKernel<<<grid, block>>>(tg);
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }

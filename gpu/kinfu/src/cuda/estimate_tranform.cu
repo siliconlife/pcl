@@ -210,8 +210,8 @@ pcl::device::estimateTransform (const MapArr& v_dst, const MapArr& n_dst,
   te.gbuf = gbuf;
 
   TransformEstimatorKernel1<<<grid, block>>>(te);
-  cudaSafeCall ( cudaGetLastError () );
-  //cudaSafeCall(cudaDeviceSynchronize());
+  cudaSafeCall ( musaGetLastError () );
+  //cudaSafeCall(musaDeviceSynchronize());
 
   TRed tr;
   tr.gbuf = gbuf;
@@ -220,8 +220,8 @@ pcl::device::estimateTransform (const MapArr& v_dst, const MapArr& n_dst,
 
   TransformEstimatorKernel2<<<TRed::TOTAL, TRed::CTA_SIZE>>>(tr);
 
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 
   float host_data[TRed::TOTAL];
   mbuf.download (host_data);

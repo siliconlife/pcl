@@ -127,7 +127,7 @@ pcl::device::createVMap (const Intr& intr, const DepthMap& depth, MapArr& vmap)
   float fy = intr.fy, cy = intr.cy;
 
   computeVmapKernel<<<grid, block>>>(depth, vmap, 1.f / fx, 1.f / fy, cx, cy);
-  cudaSafeCall (cudaGetLastError ());
+  cudaSafeCall (musaGetLastError ());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ pcl::device::createNMap (const MapArr& vmap, MapArr& nmap)
   grid.y = divUp (rows, block.y);
 
   computeNmapKernel<<<grid, block>>>(rows, cols, vmap, nmap);
-  cudaSafeCall (cudaGetLastError ());
+  cudaSafeCall (musaGetLastError ());
 }
 
 namespace pcl
@@ -219,9 +219,9 @@ pcl::device::tranformMaps (const MapArr& vmap_src, const MapArr& nmap_src,
   grid.y = divUp (rows, block.y);
 
   tranformMapsKernel<<<grid, block>>>(rows, cols, vmap_src, nmap_src, Rmat, tvec, vmap_dst, nmap_dst);
-  cudaSafeCall (cudaGetLastError ());
+  cudaSafeCall (musaGetLastError ());
 
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall (musaDeviceSynchronize ());
 }
 
 namespace pcl
@@ -297,8 +297,8 @@ namespace pcl
       dim3 block (32, 8);
       dim3 grid (divUp (out_cols, block.x), divUp (out_rows, block.y));
       resizeMapKernel<normalize><< < grid, block>>>(out_rows, out_cols, in_rows, input, output);
-      cudaSafeCall ( cudaGetLastError () );
-      cudaSafeCall (cudaDeviceSynchronize ());
+      cudaSafeCall ( musaGetLastError () );
+      cudaSafeCall (musaDeviceSynchronize ());
     }
   }
 }
@@ -362,8 +362,8 @@ pcl::device::convert (const MapArr& vmap, DeviceArray2D<T>& output)
   dim3 grid (divUp (cols, block.x), divUp (rows, block.y));
 
   convertMapKernel<T><< < grid, block>>>(rows, cols, vmap, output);
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }
 
 template void pcl::device::convert (const MapArr& vmap, DeviceArray2D<float4>& output);
@@ -405,6 +405,6 @@ pcl::device::mergePointNormal (const DeviceArray<float4>& cloud, const DeviceArr
   int total = (int)output.size ();
 
   mergePointNormalKernel<<<divUp (total, block), block>>>(cloud, normals, output);
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }

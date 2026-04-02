@@ -317,7 +317,7 @@ pcl::device::raycast (const Intr& intr, const Mat33& Rcurr, const float3& tcurr,
   dim3 grid (divUp (rc.cols, block.x), divUp (rc.rows, block.y));
 
   rayCastKernel<<<grid, block>>>(rc);
-  cudaSafeCall (cudaGetLastError ());
-  //cudaSafeCall(cudaDeviceSynchronize());
+  cudaSafeCall (musaGetLastError ());
+  //cudaSafeCall(musaDeviceSynchronize());
 }
 

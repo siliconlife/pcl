@@ -119,8 +119,8 @@ pcl::device::generateImage (const MapArr& vmap, const MapArr& nmap, const LightS
   dim3 grid (divUp (dst.cols, block.x), divUp (dst.rows, block.y));
 
   generateImageKernel<<<grid, block>>>(ig);
-  cudaSafeCall (cudaGetLastError ());
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall (musaGetLastError ());
+  cudaSafeCall (musaDeviceSynchronize ());
 } 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,8 +162,8 @@ pcl::device::generateDepth (const Mat33& R_inv, const float3& t, const MapArr& v
   dim3 grid(divUp(dst.cols(), block.x), divUp(dst.rows(), block.y));
   
   generateDepthKernel<<<grid, block>>>(R_inv.data[2], t, vmap, dst);
-  cudaSafeCall (cudaGetLastError ());
-  cudaSafeCall (cudaDeviceSynchronize ());  
+  cudaSafeCall (musaGetLastError ());
+  cudaSafeCall (musaDeviceSynchronize ());  
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,6 +209,6 @@ pcl::device::paint3DView(const PtrStep<uchar3>& colors, PtrStepSz<uchar3> dst, f
   colors_weight = min(1.f, max(0.f, colors_weight));
 
   paint3DViewKernel<<<grid, block>>>(colors, dst, colors_weight);
-  cudaSafeCall (cudaGetLastError ());
-  cudaSafeCall (cudaDeviceSynchronize ());  
+  cudaSafeCall (musaGetLastError ());
+  cudaSafeCall (musaDeviceSynchronize ());  
 }

@@ -73,8 +73,8 @@ pcl::device::initVolume (PtrStep<short2> volume)
   grid.y = divUp (VOLUME_Y, block.y);
 
   initializeVolume<<<grid, block>>>(volume);
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }
 
 namespace pcl
@@ -285,8 +285,8 @@ pcl::device::integrateTsdfVolume (const PtrStepSz<ushort>& depth_raw, const Intr
    //tsdf2<<<grid, block>>>(volume, tranc_dist, Rcurr_inv, tcurr, intr, depth_raw, tsdf.cell_size);
    integrateTsdfKernel<<<grid, block>>>(tsdf);
 #endif
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }
 
 
@@ -525,7 +525,7 @@ pcl::device::integrateTsdfVolume (const PtrStepSz<ushort>& depth, const Intr& in
 
   //scales depth along ray and converts mm -> meters. 
   scaleDepth<<<grid_scale, block_scale>>>(depth, depthScaled, intr);
-  cudaSafeCall ( cudaGetLastError () );
+  cudaSafeCall ( musaGetLastError () );
 
   float3 cell_size;
   cell_size.x = volume_size.x / VOLUME_X;
@@ -539,6 +539,6 @@ pcl::device::integrateTsdfVolume (const PtrStepSz<ushort>& depth, const Intr& in
   tsdf23<<<grid, block>>>(depthScaled, volume, tranc_dist, Rcurr_inv, tcurr, intr, cell_size);    
   //tsdf23normal_hack<<<grid, block>>>(depthScaled, volume, tranc_dist, Rcurr_inv, tcurr, intr, cell_size);
 
-  cudaSafeCall ( cudaGetLastError () );
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall ( musaGetLastError () );
+  cudaSafeCall (musaDeviceSynchronize ());
 }

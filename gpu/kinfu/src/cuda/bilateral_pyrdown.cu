@@ -182,10 +182,10 @@ pcl::device::bilateralFilter (const DepthMap& src, DepthMap& dst)
   dim3 block (32, 8);
   dim3 grid (divUp (src.cols (), block.x), divUp (src.rows (), block.y));
 
-  cudaFuncSetCacheConfig (bilateralKernel, cudaFuncCachePreferL1);
+  musaFuncSetCacheConfig (bilateralKernel, musaFuncCachePreferL1);
   bilateralKernel<<<grid, block>>>(src, dst, 0.5f / (sigma_space * sigma_space), 0.5f / (sigma_color * sigma_color));
 
-  cudaSafeCall ( cudaGetLastError () );
+  cudaSafeCall ( musaGetLastError () );
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ pcl::device::pyrDown (const DepthMap& src, DepthMap& dst)
 
   //pyrDownGaussKernel<<<grid, block>>>(src, dst, sigma_color);
   pyrDownKernel<<<grid, block>>>(src, dst, sigma_color);
-  cudaSafeCall ( cudaGetLastError () );
+  cudaSafeCall ( musaGetLastError () );
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,5 +211,5 @@ pcl::device::truncateDepth(DepthMap& depth, float max_distance)
 
   truncateDepthKernel<<<grid, block>>>(depth, static_cast<ushort>(max_distance * 1000.f));
 
-  cudaSafeCall ( cudaGetLastError () );
+  cudaSafeCall ( musaGetLastError () );
 }

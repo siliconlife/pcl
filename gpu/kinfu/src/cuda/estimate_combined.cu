@@ -308,8 +308,8 @@ pcl::device::estimateCombined (const Mat33& Rcurr, const float3& tcurr,
   cs.gbuf = gbuf;
 
   combinedKernel<<<grid, block>>>(cs);
-  cudaSafeCall ( cudaGetLastError () );
-  //cudaSafeCall(cudaDeviceSynchronize());
+  cudaSafeCall ( musaGetLastError () );
+  //cudaSafeCall(musaDeviceSynchronize());
 
   //printFuncAttrib(combinedKernel);
 
@@ -319,8 +319,8 @@ pcl::device::estimateCombined (const Mat33& Rcurr, const float3& tcurr,
   tr.output = mbuf;
 
   TransformEstimatorKernel2<<<TranformReduction::TOTAL, TranformReduction::CTA_SIZE>>>(tr);
-  cudaSafeCall (cudaGetLastError ());
-  cudaSafeCall (cudaDeviceSynchronize ());
+  cudaSafeCall (musaGetLastError ());
+  cudaSafeCall (musaDeviceSynchronize ());
 
   float_type host_data[TranformReduction::TOTAL];
   mbuf.download (host_data);
