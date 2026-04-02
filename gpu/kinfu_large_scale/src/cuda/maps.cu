@@ -135,7 +135,7 @@ namespace pcl
         float fy = intr.fy, cy = intr.cy;
 
         computeVmapKernel<<<grid, block>>>(depth, vmap, 1.f / fx, 1.f / fy, cx, cy);
-        cudaSafeCall (cudaGetLastError ());
+        cudaSafeCall (musaGetLastError ());
       }
 
       //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,7 +153,7 @@ namespace pcl
         grid.y = divUp (rows, block.y);
 
         computeNmapKernel<<<grid, block>>>(rows, cols, vmap, nmap);
-        cudaSafeCall (cudaGetLastError ());
+        cudaSafeCall (musaGetLastError ());
       }
     }
   }
@@ -231,9 +231,9 @@ namespace pcl
         grid.y = divUp (rows, block.y);
 
         transformMapsKernel<<<grid, block>>>(rows, cols, vmap_src, nmap_src, Rmat, tvec, vmap_dst, nmap_dst);
-        cudaSafeCall (cudaGetLastError ());
+        cudaSafeCall (musaGetLastError ());
 
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }
@@ -316,8 +316,8 @@ namespace pcl
         dim3 block (32, 8);
         dim3 grid (divUp (out_cols, block.x), divUp (out_rows, block.y));
         resizeMapKernel<normalize><< < grid, block>>>(out_rows, out_cols, in_rows, input, output);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
 
 
@@ -384,8 +384,8 @@ namespace pcl
         dim3 grid (divUp (cols, block.x), divUp (rows, block.y));
 
         convertMapKernel<T><< < grid, block>>>(rows, cols, vmap, output);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
       
       template void convert (const MapArr& vmap, DeviceArray2D<float4>& output);
@@ -430,8 +430,8 @@ namespace pcl
         int total = (int)output.size ();
 
         mergePointNormalKernel<<<divUp (total, block), block>>>(cloud, normals, output);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }

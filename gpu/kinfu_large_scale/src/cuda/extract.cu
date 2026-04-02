@@ -104,11 +104,11 @@ namespace pcl
           int x = threadIdx.x + blockIdx.x * CTA_SIZE_X;
           int y = threadIdx.y + blockIdx.y * CTA_SIZE_Y;
 
-  #if __CUDA_ARCH__ < 200
+  #if __MUSA_ARCH__ < 200
           __shared__ int cta_buffer[CTA_SIZE];
   #endif
 
-  #if __CUDA_ARCH__ >= 120
+  #if __MUSA_ARCH__ >= 120
           if (__all (x >= VOLUME_X) || __all (y >= VOLUME_Y))
             return;
   #else         
@@ -206,7 +206,7 @@ namespace pcl
             }/* if (x < VOLUME_X && y < VOLUME_Y) */
 
 
-  #if __CUDA_ARCH__ >= 200
+  #if __MUSA_ARCH__ >= 200
             //not we fulfilled points array at current iteration
             int total_warp = __popc (__ballot (local_count > 0)) + __popc (__ballot (local_count > 1)) + __popc (__ballot (local_count > 2));
   #else
@@ -439,12 +439,12 @@ namespace pcl
         dim3 grid (divUp (VOLUME_X, block.x), divUp (VOLUME_Y, block.y));
 
         extractKernel<<<grid, block>>>(fs);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall ( cudaDeviceSynchronize () );
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall ( musaDeviceSynchronize () );
 
         int size;
-        cudaSafeCall ( cudaMemcpyFromSymbol (&size, output_xyz_count, sizeof (size)) );
-      //  cudaSafeCall ( cudaMemcpyFromSymbol (&size, "output_xyz_count", sizeof (size)) );
+        cudaSafeCall ( musaMemcpyFromSymbol (&size, output_xyz_count, sizeof (size)) );
+      //  cudaSafeCall ( musaMemcpyFromSymbol (&size, "output_xyz_count", sizeof (size)) );
         return ((size_t)size);
       }
 
@@ -548,11 +548,11 @@ namespace pcl
         // Extraction call
         extractSliceKernel<<<grid, block>>>(fs, *buffer, minBounds, maxBounds);
 
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall ( cudaDeviceSynchronize () );
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall ( musaDeviceSynchronize () );
 
         int size;
-        cudaSafeCall ( cudaMemcpyFromSymbol (&size, output_xyz_count, sizeof(size)) );  
+        cudaSafeCall ( musaMemcpyFromSymbol (&size, output_xyz_count, sizeof(size)) );  
         return (size_t)size;
       }
     }
@@ -723,8 +723,8 @@ namespace pcl
         dim3 grid (divUp (points.size, block.x));
 
         extractNormalsKernel<<<grid, block>>>(en);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
 
       template void extractNormals<PointType>(const PtrStep<short2>&volume, const float3 &volume_size, const PtrSz<PointType>&input, PointType * output);

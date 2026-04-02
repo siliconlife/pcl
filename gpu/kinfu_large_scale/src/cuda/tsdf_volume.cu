@@ -161,8 +161,8 @@ namespace pcl
         grid.y = divUp (VOLUME_Y, block.y);
 
         initializeVolume<<<grid, block>>>(volume);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }
@@ -376,8 +376,8 @@ namespace pcl
         //tsdf2<<<grid, block>>>(volume, tranc_dist, Rcurr_inv, tcurr, intr, depth_raw, tsdf.cell_size);
         integrateTsdfKernel<<<grid, block>>>(tsdf);
       #endif
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }
@@ -627,7 +627,7 @@ namespace pcl
 
         //scales depth along ray and converts mm -> meters. 
         scaleDepth<<<grid_scale, block_scale>>>(depth, depthScaled, intr);
-        cudaSafeCall ( cudaGetLastError () );
+        cudaSafeCall ( musaGetLastError () );
 
         float3 cell_size;
         cell_size.x = volume_size.x / buffer->voxels_size.x;
@@ -641,8 +641,8 @@ namespace pcl
         tsdf23<<<grid, block>>>(depthScaled, volume, tranc_dist, Rcurr_inv, tcurr, intr, cell_size, *buffer);    
         //tsdf23normal_hack<<<grid, block>>>(depthScaled, volume, tranc_dist, Rcurr_inv, tcurr, intr, cell_size);
 
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -696,8 +696,8 @@ namespace pcl
         grid.y = divUp (buffer->voxels_size.y, block.y);
         
         clearSliceKernel<<<grid, block>>>(volume, *buffer, minBounds, maxBounds);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());        
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());        
       }
     }
   }

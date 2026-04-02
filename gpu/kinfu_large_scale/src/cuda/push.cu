@@ -96,8 +96,8 @@ namespace pcl
         dim3 threadsPerBlock (BlockX, BlockY);
         
         loadTsdfValueKernel <<< numBlocks, threadsPerBlock >>> (first_point_pointer, cloud_gpu.ptr(), number_of_points, DIVISOR, *buffer);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall ( cudaDeviceSynchronize () );
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall ( musaDeviceSynchronize () );
       }
     } /*namespace kinfuLS*/ 
   } /*namespace device*/

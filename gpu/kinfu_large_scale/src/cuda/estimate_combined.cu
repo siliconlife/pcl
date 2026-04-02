@@ -310,8 +310,8 @@ namespace pcl
         cs.gbuf = gbuf;
 
         combinedKernel<<<grid, block>>>(cs);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall(cudaDeviceSynchronize());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall(musaDeviceSynchronize());
 
         //printFuncAttrib(combinedKernel);
 
@@ -321,8 +321,8 @@ namespace pcl
         tr.output = mbuf;
 
         TransformEstimatorKernel2<<<TranformReduction::TOTAL, TranformReduction::CTA_SIZE>>>(tr);
-        cudaSafeCall (cudaGetLastError ());
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall (musaGetLastError ());
+        cudaSafeCall (musaDeviceSynchronize ());
 
         float_type host_data[TranformReduction::TOTAL];
         mbuf.download (host_data);

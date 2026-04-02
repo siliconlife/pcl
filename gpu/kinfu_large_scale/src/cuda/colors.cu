@@ -72,8 +72,8 @@ namespace pcl
         grid.y = divUp (VOLUME_Y, block.y);
 
         initColorVolumeKernel<<<grid, block>>>(color_volume);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }
@@ -236,8 +236,8 @@ namespace pcl
         dim3 grid (divUp (VOLUME_X, block.x), divUp (VOLUME_Y, block.y));
 
         updateColorVolumeKernel<<<grid, block>>>(cvi);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }
@@ -274,8 +274,8 @@ namespace pcl
         const int block = 256;
         float3 cell_size = make_float3 (volume_size.x / VOLUME_X, volume_size.y / VOLUME_Y, volume_size.z / VOLUME_Z);
         extractColorsKernel<<<divUp (points.size, block), block>>>(cell_size, color_volume, points, colors);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }

@@ -351,8 +351,8 @@ namespace pcl
         dim3 grid (divUp (rc.cols, block.x), divUp (rc.rows, block.y));
 
         rayCastKernel<<<grid, block>>>(rc, *buffer);
-        cudaSafeCall (cudaGetLastError ());
-        cudaSafeCall(cudaDeviceSynchronize());
+        cudaSafeCall (musaGetLastError ());
+        cudaSafeCall(musaDeviceSynchronize());
       }
     }
   }

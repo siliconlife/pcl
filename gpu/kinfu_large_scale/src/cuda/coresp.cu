@@ -228,8 +228,8 @@ namespace pcl
 
         corespKernel<<<grid, block>>>(cs);
 
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }

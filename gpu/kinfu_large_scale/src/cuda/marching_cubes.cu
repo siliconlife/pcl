@@ -50,24 +50,24 @@ namespace pcl
   {
     namespace kinfuLS
     {
-      //texture<int, 1, cudaReadModeElementType> edgeTex;
-      texture<int, 1, cudaReadModeElementType> triTex;
-      texture<int, 1, cudaReadModeElementType> numVertsTex;
+      //texture<int, 1, musaReadModeElementType> edgeTex;
+      texture<int, 1, musaReadModeElementType> triTex;
+      texture<int, 1, musaReadModeElementType> numVertsTex;
 
       void
       bindTextures (const int */*edgeBuf*/, const int *triBuf, const int *numVertsBuf)
       {
-        cudaChannelFormatDesc desc = cudaCreateChannelDesc<int>();
-        //cudaSafeCall(cudaBindTexture(0, edgeTex, edgeBuf, desc) );
-        cudaSafeCall (cudaBindTexture (0, triTex, triBuf, desc) );
-        cudaSafeCall (cudaBindTexture (0, numVertsTex, numVertsBuf, desc) );
+        musaChannelFormatDesc desc = musaCreateChannelDesc<int>();
+        //cudaSafeCall(musaBindTexture(0, edgeTex, edgeBuf, desc) );
+        cudaSafeCall (musaBindTexture (0, triTex, triBuf, desc) );
+        cudaSafeCall (musaBindTexture (0, numVertsTex, numVertsBuf, desc) );
       }
       void
       unbindTextures ()
       {
-        //cudaSafeCall( cudaUnbindTexture(edgeTex) );
-        cudaSafeCall ( cudaUnbindTexture (numVertsTex) );
-        cudaSafeCall ( cudaUnbindTexture (triTex) );
+        //cudaSafeCall( musaUnbindTexture(edgeTex) );
+        cudaSafeCall ( musaUnbindTexture (numVertsTex) );
+        cudaSafeCall ( musaUnbindTexture (triTex) );
       }
     }
   }
@@ -226,15 +226,15 @@ namespace pcl
         dim3 block (OccupiedVoxels::CTA_SIZE_X, OccupiedVoxels::CTA_SIZE_Y);
         dim3 grid (divUp (VOLUME_X, block.x), divUp (VOLUME_Y, block.y));
 
-        //cudaFuncSetCacheConfig(getOccupiedVoxelsKernel, cudaFuncCachePreferL1);
+        //musaFuncSetCacheConfig(getOccupiedVoxelsKernel, musaFuncCachePreferL1);
         //printFuncAttrib(getOccupiedVoxelsKernel);
 
         getOccupiedVoxelsKernel<<<grid, block>>>(ov);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
 
         int size;
-        cudaSafeCall ( cudaMemcpyFromSymbol (&size, output_count, sizeof(size)) );
+        cudaSafeCall ( musaMemcpyFromSymbol (&size, output_count, sizeof(size)) );
         return size;
       }
 
@@ -391,8 +391,8 @@ namespace pcl
         dim3 grid (divUp (tg.voxels_count, block.x));
 
         trianglesGeneratorKernel<<<grid, block>>>(tg);
-        cudaSafeCall ( cudaGetLastError () );
-        cudaSafeCall (cudaDeviceSynchronize ());
+        cudaSafeCall ( musaGetLastError () );
+        cudaSafeCall (musaDeviceSynchronize ());
       }
     }
   }
