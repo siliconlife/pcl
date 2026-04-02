@@ -236,8 +236,8 @@ namespace pcl
 void pcl::device::FacetStream::setInitialFacets(const InitalSimplex& s)
 {  
   init_fs<<<1, 1>>>(s.i1, s.i2, s.i3, s.i4, verts_inds);  
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );  
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );  
   facet_count = 4;
 }
 
@@ -343,8 +343,8 @@ void pcl::device::PointStream::initalClassify()
   //printFuncAttrib(initalClassifyKernel);
 
   initalClassifyKernel<<<divUp(cloud_size, 256), 256>>>(ic, cloud, cloud_size, facets_dists);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 
   thrust::device_ptr<int> pbeg(perm.ptr());
   thrust::sort_by_key(out, out + cloud_size, pbeg);
@@ -417,11 +417,11 @@ int pcl::device::PointStream::searchFacetHeads(size_t facet_count, DeviceArray<i
     //thrust::for_each(b, e, sfh);
 
     searchFacetHeadsKernel<<<divUp(facet_count+1, 256), 256>>>(sfh);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );        
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );        
 
 	int new_size;
-	cudaSafeCall( cudaMemcpyFromSymbol(	(void*)&new_size,  pcl::device::new_cloud_size, sizeof(new_size)) );	
+	cudaSafeCall( musaMemcpyFromSymbol(	(void*)&new_size,  pcl::device::new_cloud_size, sizeof(new_size)) );	
 	return new_size;
 }
 
@@ -554,8 +554,8 @@ void pcl::device::FacetStream::compactFacets()
   int grid = divUp(facet_count, block);
 
   compactionKernel<<<grid, block>>>(c);   
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
     
   verts_inds.swap(verts_inds2);
   head_points.swap(head_points2);
@@ -716,8 +716,8 @@ void pcl::device::PointStream::classify(FacetStream& fs)
   //thrust::for_each(b, b + cloud_size, c);
 
   classifyKernel<<<divUp(cloud_size, 256), 256>>>(c, cloud_size);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
   
   thrust::device_ptr<uint64_type> beg(facets_dists.ptr());
   thrust::device_ptr<uint64_type> end = beg + cloud_size;
@@ -781,8 +781,8 @@ void pcl::device::FacetStream::splitFacets()
   //thrust::for_each(b, b + facet_count, sf);
 
   splitFacetsKernel<<<divUp(facet_count, 256), 256>>>(sf);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 
   facet_count *= 3;
 }
@@ -826,6 +826,6 @@ void pcl::device::pack_hull(const DeviceArray<PointType>& points, const DeviceAr
   //thrust::gather(mb, me, in, out);
   
   gatherKernel<<<divUp(indeces.size(), 256), 256>>>(indeces, points, output);
-  cudaSafeCall( cudaGetLastError() );
-  cudaSafeCall( cudaDeviceSynchronize() );
+  cudaSafeCall( musaGetLastError() );
+  cudaSafeCall( musaDeviceSynchronize() );
 }

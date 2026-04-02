@@ -25,7 +25,7 @@ namespace pcl
 			mutable PtrSz<StateType> particles_;
 			int num_particles_;
 
-			mutable PtrSz<curandState>	rng_states_;
+			mutable PtrSz<murandState>	rng_states_;
 			unsigned long int						rng_seed;
 			
 			__device__ __forceinline__ void
@@ -33,8 +33,8 @@ namespace pcl
       {
 				unsigned int tid = threadIdx.x + blockDim.x;
 								
-				curandState* rng_state = &rng_states_[tid];
-				curand_init ( rng_seed, tid, 0, rng_state );
+				murandState* rng_state = &rng_states_[tid];
+				murand_init ( rng_seed, tid, 0, rng_state );
 								
 				StateType* p = &particles_[tid];
 				p->x	= getSampleNormal(mean_[0], cov_[0], rng_state);
@@ -65,7 +65,7 @@ namespace pcl
 			PtrStepSz<float4> input_;
 			PtrStepSz<uchar4> input_color_;
 
-			PtrSz<curandState> rng_states_;
+			PtrSz<murandState> rng_states_;
 			
 			PtrSz<float> step_noise_covariance_;
 
@@ -134,7 +134,7 @@ namespace pcl
 }
 
 void 
-	pcl::device::initParticles ( PtrSz<curandState> rng_states,
+	pcl::device::initParticles ( PtrSz<murandState> rng_states,
 		DeviceArray<float>& initial_noise_mean, DeviceArray<float>& initial_noise_covariance,
 		const StateType& representative_state,
 		DeviceArray<StateType>& particles )
@@ -159,14 +159,14 @@ void
 	
 	ParticleInitializerKernel<<<grid, block>>>(pi);
 
-	cudaSafeCall( cudaGetLastError() );
-	cudaSafeCall( cudaDeviceSynchronize() );
+	cudaSafeCall( musaGetLastError() );
+	cudaSafeCall( musaDeviceSynchronize() );
 }
 
 void 
 	pcl::device::computeTracking ( const DeviceArray2D<PointType>& ref, const DeviceArray2D<PixelRGB>& ref_color,
 		const DeviceArray2D<PointType>& input, const DeviceArray2D<PixelRGB>& input_color,
-		PtrSz<curandState> rng_states, const DeviceArray<float>& step_noise_covariance,
+		PtrSz<murandState> rng_states, const DeviceArray<float>& step_noise_covariance,
 		DeviceArray<StateType>& particles,
 		StateType& representative_state, StateType& motion, float motion_ratio )
 {

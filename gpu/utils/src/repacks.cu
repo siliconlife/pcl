@@ -77,8 +77,8 @@ namespace pcl
             dim3 grid(divUp(size, block.x));
 
             deviceCopyFields4B<in_size, out_size><<<grid, block>>>(i, size, input, output);
-            cudaSafeCall ( cudaGetLastError () );
-            cudaSafeCall (cudaDeviceSynchronize ());
+            cudaSafeCall ( musaGetLastError () );
+            cudaSafeCall (musaDeviceSynchronize ());
         }
 
         typedef void (*copy_fields_t)(int info[4], int size, const void* input, void* output);
