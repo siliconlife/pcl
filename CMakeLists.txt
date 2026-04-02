@@ -32,6 +32,22 @@ string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)
 ### ---[ Find universal dependencies
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/" ${CMAKE_MODULE_PATH})
 
+# ---[ Find MUSA SDK if available
+find_package(MUSA QUIET)
+if(MUSA_FOUND)
+    message(STATUS "MUSA SDK found: ${MUSA_INCLUDE_DIR}")
+else()
+    # Check if MUSA is manually specified
+    if(DEFINED MUSA_FOUND AND MUSA_FOUND)
+        set(MUSA_FOUND TRUE)
+    endif()
+endif()
+
+# ---[ Add CUDA compatibility stubs to include path
+if(EXISTS "${CMAKE_BINARY_DIR}/boost_stubs/cuda")
+    include_directories(BEFORE SYSTEM "${CMAKE_BINARY_DIR}/boost_stubs")
+endif()
+
 # ---[ Include pkgconfig
 include (FindPkgConfig)
 

@@ -217,21 +217,92 @@ endmacro(PCL_ADD_LIBRARY)
 
 
 ###############################################################################
-# Add a cuda library target.
+# Add a MUSA GPU library target.
 # _name The library name.
 # _component The part of PCL that this library belongs to.
 # ARGN The source files for the library.
 macro(PCL_CUDA_ADD_LIBRARY _name _component)
     REMOVE_VTK_DEFINITIONS()
-    if(PCL_SHARED_LIBS)
-        # to overcome a limitation in cuda_add_library, we add manually PCLAPI_EXPORTS macro
-        cuda_add_library(${_name} ${PCL_LIB_TYPE} ${ARGN} OPTIONS -DPCLAPI_EXPORTS)
-    else(PCL_SHARED_LIBS)
-        cuda_add_library(${_name} ${PCL_LIB_TYPE} ${ARGN})
-    endif(PCL_SHARED_LIBS)
     
-    # must link explicitly against boost.
-    target_link_libraries(${_name} ${Boost_LIBRARIES})
+    # MUSA GPU configuration
+    set(MUSA_ARCH_FLAG "--offload-arch=mp_22")
+    set(MUSA_INCLUDE_DIR "/usr/local/musa/include")
+    set(MUSA_LIB_DIR "/usr/local/musa/lib")
+    
+    # Separate .cu files from other sources (filter out headers)
+    set(cu_sources)
+    set(other_sources)
+    foreach(src ${ARGN})
+        if(src MATCHES "\\.cu$")
+            list(APPEND cu_sources ${src})
+        elseif(src MATCHES "\\.(cpp|cxx|cc|c)$")
+            list(APPEND other_sources ${src})
+        endif()
+    endforeach()
+    
+    # Debug output
+    message(STATUS "PCL_CUDA_ADD_LIBRARY: ${_name}")
+    message(STATUS "  cu_sources: ${cu_sources}")
+    message(STATUS "  other_sources: ${other_sources}")
+    
+    # Create a stub C++ file if no sources exist (empty library or CUDA-only)
+    if(NOT other_sources)
+        set(stub_file "${CMAKE_CURRENT_BINARY_DIR}/${_name}_stub.cpp")
+        if(NOT EXISTS ${stub_file})
+            file(WRITE ${stub_file} "// Stub for ${_name}\nvoid ${_name}_stub() {}\n")
+        endif()
+        list(APPEND other_sources ${stub_file})
+        message(STATUS "  Created stub: ${stub_file}")
+    endif()
+    
+    # Create library
+    if(PCL_SHARED_LIBS)
+        add_library(${_name} SHARED ${other_sources})
+    else()
+        add_library(${_name} STATIC ${other_sources})
+    endif()
+    
+    # Add PCL API exports definition
+    target_compile_definitions(${_name} PRIVATE PCLAPI_EXPORTS)
+    
+    # Add MUSA include directories and CUDA compatibility stubs
+    target_include_directories(${_name} SYSTEM PRIVATE 
+        ${MUSA_INCLUDE_DIR}
+        ${PROJECT_BINARY_DIR}/boost_stubs
+    )
+    
+    # Compile .cu files separately with mcc and add as object files
+    if(cu_sources)
+        # Add PCL include directories for CUDA compilation
+        set(MUSA_CUDA_INCLUDE_PATHS 
+            -I${MUSA_INCLUDE_DIR}
+            -I${PROJECT_SOURCE_DIR}/common/include
+            -I${PROJECT_BINARY_DIR}/common/include
+            -I${CMAKE_CURRENT_SOURCE_DIR}/include
+        )
+        
+        foreach(cu_src ${cu_sources})
+            get_filename_component(cu_name ${cu_src} NAME)
+            get_filename_component(cu_abs_src ${cu_src} ABSOLUTE)
+            set(obj_file "${CMAKE_CURRENT_BINARY_DIR}/${cu_name}.o")
+            add_custom_command(OUTPUT ${obj_file}
+                COMMAND mcc -c ${cu_abs_src} -o ${obj_file} 
+                    -mtgpu ${MUSA_ARCH_FLAG}
+                    ${MUSA_CUDA_INCLUDE_PATHS}
+                DEPENDS ${cu_abs_src}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                COMMENT "Compiling MUSA GPU: ${cu_abs_src}")
+            target_sources(${_name} PRIVATE ${obj_file})
+        endforeach()
+    endif()
+    
+    # Link MUSA runtime library
+    target_link_libraries(${_name} PRIVATE 
+        ${MUSA_LIB_DIR}/libmusart.so
+        ${Boost_LIBRARIES})
+    
+    # Add linker library path
+    target_link_directories(${_name} PRIVATE ${MUSA_LIB_DIR})
 
     set_target_properties(${_name} PROPERTIES
         VERSION ${PCL_VERSION}
