@@ -41,7 +41,7 @@
 
 #include "internal.hpp"
 
-#include "cuda.h"
+#include "musa.h"
 
 using namespace std;
 using namespace thrust;
@@ -72,7 +72,7 @@ namespace pcl
     }
 }
 
-#if defined(CUDA_VERSION) && CUDA_VERSION == 4000
+#if defined(MUSA_VERSION) && MUSA_VERSION == 4000
     //workaround of bug in Thrust
     typedef thrust::counting_iterator<int, thrust::use_default, thrust::use_default, thrust::use_default> It;
     template<> struct thrust::iterator_difference<It> { typedef int type; };

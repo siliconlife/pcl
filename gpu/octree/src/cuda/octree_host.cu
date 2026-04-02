@@ -60,8 +60,8 @@ namespace pcl
 
 void  pcl::device::OctreeImpl::get_gpu_arch_compiled_for(int& bin, int& ptx)
 {
-    cudaFuncAttributes attrs;
-    cudaSafeCall( cudaFuncGetAttributes(&attrs, get_cc_kernel) );  
+    musaFuncAttributes attrs;
+    cudaSafeCall( musaFuncGetAttributes(&attrs, get_cc_kernel) );  
     bin = attrs.binaryVersion;
     ptx = attrs.ptxVersion;
 }

@@ -303,9 +303,9 @@ void pcl::device::OctreeImpl::approxNearestSearch(const Queries& queries, Neighb
     int block = pcl::device::appnearest_search::KernelPolicy::CTA_SIZE;
     int grid = (batch.queries_num + block - 1) / block;    
 
-    cudaSafeCall( cudaFuncSetCacheConfig(pcl::device::appnearest_search::KernelAN, cudaFuncCachePreferL1) );
+    cudaSafeCall( musaFuncSetCacheConfig(pcl::device::appnearest_search::KernelAN, musaFuncCachePreferL1) );
 
     pcl::device::appnearest_search::KernelAN<<<grid, block>>>(batch);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 }
