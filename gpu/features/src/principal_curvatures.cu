@@ -247,8 +247,8 @@ void pcl::device::computePointPrincipalCurvatures(const Normals& normals, const 
     int block = PrincipalCurvaturesImpl::CTA_SIZE;
     int grid = divUp(impl.work_size, PrincipalCurvaturesImpl::WARPS);
     principalCurvaturesKernel<<<grid, block>>>(impl);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(principalCurvaturesKernel);
     //printFuncAttrib(principalCurvaturesStep2<256>);

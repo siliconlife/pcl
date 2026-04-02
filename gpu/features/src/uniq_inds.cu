@@ -119,12 +119,12 @@ int pcl::device::computeUniqueIndices(size_t surface_size, const NeighborIndices
     int grid = divUp((int)neighbours.sizes.size(), IndsRepack::WARPS);
 
     IndsRepackKernel<<<grid, block>>>(irpk);
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());
 
     int total;
-    cudaSafeCall( cudaMemcpyFromSymbol(&total, total_after_repack, sizeof(total)) );
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaMemcpyFromSymbol(&total, total_after_repack, sizeof(total)) );
+    cudaSafeCall(musaDeviceSynchronize());
 
     thrust::device_ptr<int> begu(unique_indices.ptr());
     thrust::device_ptr<int> endu = begu + total;    
@@ -137,8 +137,8 @@ int pcl::device::computeUniqueIndices(size_t surface_size, const NeighborIndices
     thrust::fill(begl, endl, 0);
     
     createLookupKernel<<<divUp((int)unique_indices.size(), 256), 256>>>(unique_indices, total, lookup);
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());
 
     return total;
 }

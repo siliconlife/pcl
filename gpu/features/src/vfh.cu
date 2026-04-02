@@ -232,10 +232,10 @@ void pcl::device::VFHEstimationImpl::compute(DeviceArray<VFHSignature308>& featu
 
 
     int device;
-    cudaSafeCall( cudaGetDevice(&device) );
+    cudaSafeCall( musaGetDevice(&device) );
     
-    cudaDeviceProp prop;    
-    cudaSafeCall( cudaGetDeviceProperties(&prop, device) );
+    musaDeviceProp prop;    
+    cudaSafeCall( musaGetDeviceProperties(&prop, device) );
     
     int total = static_cast<int> (indices.empty() ? points.size() : indices.size());
     int total_lenght_in_blocks = (total + VfhDevice::CTA_SIZE - 1) / VfhDevice::CTA_SIZE;
@@ -249,7 +249,7 @@ void pcl::device::VFHEstimationImpl::compute(DeviceArray<VFHSignature308>& featu
     vfh.output = (float*)feature.ptr();   
 
     estimateVfhKernel<<<grid, block>>>(vfh);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );    
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );    
 }
 

@@ -247,8 +247,8 @@ void pcl::device::computeNormals(const PointCloud& cloud, const NeighborIndices&
     int grid = divUp((int)normals.size(), NormalsEstimator::WAPRS);
     EstimateNormaslKernel<<<grid, block>>>(est);
 
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());
 }
 
 void pcl::device::flipNormalTowardsViewpoint(const PointCloud& cloud, const float3& vp, Normals& normals)
@@ -262,8 +262,8 @@ void pcl::device::flipNormalTowardsViewpoint(const PointCloud& cloud, const floa
     flip.normals = normals;
 
     flipNormalTowardsViewpointKernel<<<grid, block>>>(flip);
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());
 }
 
 void pcl::device::flipNormalTowardsViewpoint(const PointCloud& cloud, const Indices& indices, const float3& vp, Normals& normals)
@@ -277,6 +277,6 @@ void pcl::device::flipNormalTowardsViewpoint(const PointCloud& cloud, const Indi
     flip.normals = normals;
 
     flipNormalTowardsViewpointKernel<<<grid, block>>>(flip, indices.ptr());
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());
 }

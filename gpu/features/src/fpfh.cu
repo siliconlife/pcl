@@ -186,8 +186,8 @@ void pcl::device::computeSPFH(const PointCloud& surface, const Normals& normals,
 
     SpfhKernel<<<grid, block>>>(spfh);
 
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());
 }
 
 namespace pcl
@@ -330,8 +330,8 @@ void pcl::device::computeFPFH(const PointCloud& cloud, const NeighborIndices& ne
 
     FpfhKernel<<<grid, block>>>(fpfh);
 
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());    
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());    
 }
 
 void pcl::device::computeFPFH(const PointCloud& cloud, const Indices& indices, const PointCloud& surface, 
@@ -353,8 +353,8 @@ void pcl::device::computeFPFH(const PointCloud& cloud, const Indices& indices, c
 
     FpfhKernel<<<grid, block>>>(fpfh);
 
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());    
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());    
 
 }
 

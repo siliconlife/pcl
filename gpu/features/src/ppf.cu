@@ -196,8 +196,8 @@ void pcl::device::computePPF(const PointCloud& input, const Normals& normals, co
     int block = PpfImpl::CTA_SIZE;
     int grid = divUp(total, block);
     estimatePpfKernel<<<grid, block>>>(ppf);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(estimatePpfKernel);
 }
@@ -217,8 +217,8 @@ void pcl::device::computePPFRGB(const PointXYZRGBCloud& input, const Normals& no
     int block = PpfRgbImpl::CTA_SIZE;
     int grid = divUp(total, block);
     estimatePpfRgbKernel<<<grid, block>>>(ppfrgb);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(estimatePpfRgbKernel);
 }
@@ -358,8 +358,8 @@ void pcl::device::computePPFRGBRegion(const PointXYZRGBCloud& cloud, const Norma
 
     estiamtePpfRgbRegionKernel<<<grid, block>>>(impl);
 
-    cudaSafeCall( cudaGetLastError() );        
-    cudaSafeCall(cudaDeviceSynchronize());    
+    cudaSafeCall( musaGetLastError() );        
+    cudaSafeCall(musaDeviceSynchronize());    
 
     //printFuncAttrib(estiamtePpfRgbRegionKernel);
 }

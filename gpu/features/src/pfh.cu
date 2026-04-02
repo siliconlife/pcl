@@ -271,8 +271,8 @@ void pcl::device::repackToAosForPfh(const PointCloud& cloud, const Normals& norm
     int grid = divUp(rpk.work_size, Repack<false>::WARPS);
     
     device::repackKernel<<<grid, block>>>(rpk);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(repackKernel);
 }
@@ -290,8 +290,8 @@ void pcl::device::computePfh125(const DeviceArray2D<float>& data_rpk, int max_el
     int grid = (int)fph.work_size;    
 
     device::pfhKernel<<<grid, block>>>(fph);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(pfhKernel);
 }
@@ -328,8 +328,8 @@ void pcl::device::repackToAosForPfhRgb(const PointCloud& cloud, const Normals& n
     int grid = divUp(rpk.work_size, Repack<true>::WARPS);
     
     device::repackRgbKernel<<<grid, block>>>(rpk);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(repackRgbKernel);
 }
@@ -348,8 +348,8 @@ void pcl::device::computePfhRgb250(const DeviceArray2D<float>& data_rpk, int max
     int grid = (int)pfhrgb.work_size;    
 
     device::pfhRgbKernel<<<grid, block>>>(pfhrgb);
-    cudaSafeCall( cudaGetLastError() );
-    cudaSafeCall( cudaDeviceSynchronize() );
+    cudaSafeCall( musaGetLastError() );
+    cudaSafeCall( musaDeviceSynchronize() );
 
     //printFuncAttrib(pfhRgbKernel);
 

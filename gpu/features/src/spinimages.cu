@@ -301,8 +301,8 @@ namespace pcl
 			dim3 grid(min(total, max_grid_dim), divUp(total, max_grid_dim));
 
 			computeSpinKernel<Impl><<<grid, block, smem_size>>>(impl);
-			cudaSafeCall( cudaGetLastError() );
-			cudaSafeCall( cudaDeviceSynchronize() );
+			cudaSafeCall( musaGetLastError() );
+			cudaSafeCall( musaDeviceSynchronize() );
 		}
 
 		template<bool radial, bool angular>
@@ -400,6 +400,6 @@ void pcl::device::computeMask(const NeighborIndices& neighbours, int min_neighb,
 	thrust::device_ptr<unsigned char> out(mask.ptr());
 	
 	thrust::transform(beg, end, out, GtThan(min_neighb));
-	cudaSafeCall( cudaGetLastError() );
-	cudaSafeCall( cudaDeviceSynchronize() );	
+	cudaSafeCall( musaGetLastError() );
+	cudaSafeCall( musaDeviceSynchronize() );	
 }
