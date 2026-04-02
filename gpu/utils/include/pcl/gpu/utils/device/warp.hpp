@@ -53,13 +53,18 @@ namespace pcl
             /** \brief Returns the warp lane ID of the calling thread. */
             static __device__ __forceinline__ unsigned int laneId()
             {
+#ifndef __MUSA__
 	            unsigned int ret;
 	            asm("mov.u32 %0, %laneid;" : "=r"(ret) );
 	            return ret;
+#else
+                return 0;  // MUSA fallback - no direct lane access
+#endif
             }
 
             static __device__ __forceinline__ int laneMaskLe()
             {
+#ifndef __MUSA__
 #if (__CUDA_ARCH__ >= 200)
                 unsigned int ret;
 	            asm("mov.u32 %0, %lanemask_le;" : "=r"(ret) );
@@ -67,16 +72,23 @@ namespace pcl
 #else
                 return 0xFFFFFFFF >> (31 - laneId());
 #endif
+#else
+                return 0xFFFFFFFF;
+#endif
             }
 
             static __device__ __forceinline__ int laneMaskLt()
             {
+#ifndef __MUSA__
 #if (__CUDA_ARCH__ >= 200)
                 unsigned int ret;
 	            asm("mov.u32 %0, %lanemask_lt;" : "=r"(ret) );
 	            return ret;
 #else
                 return 0xFFFFFFFF >> (32 - laneId());
+#endif
+#else
+                return 0xFFFFFFFF >> 1;
 #endif
             }
             static __device__ __forceinline__ unsigned int id()

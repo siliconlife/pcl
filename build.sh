@@ -13,50 +13,35 @@ echo "PCL Directory: $PCL_DIR"
 echo "Build Directory: $BUILD_DIR"
 echo ""
 
-echo "=== Step 1: Install GTest ==="
+echo "=== Step 1: Install and Build GTest ==="
 
-GTEST_FOUND=false
-if [ -f "/usr/src/gtest/src/gtest-all.cc" ] || [ -d "/usr/src/googletest" ]; then
-    GTEST_FOUND=true
-    echo "  GTest found in /usr/src"
-elif [ -f "/usr/lib/libgtest.so" ]; then
-    GTEST_FOUND=true
-    echo "  GTest library found"
-fi
-
-if [ "$GTEST_FOUND" = false ]; then
-    echo "  Installing via apt..."
+if [ ! -f /usr/lib/libgtest.so ]; then
+    echo "  Installing libgtest-dev..."
     sudo apt-get update -qq 2>/dev/null || true
-    sudo apt-get install -y -qq libgtest-dev 2>/dev/null || true
+    sudo apt-get install -y -qq libgtest-dev cmake 2>/dev/null || true
     
-    if [ -f "/usr/src/gtest/src/gtest-all.cc" ] || [ -d "/usr/src/googletest" ]; then
-        GTEST_FOUND=true
-        echo "  GTest installed via apt"
+    GTEST_SRC=""
+    if [ -d "/usr/src/gtest" ]; then
+        GTEST_SRC="/usr/src/gtest"
+    elif [ -d "/usr/src/googletest/googletest" ]; then
+        GTEST_SRC="/usr/src/googletest/googletest"
+    fi
+    
+    if [ -n "$GTEST_SRC" ] && [ -f "$GTEST_SRC/CMakeLists.txt" ]; then
+        echo "  Building GTest shared library..."
+        cd "$GTEST_SRC"
+        sudo cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .
+        sudo make -j$(nproc)
+        sudo cp lib/libgtest.so lib/libgtest_main.so /usr/lib/ 2>/dev/null || true
+        sudo ldconfig
+        echo "  GTest shared library built"
     fi
 fi
 
-if [ "$GTEST_FOUND" = false ]; then
-    echo "  Downloading GTest sources..."
-    GTEST_BUILD_DIR="$BUILD_DIR/gtest-src"
-    mkdir -p "$GTEST_BUILD_DIR"
-    cd "$GTEST_BUILD_DIR"
-    
-    if command -v wget &> /dev/null; then
-        wget -q https://github.com/google/googletest/archive/refs/tags/release-1.12.1.tar.gz -O gtest.tar.gz
-    elif command -v curl &> /dev/null; then
-        curl -sL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.tar.gz -o gtest.tar.gz
-    fi
-    
-    if [ -f gtest.tar.gz ]; then
-        tar -xzf gtest.tar.gz
-        mv googletest-release-1.12.1 googletest
-        export GTEST_ROOT="$GTEST_BUILD_DIR/googletest"
-        GTEST_FOUND=true
-        echo "  GTest downloaded"
-        cd "$BUILD_DIR"
-    else
-        echo "  Warning: GTest not available"
-    fi
+if [ -f /usr/lib/libgtest.so ] || [ -f /usr/lib/libgtest.a ]; then
+    echo "  GTest ready: $(ls /usr/lib/libgtest* 2>/dev/null | tr '\n' ' ')"
+else
+    echo "  Warning: GTest not found"
 fi
 
 echo ""
@@ -72,7 +57,7 @@ cmake "$PCL_DIR" \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_visualization=OFF \
     -DWITH_VTK=OFF \
-    -DBUILD_GPU=OFF \
+    -DBUILD_GPU=ON \
     -DBUILD_CUDA=OFF \
     -DBUILD_filters=OFF \
     -DBUILD_surface=OFF \
@@ -85,6 +70,9 @@ cmake "$PCL_DIR" \
     -DCMAKE_CXX_COMPILER=g++ \
     -DCMAKE_CXX_FLAGS="-Wno-conversion -Wno-unused-parameter -Wno-enum-compare -DBOOST_BIND_GLOBAL_PLACEHOLDERS" \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+    -DMUSA_FOUND=ON \
+    -DMUSA_INCLUDE_DIR=/usr/local/musa/include \
+    -DMUSA_LIBRARY_DIR=/usr/local/musa/lib \
     2>&1 | tail -35
 
 if [ ! -f "$BUILD_DIR/Makefile" ]; then

@@ -6,7 +6,7 @@
 #  MUSA_LIBRARIES - Libraries needed to use MUSA
 #  MUSA_MCC_BIN - Path to mcc compiler
 
-find_path(MUSA_INCLUDE_DIR musa/musa_runtime.h
+find_path(MUSA_INCLUDE_DIR musa_runtime.h
     /usr/local/musa/include
     /opt/musa/include
 )
@@ -25,7 +25,7 @@ find_file(MUSA_MCC_BIN mcc
 if (MUSA_INCLUDE_DIR AND MUSA_RUNTIME_LIBRARY)
     set(MUSA_FOUND TRUE)
     set(MUSA_LIBRARIES ${MUSA_RUNTIME_LIBRARY})
-    set(MUSA_LIBRARY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../lib64" CACHE PATH "MUSA library directory")
+    set(MUSA_LIBRARY_DIR "/usr/local/musa/lib" CACHE PATH "MUSA library directory")
 else ()
     set(MUSA_FOUND FALSE)
 endif ()
