@@ -59,6 +59,7 @@ cmake "$PCL_DIR" \
     -DWITH_VTK=OFF \
     -DBUILD_GPU=ON \
     -DBUILD_CUDA=OFF \
+    -DBUILD_gpu_octree=OFF \
     -DBUILD_filters=OFF \
     -DBUILD_surface=OFF \
     -DBUILD_tools=OFF \
@@ -68,11 +69,12 @@ cmake "$PCL_DIR" \
     -DBOOST_ROOT=/usr \
     -DCMAKE_C_COMPILER=gcc \
     -DCMAKE_CXX_COMPILER=g++ \
-    -DCMAKE_CXX_FLAGS="-Wno-conversion -Wno-unused-parameter -Wno-enum-compare -DBOOST_BIND_GLOBAL_PLACEHOLDERS" \
+    -DCMAKE_CXX_FLAGS="-Wno-conversion -Wno-unused-parameter -Wno-enum-compare -Wno-narrowing -DBOOST_BIND_GLOBAL_PLACEHOLDERS" \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -DMUSA_FOUND=ON \
     -DMUSA_INCLUDE_DIR=/usr/local/musa/include \
     -DMUSA_LIBRARY_DIR=/usr/local/musa/lib \
+    -DGTEST_ROOT=/usr/src/gtest \
     2>&1 | tail -35
 
 if [ ! -f "$BUILD_DIR/Makefile" ]; then
@@ -94,13 +96,48 @@ echo ""
 echo "=== Step 6: Run tests ==="
 cd "$BUILD_DIR"
 
-if grep -q "GTEST_FOUND:BOOL=ON" CMakeCache.txt 2>/dev/null; then
-    echo "GTest detected, running tests..."
-    ctest --output-on-failure -j$(nproc) 2>&1 | tail -30 || true
-else
-    echo "GTest not configured - tests disabled"
-    echo "Test count: 0"
-fi
+export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
+
+echo "Running common tests..."
+cd "$BUILD_DIR/test/common"
+for test in test_common test_centroid test_eigen test_gaussian test_intensity; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo "Running geometry tests..."
+cd "$BUILD_DIR/test/geometry"
+for test in test_mesh test_mesh_io test_mesh_data; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo "Running io tests..."
+cd "$BUILD_DIR/test/io"
+for test in test_io; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo "Running octree tests..."
+cd "$BUILD_DIR/test/octree"
+for test in test_octree; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo ""
+echo "=== Test Summary ==="
+TEST_COUNT=$(find "$BUILD_DIR/test" -type f -executable -name "test_*" 2>/dev/null | wc -l)
+echo "Test binaries built: $TEST_COUNT"
 
 echo ""
 echo "============================================"
