@@ -110,10 +110,10 @@ pcl::FrustumCulling<PointT>::applyFilter (std::vector<int> &indices)
   Eigen::Vector3f np_br (np_c - (up * np_h / 2) + (right * np_w / 2));   // Bottom right corner of the near plane
 
   pl_f.block (0, 0, 3, 1).matrix () = (fp_bl - fp_br).cross (fp_tr - fp_br);   // Far plane equation - cross product of the 
-  pl_f (3) = -fp_c.dot (pl_f.block (0, 0, 3, 1));                    // perpendicular edges of the far plane
+  pl_f (3) = -fp_c.dot (pl_f.head<3>());                    // perpendicular edges of the far plane
 
   pl_n.block (0, 0, 3, 1).matrix () = (np_tr - np_br).cross (np_bl - np_br);   // Near plane equation - cross product of the 
-  pl_n (3) = -np_c.dot (pl_n.block (0, 0, 3, 1));                    // perpendicular edges of the far plane
+  pl_n (3) = -np_c.dot (pl_n.head<3>());                    // perpendicular edges of the far plane
 
   Eigen::Vector3f a (fp_bl - T);    // Vector connecting the camera and far plane bottom left
   Eigen::Vector3f b (fp_br - T);    // Vector connecting the camera and far plane bottom right
@@ -138,10 +138,10 @@ pcl::FrustumCulling<PointT>::applyFilter (std::vector<int> &indices)
   pl_t.block (0, 0, 3, 1).matrix () = c.cross (d);
   pl_b.block (0, 0, 3, 1).matrix () = a.cross (b);
 
-  pl_r (3) = -T.dot (pl_r.block (0, 0, 3, 1));
-  pl_l (3) = -T.dot (pl_l.block (0, 0, 3, 1));
-  pl_t (3) = -T.dot (pl_t.block (0, 0, 3, 1));
-  pl_b (3) = -T.dot (pl_b.block (0, 0, 3, 1));
+  pl_r (3) = -T.dot (pl_r.head<3>());
+  pl_l (3) = -T.dot (pl_l.head<3>());
+  pl_t (3) = -T.dot (pl_t.head<3>());
+  pl_b (3) = -T.dot (pl_b.head<3>());
 
   if (extract_removed_indices_)
   {
