@@ -14,20 +14,18 @@ usage() {
     echo "Usage: $0 [mode]"
     echo ""
     echo "Modes:"
-    echo "  cpu   - Build CPU modules only (no GPU)"
-    echo "  gpu   - Build GPU modules only"
+    echo "  cpu   - Build CPU modules only"
     echo "  all   - Build both CPU and GPU modules (default)"
     echo ""
     echo "Examples:"
     echo "  $0 cpu    # Build only CPU libraries"
-    echo "  $0 gpu    # Build only GPU libraries"
     echo "  $0 all    # Build everything"
     echo "  $0        # Same as 'all'"
 }
 
 # Validate build mode
 case "$BUILD_MODE" in
-    cpu|gpu|all)
+    cpu|all)
         ;;
     -h|--help|help)
         usage
@@ -48,9 +46,8 @@ echo "PCL Directory: $PCL_DIR"
 echo "Build Directory: $BUILD_DIR"
 echo ""
 
-# Step 1: Install and Build GTest (only for cpu or all modes)
-if [ "$BUILD_MODE" != "gpu" ]; then
-    echo "=== Step 1: Install and Build GTest ==="
+# Step 1: Install and Build GTest
+echo "=== Step 1: Install and Build GTest ==="
     
     if [ ! -f /usr/lib/libgtest.so ]; then
         echo "  Installing libgtest-dev..."
@@ -109,6 +106,7 @@ CMAKE_ARGS=(
     -DCMAKE_CXX_COMPILER=g++
     -DCMAKE_CXX_FLAGS="-Wno-conversion -Wno-unused-parameter -Wno-enum-compare -Wno-narrowing -DBOOST_BIND_GLOBAL_PLACEHOLDERS"
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    -Wno-dev
     -DMUSA_FOUND=ON
     -DMUSA_INCLUDE_DIR=/usr/local/musa/include
     -DMUSA_LIBRARY_DIR=/usr/local/musa/lib
@@ -134,25 +132,6 @@ case "$BUILD_MODE" in
             -DBUILD_tools=OFF
             -DBUILD_global_tests=ON
             -DGTEST_ROOT=/usr/src/gtest
-        )
-        ;;
-    gpu)
-        echo "Configuring for GPU modules only..."
-        CMAKE_ARGS+=(
-            -DBUILD_gpu_containers=ON
-            -DBUILD_gpu_utils=ON
-            -DBUILD_gpu_octree=ON
-            -DBUILD_gpu_features=ON
-            -DBUILD_gpu_segmentation=ON
-            -DBUILD_gpu_surface=ON
-            -DBUILD_gpu_tracking=ON
-            -DBUILD_gpu_kinfu=OFF
-            -DBUILD_gpu_kinfu_large_scale=OFF
-            -DBUILD_gpu_people=OFF
-            -DBUILD_filters=ON
-            -DBUILD_surface=ON
-            -DBUILD_tools=OFF
-            -DBUILD_global_tests=OFF
         )
         ;;
     all)
@@ -194,10 +173,6 @@ case "$BUILD_MODE" in
         echo "Building CPU modules..."
         make -j$(nproc) 2>&1 | tail -40
         ;;
-    gpu)
-        echo "Building GPU modules..."
-        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_gpu_surface pcl_gpu_tracking pcl_filters pcl_surface 2>&1 | tail -50
-        ;;
     all)
         echo "Building all modules (CPU + GPU)..."
         # First build GPU modules to ensure they're available
@@ -222,16 +197,13 @@ echo ""
 echo "CPU Libraries:"
 ls -1 lib/libpcl_*.so 2>/dev/null | grep -v libpcl_gpu || echo "  None found"
 
-if [ "$BUILD_MODE" != "cpu" ]; then
-    echo ""
-    echo "GPU Libraries:"
-    ls -1 lib/libpcl_gpu*.so 2>/dev/null || echo "  None found"
-fi
+echo ""
+echo "GPU Libraries:"
+ls -1 lib/libpcl_gpu*.so 2>/dev/null || echo "  None found"
 
-# Step 6: Run tests (only for cpu or all modes)
-if [ "$BUILD_MODE" != "gpu" ]; then
-    echo ""
-    echo "=== Step 6: Run tests ==="
+# Step 6: Run tests
+echo ""
+echo "=== Step 6: Run tests ==="
     cd "$BUILD_DIR"
     
     export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
@@ -284,20 +256,11 @@ echo "  Build Complete"
 echo "============================================"
 echo "Build Mode: $BUILD_MODE"
 echo "CPU Libraries built: $CPU_LIB_COUNT"
-if [ "$BUILD_MODE" != "cpu" ]; then
-    echo "GPU Libraries built: $GPU_LIB_COUNT"
-fi
+echo "GPU Libraries built: $GPU_LIB_COUNT"
 echo ""
 
 # Determine success/failure
-if [ "$BUILD_MODE" = "gpu" ]; then
-    if [ "$GPU_LIB_COUNT" -gt 0 ]; then
-        echo "Build Status: SUCCESS"
-    else
-        echo "Build Status: FAILED"
-        exit 1
-    fi
-elif [ "$BUILD_MODE" = "cpu" ]; then
+if [ "$BUILD_MODE" = "cpu" ]; then
     if [ "$CPU_LIB_COUNT" -gt 0 ]; then
         echo "Build Status: SUCCESS"
     else
@@ -321,5 +284,4 @@ echo "To run tests manually: cd build_musa && ctest --output-on-failure"
 echo ""
 echo "Usage reminder:"
 echo "  $0 cpu  # Build CPU only"
-echo "  $0 gpu  # Build GPU only"
 echo "  $0 all  # Build everything (default)"
