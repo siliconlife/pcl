@@ -1,82 +1,183 @@
 #!/bin/bash
-# PCL CUDA to MUSA Migration Build Script
+# PCL CUDA to MUSA Migration Build Script - Unified CPU & GPU Build
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PCL_DIR="$SCRIPT_DIR"
 BUILD_DIR="$PCL_DIR/build_musa"
 
+# Default build mode: all (both CPU and GPU)
+BUILD_MODE="${1:-all}"
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 [mode]"
+    echo ""
+    echo "Modes:"
+    echo "  cpu   - Build CPU modules only (no GPU)"
+    echo "  gpu   - Build GPU modules only"
+    echo "  all   - Build both CPU and GPU modules (default)"
+    echo ""
+    echo "Examples:"
+    echo "  $0 cpu    # Build only CPU libraries"
+    echo "  $0 gpu    # Build only GPU libraries"
+    echo "  $0 all    # Build everything"
+    echo "  $0        # Same as 'all'"
+}
+
+# Validate build mode
+case "$BUILD_MODE" in
+    cpu|gpu|all)
+        ;;
+    -h|--help|help)
+        usage
+        exit 0
+        ;;
+    *)
+        echo "Error: Unknown build mode '$BUILD_MODE'"
+        usage
+        exit 1
+        ;;
+esac
+
 echo "============================================"
-echo "  PCL MUSA Build Script"
+echo "  PCL MUSA Unified Build Script"
 echo "============================================"
+echo "Build Mode: $BUILD_MODE"
 echo "PCL Directory: $PCL_DIR"
 echo "Build Directory: $BUILD_DIR"
 echo ""
 
-echo "=== Step 1: Install and Build GTest ==="
-
-if [ ! -f /usr/lib/libgtest.so ]; then
-    echo "  Installing libgtest-dev..."
-    sudo apt-get update -qq 2>/dev/null || true
-    sudo apt-get install -y -qq libgtest-dev cmake 2>/dev/null || true
+# Step 1: Install and Build GTest (only for cpu or all modes)
+if [ "$BUILD_MODE" != "gpu" ]; then
+    echo "=== Step 1: Install and Build GTest ==="
     
-    GTEST_SRC=""
-    if [ -d "/usr/src/gtest" ]; then
-        GTEST_SRC="/usr/src/gtest"
-    elif [ -d "/usr/src/googletest/googletest" ]; then
-        GTEST_SRC="/usr/src/googletest/googletest"
+    if [ ! -f /usr/lib/libgtest.so ]; then
+        echo "  Installing libgtest-dev..."
+        sudo apt-get update -qq 2>/dev/null || true
+        sudo apt-get install -y -qq libgtest-dev cmake 2>/dev/null || true
+        
+        GTEST_SRC=""
+        if [ -d "/usr/src/gtest" ]; then
+            GTEST_SRC="/usr/src/gtest"
+        elif [ -d "/usr/src/googletest/googletest" ]; then
+            GTEST_SRC="/usr/src/googletest/googletest"
+        fi
+        
+        if [ -n "$GTEST_SRC" ] && [ -f "$GTEST_SRC/CMakeLists.txt" ]; then
+            echo "  Building GTest shared library..."
+            cd "$GTEST_SRC"
+            sudo cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .
+            sudo make -j$(nproc)
+            sudo cp lib/libgtest.so lib/libgtest_main.so /usr/lib/ 2>/dev/null || true
+            sudo ldconfig
+            echo "  GTest shared library built"
+        fi
     fi
     
-    if [ -n "$GTEST_SRC" ] && [ -f "$GTEST_SRC/CMakeLists.txt" ]; then
-        echo "  Building GTest shared library..."
-        cd "$GTEST_SRC"
-        sudo cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .
-        sudo make -j$(nproc)
-        sudo cp lib/libgtest.so lib/libgtest_main.so /usr/lib/ 2>/dev/null || true
-        sudo ldconfig
-        echo "  GTest shared library built"
+    if [ -f /usr/lib/libgtest.so ] || [ -f /usr/lib/libgtest.a ]; then
+        echo "  GTest ready: $(ls /usr/lib/libgtest* 2>/dev/null | tr '\n' ' ')"
+    else
+        echo "  Warning: GTest not found"
     fi
+    echo ""
 fi
 
-if [ -f /usr/lib/libgtest.so ] || [ -f /usr/lib/libgtest.a ]; then
-    echo "  GTest ready: $(ls /usr/lib/libgtest* 2>/dev/null | tr '\n' ' ')"
-else
-    echo "  Warning: GTest not found"
-fi
-
-echo ""
+# Step 2: Prepare build directory
 echo "=== Step 2: Prepare build directory ==="
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-
 echo ""
+
+# Step 3: Configure CMake based on build mode
 echo "=== Step 3: Configure CMake ==="
 
-cmake "$PCL_DIR" \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DBUILD_visualization=OFF \
-    -DWITH_VTK=OFF \
-    -DBUILD_GPU=ON \
-    -DBUILD_CUDA=OFF \
-    -DBUILD_gpu_octree=OFF \
-    -DBUILD_gpu_features=OFF \
-    -DBUILD_filters=OFF \
-    -DBUILD_surface=OFF \
-    -DBUILD_tools=OFF \
-    -DBUILD_global_tests=ON \
-    -DPCL_SHARED_LIBS=ON \
-    -DBoost_USE_STATIC_LIBS=OFF \
-    -DBOOST_ROOT=/usr \
-    -DCMAKE_C_COMPILER=gcc \
-    -DCMAKE_CXX_COMPILER=g++ \
-    -DCMAKE_CXX_FLAGS="-Wno-conversion -Wno-unused-parameter -Wno-enum-compare -Wno-narrowing -DBOOST_BIND_GLOBAL_PLACEHOLDERS" \
-    -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
-    -DMUSA_FOUND=ON \
-    -DMUSA_INCLUDE_DIR=/usr/local/musa/include \
-    -DMUSA_LIBRARY_DIR=/usr/local/musa/lib \
-    -DGTEST_ROOT=/usr/src/gtest \
-    2>&1 | tail -35
+# Base CMake arguments
+CMAKE_ARGS=(
+    "$PCL_DIR"
+    -DCMAKE_BUILD_TYPE=Release
+    -DBUILD_visualization=OFF
+    -DWITH_VTK=OFF
+    -DWITH_QT=OFF
+    -DBUILD_GPU=ON
+    -DBUILD_CUDA=OFF
+    -DPCL_SHARED_LIBS=ON
+    -DBoost_USE_STATIC_LIBS=OFF
+    -DBOOST_ROOT=/usr
+    -DCMAKE_C_COMPILER=gcc
+    -DCMAKE_CXX_COMPILER=g++
+    -DCMAKE_CXX_FLAGS="-Wno-conversion -Wno-unused-parameter -Wno-enum-compare -Wno-narrowing -DBOOST_BIND_GLOBAL_PLACEHOLDERS"
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    -DMUSA_FOUND=ON
+    -DMUSA_INCLUDE_DIR=/usr/local/musa/include
+    -DMUSA_LIBRARY_DIR=/usr/local/musa/lib
+)
+
+# Add mode-specific configuration
+case "$BUILD_MODE" in
+    cpu)
+        echo "Configuring for CPU modules only..."
+        CMAKE_ARGS+=(
+            -DBUILD_gpu_containers=OFF
+            -DBUILD_gpu_utils=OFF
+            -DBUILD_gpu_octree=OFF
+            -DBUILD_gpu_features=OFF
+            -DBUILD_gpu_segmentation=OFF
+            -DBUILD_gpu_surface=OFF
+            -DBUILD_gpu_tracking=OFF
+            -DBUILD_gpu_kinfu=OFF
+            -DBUILD_gpu_kinfu_large_scale=OFF
+            -DBUILD_gpu_people=OFF
+            -DBUILD_filters=OFF
+            -DBUILD_surface=OFF
+            -DBUILD_tools=OFF
+            -DBUILD_global_tests=ON
+            -DGTEST_ROOT=/usr/src/gtest
+        )
+        ;;
+    gpu)
+        echo "Configuring for GPU modules only..."
+        CMAKE_ARGS+=(
+            -DBUILD_gpu_containers=ON
+            -DBUILD_gpu_utils=ON
+            -DBUILD_gpu_octree=ON
+            -DBUILD_gpu_features=ON
+            -DBUILD_gpu_segmentation=ON
+            -DBUILD_gpu_surface=OFF
+            -DBUILD_gpu_tracking=OFF
+            -DBUILD_gpu_kinfu=OFF
+            -DBUILD_gpu_kinfu_large_scale=OFF
+            -DBUILD_gpu_people=OFF
+            -DBUILD_filters=ON
+            -DBUILD_surface=ON
+            -DBUILD_tools=OFF
+            -DBUILD_global_tests=OFF
+        )
+        ;;
+    all)
+        echo "Configuring for all modules (CPU + GPU)..."
+        CMAKE_ARGS+=(
+            -DBUILD_gpu_containers=ON
+            -DBUILD_gpu_utils=ON
+            -DBUILD_gpu_octree=ON
+            -DBUILD_gpu_features=ON
+            -DBUILD_gpu_segmentation=ON
+            -DBUILD_gpu_surface=OFF
+            -DBUILD_gpu_tracking=OFF
+            -DBUILD_gpu_kinfu=OFF
+            -DBUILD_gpu_kinfu_large_scale=OFF
+            -DBUILD_gpu_people=OFF
+            -DBUILD_filters=ON
+            -DBUILD_surface=ON
+            -DBUILD_tools=OFF
+            -DBUILD_global_tests=ON
+            -DGTEST_ROOT=/usr/src/gtest
+        )
+        ;;
+esac
+
+cmake "${CMAKE_ARGS[@]}" 2>&1 | tail -50
 
 if [ ! -f "$BUILD_DIR/Makefile" ]; then
     echo "ERROR: CMake configuration failed"
@@ -84,67 +185,141 @@ if [ ! -f "$BUILD_DIR/Makefile" ]; then
 fi
 
 echo ""
-echo "=== Step 4: Compile PCL ==="
-make -j$(nproc) 2>&1 | tail -40
+
+# Step 4: Compile based on build mode
+echo "=== Step 4: Compile ==="
+
+case "$BUILD_MODE" in
+    cpu)
+        echo "Building CPU modules..."
+        make -j$(nproc) 2>&1 | tail -40
+        ;;
+    gpu)
+        echo "Building GPU modules..."
+        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_filters pcl_surface 2>&1 | tail -50
+        ;;
+    all)
+        echo "Building all modules (CPU + GPU)..."
+        # First build GPU modules to ensure they're available
+        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_filters pcl_surface 2>&1 | tail -30
+        # Then build everything else
+        make -j$(nproc) 2>&1 | tail -40
+        ;;
+esac
 
 echo ""
+
+# Step 5: Build verification
 echo "=== Step 5: Build verification ==="
-LIB_COUNT=$(ls lib/libpcl_*.so 2>/dev/null | wc -l)
-echo "Built Libraries: $LIB_COUNT"
-ls -1 lib/libpcl_*.so 2>/dev/null || echo "  None found"
+
+CPU_LIB_COUNT=$(ls lib/libpcl_*.so 2>/dev/null | grep -v libpcl_gpu | wc -l)
+GPU_LIB_COUNT=$(ls lib/libpcl_gpu*.so 2>/dev/null | wc -l)
+
+echo "Built CPU Libraries: $CPU_LIB_COUNT"
+echo "Built GPU Libraries: $GPU_LIB_COUNT"
 
 echo ""
-echo "=== Step 6: Run tests ==="
-cd "$BUILD_DIR"
+echo "CPU Libraries:"
+ls -1 lib/libpcl_*.so 2>/dev/null | grep -v libpcl_gpu || echo "  None found"
 
-export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
+if [ "$BUILD_MODE" != "cpu" ]; then
+    echo ""
+    echo "GPU Libraries:"
+    ls -1 lib/libpcl_gpu*.so 2>/dev/null || echo "  None found"
+fi
 
-echo "Running common tests..."
-cd "$BUILD_DIR/test/common"
-for test in test_common test_centroid test_eigen test_gaussian test_intensity; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
-echo "Running geometry tests..."
-cd "$BUILD_DIR/test/geometry"
-for test in test_mesh test_mesh_io test_mesh_data; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
-echo "Running io tests..."
-cd "$BUILD_DIR/test/io"
-for test in test_io; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
-echo "Running octree tests..."
-cd "$BUILD_DIR/test/octree"
-for test in test_octree; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
-echo ""
-echo "=== Test Summary ==="
-TEST_COUNT=$(find "$BUILD_DIR/test" -type f -executable -name "test_*" 2>/dev/null | wc -l)
-echo "Test binaries built: $TEST_COUNT"
+# Step 6: Run tests (only for cpu or all modes)
+if [ "$BUILD_MODE" != "gpu" ]; then
+    echo ""
+    echo "=== Step 6: Run tests ==="
+    cd "$BUILD_DIR"
+    
+    export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
+    
+    echo "Running common tests..."
+    cd "$BUILD_DIR/test/common"
+    for test in test_common test_centroid test_eigen test_gaussian test_intensity; do
+        if [ -x "$test" ]; then
+            echo "  Running $test..."
+            ./$test --gtest_color=yes 2>&1 | tail -5 || true
+        fi
+    done
+    
+    echo "Running geometry tests..."
+    cd "$BUILD_DIR/test/geometry"
+    for test in test_mesh test_mesh_io test_mesh_data; do
+        if [ -x "$test" ]; then
+            echo "  Running $test..."
+            ./$test --gtest_color=yes 2>&1 | tail -5 || true
+        fi
+    done
+    
+    echo "Running io tests..."
+    cd "$BUILD_DIR/test/io"
+    for test in test_io; do
+        if [ -x "$test" ]; then
+            echo "  Running $test..."
+            ./$test --gtest_color=yes 2>&1 | tail -5 || true
+        fi
+    done
+    
+    echo "Running octree tests..."
+    cd "$BUILD_DIR/test/octree"
+    for test in test_octree; do
+        if [ -x "$test" ]; then
+            echo "  Running $test..."
+            ./$test --gtest_color=yes 2>&1 | tail -5 || true
+        fi
+    done
+    
+    echo ""
+    echo "=== Test Summary ==="
+    TEST_COUNT=$(find "$BUILD_DIR/test" -type f -executable -name "test_*" 2>/dev/null | wc -l)
+    echo "Test binaries built: $TEST_COUNT"
+fi
 
 echo ""
 echo "============================================"
 echo "  Build Complete"
 echo "============================================"
-echo "Libraries built: $LIB_COUNT"
+echo "Build Mode: $BUILD_MODE"
+echo "CPU Libraries built: $CPU_LIB_COUNT"
+if [ "$BUILD_MODE" != "cpu" ]; then
+    echo "GPU Libraries built: $GPU_LIB_COUNT"
+fi
+echo ""
+
+# Determine success/failure
+if [ "$BUILD_MODE" = "gpu" ]; then
+    if [ "$GPU_LIB_COUNT" -gt 0 ]; then
+        echo "Build Status: SUCCESS"
+    else
+        echo "Build Status: FAILED"
+        exit 1
+    fi
+elif [ "$BUILD_MODE" = "cpu" ]; then
+    if [ "$CPU_LIB_COUNT" -gt 0 ]; then
+        echo "Build Status: SUCCESS"
+    else
+        echo "Build Status: FAILED"
+        exit 1
+    fi
+else
+    # all mode
+    if [ "$CPU_LIB_COUNT" -gt 0 ] && [ "$GPU_LIB_COUNT" -gt 0 ]; then
+        echo "Build Status: SUCCESS"
+    elif [ "$CPU_LIB_COUNT" -gt 0 ] || [ "$GPU_LIB_COUNT" -gt 0 ]; then
+        echo "Build Status: PARTIAL SUCCESS"
+    else
+        echo "Build Status: FAILED"
+        exit 1
+    fi
+fi
+
 echo ""
 echo "To run tests manually: cd build_musa && ctest --output-on-failure"
-echo "Build Status: SUCCESS"
+echo ""
+echo "Usage reminder:"
+echo "  $0 cpu  # Build CPU only"
+echo "  $0 gpu  # Build GPU only"
+echo "  $0 all  # Build everything (default)"
