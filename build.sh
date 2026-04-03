@@ -176,8 +176,8 @@ case "$BUILD_MODE" in
         echo "Building all modules (CPU + GPU)..."
         # First build GPU modules to ensure they're available
         make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_gpu_surface pcl_gpu_tracking pcl_filters pcl_surface 2>&1 | tail -30
-        # Then build everything else
-        make -j$(nproc) 2>&1 | tail -40
+        # Then build everything else including tests
+        make -j$(nproc) tests 2>&1 | tail -40
         ;;
 esac
 
@@ -200,49 +200,18 @@ echo ""
 echo "GPU Libraries:"
 ls -1 lib/libpcl_gpu*.so 2>/dev/null || echo "  None found"
 
-# Step 6: Run tests
+# Step 6: Run tests using ctest
 echo ""
 echo "=== Step 6: Run tests ==="
 cd "$BUILD_DIR"
 
 export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
 
-echo "Running common tests..."
-cd "$BUILD_DIR/test/common"
-for test in test_common test_centroid test_eigen test_gaussian test_intensity; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
+# Run all tests using ctest
+echo "Running ctest..."
+ctest --output-on-failure 2>&1 | tail -50
 
-echo "Running geometry tests..."
-cd "$BUILD_DIR/test/geometry"
-for test in test_mesh test_mesh_io test_mesh_data; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
-echo "Running io tests..."
-cd "$BUILD_DIR/test/io"
-for test in test_io; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
-echo "Running octree tests..."
-cd "$BUILD_DIR/test/octree"
-for test in test_octree; do
-    if [ -x "$test" ]; then
-        echo "  Running $test..."
-        ./$test --gtest_color=yes 2>&1 | tail -5 || true
-    fi
-done
-
+# Count test results
 echo ""
 echo "=== Test Summary ==="
 TEST_COUNT=$(find "$BUILD_DIR/test" -type f -executable -name "test_*" 2>/dev/null | wc -l)
