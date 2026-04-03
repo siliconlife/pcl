@@ -268,8 +268,8 @@ pcl::io::AverageBuffer<T>::push (std::vector<T>& data)
   // data_sum_
   for (size_t i = 0; i < size_; ++i)
   {
-    const float& new_value = data[i];
-    const float& old_value = data_[data_current_idx_][i];
+    const T& new_value = data[i];
+    const T& old_value = data_[data_current_idx_][i];
     bool new_is_invalid = buffer_traits<T>::is_invalid (new_value);
     bool old_is_invalid = buffer_traits<T>::is_invalid (old_value);
 
