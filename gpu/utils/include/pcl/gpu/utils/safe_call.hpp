@@ -42,7 +42,7 @@
 
 #if defined(__GNUC__)
     #define cudaSafeCall(expr)  pcl::gpu::___cudaSafeCall(expr, __FILE__, __LINE__, __func__)
-#else /* defined(__CUDACC__) || defined(__MSVC__) */
+#else /* defined(__MUSACC__) || defined(__MSVC__) */
     #define cudaSafeCall(expr)  pcl::gpu::___cudaSafeCall(expr, __FILE__, __LINE__)    
 #endif
 

@@ -99,7 +99,7 @@ namespace
     template <class T> inline void getCudaAttribute(T *attribute, MUdevice_attribute device_attribute, int device)
     {
         *attribute = T();
-        MUresult error = MUSA_SUCCESS;// = cuDeviceGetAttribute( attribute, device_attribute, device );
+        MUresult error = MUSA_SUCCESS;// = muDeviceGetAttribute( attribute, device_attribute, device );
         if( MUSA_SUCCESS == error ) 
             return;        
 
@@ -167,12 +167,12 @@ void pcl::gpu::printCudaDeviceInfo(int device)
         printf("  (%2d) Multiprocessors x (%2d) CUDA Cores/MP:     %d CUDA Cores\n", prop.multiProcessorCount, sm_cores, sm_cores * prop.multiProcessorCount);
         printf("  GPU Clock Speed:                               %.2f GHz\n", prop.clockRate * 1e-6f);
 
-#if (CUDART_VERSION >= 4000)
+#if (MUSART_VERSION >= 4000)
         // This is not available in the CUDA Runtime API, so we make the necessary calls the driver API to support this for output
         int memoryClock, memBusWidth, L2CacheSize;
-        getCudaAttribute<int>( &memoryClock, CU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE, dev );        
-        getCudaAttribute<int>( &memBusWidth, CU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH, dev );                
-        getCudaAttribute<int>( &L2CacheSize, CU_DEVICE_ATTRIBUTE_L2_CACHE_SIZE, dev );
+        getCudaAttribute<int>( &memoryClock, MU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE, dev );        
+        getCudaAttribute<int>( &memBusWidth, MU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH, dev );                
+        getCudaAttribute<int>( &L2CacheSize, MU_DEVICE_ATTRIBUTE_L2_CACHE_SIZE, dev );
 
         printf("  Memory Clock rate:                             %.2f Mhz\n", memoryClock * 1e-3f);
         printf("  Memory Bus Width:                              %d-bit\n", memBusWidth);
@@ -196,7 +196,7 @@ void pcl::gpu::printCudaDeviceInfo(int device)
         printf("  Maximum memory pitch:                          %u bytes\n", (int)prop.memPitch);
         printf("  Texture alignment:                             %u bytes\n", (int)prop.textureAlignment);
 
-#if CUDART_VERSION >= 4000
+#if MUSART_VERSION >= 4000
         printf("  Concurrent copy and execution:                 %s with %d copy engine(s)\n", (prop.deviceOverlap ? "Yes" : "No"), prop.asyncEngineCount);
 #else
         printf("  Concurrent copy and execution:                 %s\n", prop.deviceOverlap ? "Yes" : "No");
@@ -209,7 +209,7 @@ void pcl::gpu::printCudaDeviceInfo(int device)
         printf("  Alignment requirement for Surfaces:            %s\n", prop.surfaceAlignment ? "Yes" : "No");
         printf("  Device has ECC support enabled:                %s\n", prop.ECCEnabled ? "Yes" : "No");
         printf("  Device is using TCC driver mode:               %s\n", prop.tccDriver ? "Yes" : "No");
-#if CUDART_VERSION >= 4000
+#if MUSART_VERSION >= 4000
         printf("  Device supports Unified Addressing (UVA):      %s\n", prop.unifiedAddressing ? "Yes" : "No");
         printf("  Device PCI Bus ID / PCI location ID:           %d / %d\n", prop.pciBusID, prop.pciDeviceID );
 #endif

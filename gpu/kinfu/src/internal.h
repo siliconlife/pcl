@@ -393,7 +393,7 @@ namespace pcl
     /** \brief synchronizes CUDA execution */
     inline 
     void 
-    sync () { cudaSafeCall (cudaDeviceSynchronize ()); }
+    sync () { cudaSafeCall (musaDeviceSynchronize ()); }
 
 
     template<class D, class Matx> D&

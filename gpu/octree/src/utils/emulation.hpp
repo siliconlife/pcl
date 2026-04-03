@@ -47,7 +47,7 @@ namespace pcl
 		{
 			static __forceinline__ __device__ int Ballot(int predicate, volatile int* cta_buffer)
 			{
-#if __CUDA_ARCH__ >= 200
+#if __MUSA_ARCH__ >= 200
 				(void)cta_buffer;
 				return __ballot(predicate);
 #else

@@ -1,0 +1,191 @@
+[INFO] [2026-04-03 13:59:42,771] Processing ./features/src/pfh.cu
+[INFO] [2026-04-03 13:59:42,776] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,776] Processing ./features/src/spinimages.cu
+[INFO] [2026-04-03 13:59:42,782] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,782] Processing ./features/src/vfh.cu
+[INFO] [2026-04-03 13:59:42,785] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,786] Processing ./features/src/normal_3d.cu
+[INFO] [2026-04-03 13:59:42,789] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,789] Processing ./features/src/uniq_inds.cu
+[INFO] [2026-04-03 13:59:42,791] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,792] Processing ./features/src/ppf.cu
+[INFO] [2026-04-03 13:59:42,796] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,797] Processing ./features/src/fpfh.cu
+[INFO] [2026-04-03 13:59:42,801] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,802] Processing ./features/src/centroid.cu
+[INFO] [2026-04-03 13:59:42,804] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,804] Processing ./features/src/principal_curvatures.cu
+[INFO] [2026-04-03 13:59:42,810] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,811] Processing ./people/src/cuda/smooth.cu
+[INFO] [2026-04-03 13:59:42,813] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,813] Processing ./people/src/cuda/shs.cu
+[INFO] [2026-04-03 13:59:42,816] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,817] Processing ./people/src/cuda/elec.cu
+[INFO] [2026-04-03 13:59:42,822] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,823] Processing ./people/src/cuda/multi_tree.cu
+[INFO] [2026-04-03 13:59:42,828] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,829] Processing ./people/src/cuda/prob.cu
+[INFO] [2026-04-03 13:59:42,833] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,833] Processing ./people/src/cuda/utils.cu
+[INFO] [2026-04-03 13:59:42,836] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,836] Processing ./people/src/cuda/nvidia/NCV.cu
+[INFO] [2026-04-03 13:59:42,844] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,845] Processing ./people/src/cuda/nvidia/NPP_staging.cu
+[INFO] [2026-04-03 13:59:42,871] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,871] Processing ./people/src/cuda/nvidia/NCVHaarObjectDetection.cu
+[INFO] [2026-04-03 13:59:42,898] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,899] Processing ./people/src/cuda/nvidia/NCVPyramid.cu
+[INFO] [2026-04-03 13:59:42,906] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,906] Processing ./octree/src/cuda/octree_host.cu
+[INFO] [2026-04-03 13:59:42,909] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,909] Processing ./octree/src/cuda/bfrs.cu
+[INFO] [2026-04-03 13:59:42,911] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,911] Processing ./octree/src/cuda/knn_search.cu
+[INFO] [2026-04-03 13:59:42,914] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,914] Processing ./octree/src/cuda/radius_search.cu
+[INFO] [2026-04-03 13:59:42,919] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,919] Processing ./octree/src/cuda/approx_nsearch.cu
+[INFO] [2026-04-03 13:59:42,922] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,922] Processing ./octree/src/cuda/octree_builder.cu
+[INFO] [2026-04-03 13:59:42,927] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,927] Processing ./kinfu/src/cuda/extract.cu
+[INFO] [2026-04-03 13:59:42,931] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,932] Processing ./kinfu/src/cuda/colors.cu
+[INFO] [2026-04-03 13:59:42,934] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,935] Processing ./kinfu/src/cuda/estimate_tranform.cu
+[INFO] [2026-04-03 13:59:42,937] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,937] Processing ./kinfu/src/cuda/marching_cubes.cu
+[INFO] [2026-04-03 13:59:42,942] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,942] Processing ./kinfu/src/cuda/estimate_combined.cu
+[INFO] [2026-04-03 13:59:42,945] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,946] Processing ./kinfu/src/cuda/image_generator.cu
+[INFO] [2026-04-03 13:59:42,948] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,948] Processing ./kinfu/src/cuda/coresp.cu
+[INFO] [2026-04-03 13:59:42,950] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,951] Processing ./kinfu/src/cuda/ray_caster.cu
+[INFO] [2026-04-03 13:59:42,954] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,954] Processing ./kinfu/src/cuda/tsdf_volume.cu
+[INFO] [2026-04-03 13:59:42,960] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,960] Processing ./kinfu/src/cuda/bilateral_pyrdown.cu
+[INFO] [2026-04-03 13:59:42,963] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,963] Processing ./kinfu/src/cuda/normals_eigen.cu
+[INFO] [2026-04-03 13:59:42,965] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,965] Processing ./kinfu/src/cuda/maps.cu
+[INFO] [2026-04-03 13:59:42,969] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,969] Processing ./utils/src/repacks.cu
+[INFO] [2026-04-03 13:59:42,971] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,971] Processing ./surface/src/cuda/convex_hull.cu
+[INFO] [2026-04-03 13:59:42,979] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,979] Processing ./kinfu_large_scale/src/cuda/extract.cu
+[INFO] [2026-04-03 13:59:42,987] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,988] Processing ./kinfu_large_scale/src/cuda/colors.cu
+[INFO] [2026-04-03 13:59:42,991] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,991] Processing ./kinfu_large_scale/src/cuda/estimate_tranform.cu
+[INFO] [2026-04-03 13:59:42,994] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,994] Processing ./kinfu_large_scale/src/cuda/marching_cubes.cu
+[INFO] [2026-04-03 13:59:42,998] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,999] Processing ./kinfu_large_scale/src/cuda/pointer_shift.cu
+[INFO] [2026-04-03 13:59:42,999] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:42,999] Processing ./kinfu_large_scale/src/cuda/estimate_combined.cu
+[INFO] [2026-04-03 13:59:43,003] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,003] Processing ./kinfu_large_scale/src/cuda/image_generator.cu
+[INFO] [2026-04-03 13:59:43,005] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,006] Processing ./kinfu_large_scale/src/cuda/coresp.cu
+[INFO] [2026-04-03 13:59:43,008] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,008] Processing ./kinfu_large_scale/src/cuda/ray_caster.cu
+[INFO] [2026-04-03 13:59:43,012] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,012] Processing ./kinfu_large_scale/src/cuda/tsdf_volume.cu
+[INFO] [2026-04-03 13:59:43,020] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,021] Processing ./kinfu_large_scale/src/cuda/bilateral_pyrdown.cu
+[INFO] [2026-04-03 13:59:43,023] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,023] Processing ./kinfu_large_scale/src/cuda/push.cu
+[INFO] [2026-04-03 13:59:43,024] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,025] Processing ./kinfu_large_scale/src/cuda/normals_eigen.cu
+[INFO] [2026-04-03 13:59:43,026] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,027] Processing ./kinfu_large_scale/src/cuda/maps.cu
+[INFO] [2026-04-03 13:59:43,031] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:43,031] Processing ./tracking/src/cuda/particle_filter.cu
+[INFO] [2026-04-03 13:59:43,033] CONVERTED refs by names:
+use mapping:  /usr/local/musa/tools/../tools//include.json
+use mapping:  /usr/local/musa/tools/../tools//general.json
+  cuda => musa: 8
+  cuda => musa: 4
+  nv => mt: 4
+  cuda => musa: 4
+  nv => mt: 6
+  cuda => musa: 6
+  cuda => musa: 6
+  cuda => musa: 6
+  cuda.h => musa.h: 1
+  cuda => musa: 6
+  nv => mt: 6
+  cuda => musa: 2
+  cuda => musa: 2
+  nv => mt: 4
+  cuda => musa: 12
+  cuda => musa: 9
+  nv => mt: 2
+  cuda => musa: 10
+  cuda => musa: 11
+  nv => mt: 9
+  nv => mt: 2
+  cuda => musa: 2
+  nv => mt: 14
+  nv => mt: 2
+  NPP_ERROR => MUPP_ERROR: 1
+  nv => mt: 6
+  cuda => musa: 4
+  cuda.h => musa.h: 1
+  cuda => musa: 1
+  cuda => musa: 3
+  cuda => musa: 3
+  cuda => musa: 3
+  cuda.h => musa.h: 1
+  cuda => musa: 3
+  nv => mt: 6
+  cuda => musa: 5
+  cuda => musa: 6
+  nv => mt: 5
+  cuda.h => musa.h: 1
+  cuda => musa: 4
+  cuda => musa: 13
+  nv => mt: 5
+  cuda => musa: 4
+  cuda => musa: 6
+  nv => mt: 4
+  nv => mt: 5
+  cuda => musa: 2
+  cuda => musa: 2
+  cuda => musa: 7
+  nv => mt: 73
+  nv_half => mt_half: 4
+  cuda => musa: 3
+  cuda => musa: 2
+  nv => mt: 10
+  cuda => musa: 10
+  cuda => musa: 2
+  cuda => musa: 15
+  nv => mt: 9
+  nv => mt: 7
+  cuda => musa: 9
+  cuda => musa: 6
+  nv => mt: 5
+  cuda.h => musa.h: 1
+  cuda => musa: 4
+  cuda => musa: 11
+  nv => mt: 5
+  cuda => musa: 4
+  cuda => musa: 6
+  nv => mt: 4
+  nv => mt: 5
+  cuda => musa: 2
+  cuda => musa: 2
+  cuda => musa: 9
+  nv => mt: 73
+  nv_half => mt_half: 4
+  cuda => musa: 3
+  cuda => musa: 2
+  cuda => musa: 2
+  nv => mt: 10
+  cuda => musa: 10
+  cuda => musa: 2

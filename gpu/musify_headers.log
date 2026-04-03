@@ -1,0 +1,360 @@
+[INFO] [2026-04-03 13:59:53,263] Processing ./features/src/utils/vector_operations.hpp
+[INFO] [2026-04-03 13:59:53,266] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,266] Processing ./features/src/internal.hpp
+[INFO] [2026-04-03 13:59:53,269] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,269] Processing ./features/test/data_source.hpp
+[INFO] [2026-04-03 13:59:53,272] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,272] Processing ./features/include/pcl/gpu/features/features.hpp
+[INFO] [2026-04-03 13:59:53,276] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,276] Processing ./features/include/pcl/gpu/features/device/eigen.hpp
+[INFO] [2026-04-03 13:59:53,282] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,283] Processing ./features/include/pcl/gpu/features/device/pair_features.hpp
+[INFO] [2026-04-03 13:59:53,286] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,286] Processing ./features/include/pcl/gpu/features/device/rodrigues.hpp
+[INFO] [2026-04-03 13:59:53,287] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,287] Processing ./people/src/cuda/device.h
+[INFO] [2026-04-03 13:59:53,289] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,289] Processing ./people/src/cuda/nvidia/NCVPixelOperations.hpp
+[INFO] [2026-04-03 13:59:53,294] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,294] Processing ./people/src/cuda/nvidia/NCVRuntimeTemplates.hpp
+[INFO] [2026-04-03 13:59:53,297] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,297] Processing ./people/src/cuda/nvidia/NCVColorConversion.hpp
+[INFO] [2026-04-03 13:59:53,298] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,299] Processing ./people/src/cuda/nvidia/NCVPyramid.hpp
+[INFO] [2026-04-03 13:59:53,300] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,300] Processing ./people/src/cuda/nvidia/NCV.hpp
+[INFO] [2026-04-03 13:59:53,309] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,310] Processing ./people/src/cuda/nvidia/NPP_staging.hpp
+[INFO] [2026-04-03 13:59:53,321] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,321] Processing ./people/src/cuda/nvidia/NCVAlg.hpp
+[INFO] [2026-04-03 13:59:53,323] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,323] Processing ./people/src/cuda/nvidia/NCVHaarObjectDetection.hpp
+[INFO] [2026-04-03 13:59:53,329] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,330] Processing ./people/src/internal.h
+[INFO] [2026-04-03 13:59:53,335] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,336] Processing ./people/src/cuda_async_copy.h
+[INFO] [2026-04-03 13:59:53,337] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,338] Processing ./people/include/pcl/gpu/people/tree_train.h
+[INFO] [2026-04-03 13:59:53,340] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,341] Processing ./people/include/pcl/gpu/people/label_tree.h
+[INFO] [2026-04-03 13:59:53,350] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,350] Processing ./people/include/pcl/gpu/people/organized_plane_detector.h
+[INFO] [2026-04-03 13:59:53,352] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,352] Processing ./people/include/pcl/gpu/people/face_detector.h
+[INFO] [2026-04-03 13:59:53,355] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,355] Processing ./people/include/pcl/gpu/people/tree.h
+[INFO] [2026-04-03 13:59:53,357] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,357] Processing ./people/include/pcl/gpu/people/person_attribs.h
+[INFO] [2026-04-03 13:59:53,358] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,358] Processing ./people/include/pcl/gpu/people/label_common.h
+[INFO] [2026-04-03 13:59:53,361] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,362] Processing ./people/include/pcl/gpu/people/label_segment.h
+[INFO] [2026-04-03 13:59:53,367] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,367] Processing ./people/include/pcl/gpu/people/probability_processor.h
+[INFO] [2026-04-03 13:59:53,368] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,369] Processing ./people/include/pcl/gpu/people/colormap.h
+[INFO] [2026-04-03 13:59:53,370] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,370] Processing ./people/include/pcl/gpu/people/people_detector.h
+[INFO] [2026-04-03 13:59:53,372] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,372] Processing ./people/include/pcl/gpu/people/label_blob2.h
+[INFO] [2026-04-03 13:59:53,374] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,374] Processing ./people/include/pcl/gpu/people/bodyparts_detector.h
+[INFO] [2026-04-03 13:59:53,376] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,376] Processing ./octree/src/utils/scan_block.hpp
+[INFO] [2026-04-03 13:59:53,378] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,378] Processing ./octree/src/utils/warp_reduce.hpp
+[INFO] [2026-04-03 13:59:53,380] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,380] Processing ./octree/src/utils/bitonic_sort.hpp
+[INFO] [2026-04-03 13:59:53,381] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,381] Processing ./octree/src/utils/boxutils.hpp
+[INFO] [2026-04-03 13:59:53,383] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,383] Processing ./octree/src/utils/emulation.hpp
+[INFO] [2026-04-03 13:59:53,384] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,384] Processing ./octree/src/utils/priority_octree_iterator.hpp
+[INFO] [2026-04-03 13:59:53,386] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,386] Processing ./octree/src/utils/morton.hpp
+[INFO] [2026-04-03 13:59:53,388] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,388] Processing ./octree/src/utils/copygen.hpp
+[INFO] [2026-04-03 13:59:53,389] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,389] Processing ./octree/src/cuda/octree_iterator.hpp
+[INFO] [2026-04-03 13:59:53,391] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,391] Processing ./octree/src/cuda/internal.hpp
+[INFO] [2026-04-03 13:59:53,394] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,394] Processing ./octree/src/internal.hpp
+[INFO] [2026-04-03 13:59:53,396] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,396] Processing ./octree/test/data_source.hpp
+[INFO] [2026-04-03 13:59:53,398] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,398] Processing ./octree/include/pcl/gpu/octree/device_format.hpp
+[INFO] [2026-04-03 13:59:53,399] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,399] Processing ./octree/include/pcl/gpu/octree/octree.hpp
+[INFO] [2026-04-03 13:59:53,402] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,402] Processing ./containers/include/pcl/gpu/containers/initialization.h
+[INFO] [2026-04-03 13:59:53,403] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,404] Processing ./containers/include/pcl/gpu/containers/impl/device_memory.hpp
+[INFO] [2026-04-03 13:59:53,405] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,405] Processing ./containers/include/pcl/gpu/containers/impl/device_array.hpp
+[INFO] [2026-04-03 13:59:53,408] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,408] Processing ./containers/include/pcl/gpu/containers/device_memory.h
+[INFO] [2026-04-03 13:59:53,411] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,412] Processing ./containers/include/pcl/gpu/containers/device_array.h
+[INFO] [2026-04-03 13:59:53,415] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,415] Processing ./containers/include/pcl/gpu/containers/kernel_containers.h
+[INFO] [2026-04-03 13:59:53,417] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,417] Processing ./kinfu/tools/evaluation.h
+[INFO] [2026-04-03 13:59:53,418] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,418] Processing ./kinfu/tools/openni_capture.h
+[INFO] [2026-04-03 13:59:53,419] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,420] Processing ./kinfu/tools/tsdf_volume.h
+[INFO] [2026-04-03 13:59:53,423] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,423] Processing ./kinfu/tools/tsdf_volume.hpp
+[INFO] [2026-04-03 13:59:53,429] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,430] Processing ./kinfu/tools/camera_pose.h
+[INFO] [2026-04-03 13:59:53,431] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,431] Processing ./kinfu/src/safe_call.hpp
+[INFO] [2026-04-03 13:59:53,432] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,433] Processing ./kinfu/src/cuda/utils.hpp
+[INFO] [2026-04-03 13:59:53,440] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,440] Processing ./kinfu/src/cuda/device.hpp
+[INFO] [2026-04-03 13:59:53,442] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,442] Processing ./kinfu/src/internal.h
+[INFO] [2026-04-03 13:59:53,448] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,448] Processing ./kinfu/include/pcl/gpu/kinfu/kinfu.h
+[INFO] [2026-04-03 13:59:53,451] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,452] Processing ./kinfu/include/pcl/gpu/kinfu/raycaster.h
+[INFO] [2026-04-03 13:59:53,453] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,454] Processing ./kinfu/include/pcl/gpu/kinfu/marching_cubes.h
+[INFO] [2026-04-03 13:59:53,455] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,455] Processing ./kinfu/include/pcl/gpu/kinfu/color_volume.h
+[INFO] [2026-04-03 13:59:53,457] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,457] Processing ./kinfu/include/pcl/gpu/kinfu/tsdf_volume.h
+[INFO] [2026-04-03 13:59:53,459] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,459] Processing ./kinfu/include/pcl/gpu/kinfu/pixel_rgb.h
+[INFO] [2026-04-03 13:59:53,460] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,460] Processing ./segmentation/include/pcl/gpu/segmentation/gpu_seeded_hue_segmentation.h
+[INFO] [2026-04-03 13:59:53,462] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,462] Processing ./segmentation/include/pcl/gpu/segmentation/gpu_extract_labeled_clusters.h
+[INFO] [2026-04-03 13:59:53,464] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,465] Processing ./segmentation/include/pcl/gpu/segmentation/impl/gpu_extract_clusters.hpp
+[INFO] [2026-04-03 13:59:53,467] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,468] Processing ./segmentation/include/pcl/gpu/segmentation/impl/gpu_seeded_hue_segmentation.hpp
+[INFO] [2026-04-03 13:59:53,469] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,470] Processing ./segmentation/include/pcl/gpu/segmentation/impl/gpu_extract_labeled_clusters.hpp
+[INFO] [2026-04-03 13:59:53,472] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,472] Processing ./segmentation/include/pcl/gpu/segmentation/gpu_extract_clusters.h
+[INFO] [2026-04-03 13:59:53,475] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,475] Processing ./utils/src/internal.hpp
+[INFO] [2026-04-03 13:59:53,476] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,476] Processing ./utils/include/pcl/gpu/utils/timers_cuda.hpp
+[INFO] [2026-04-03 13:59:53,477] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,477] Processing ./utils/include/pcl/gpu/utils/texture_binder.hpp
+[INFO] [2026-04-03 13:59:53,479] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,479] Processing ./utils/include/pcl/gpu/utils/device/asm.hpp
+[INFO] [2026-04-03 13:59:53,480] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,480] Processing ./utils/include/pcl/gpu/utils/device/limits.hpp
+[INFO] [2026-04-03 13:59:53,483] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,484] Processing ./utils/include/pcl/gpu/utils/device/static_check.hpp
+[INFO] [2026-04-03 13:59:53,485] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,485] Processing ./utils/include/pcl/gpu/utils/device/funcattrib.hpp
+[INFO] [2026-04-03 13:59:53,486] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,486] Processing ./utils/include/pcl/gpu/utils/device/reduce.hpp
+[INFO] [2026-04-03 13:59:53,487] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,487] Processing ./utils/include/pcl/gpu/utils/device/emulation.hpp
+[INFO] [2026-04-03 13:59:53,488] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,488] Processing ./utils/include/pcl/gpu/utils/device/functional.hpp
+[INFO] [2026-04-03 13:59:53,489] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,490] Processing ./utils/include/pcl/gpu/utils/device/block.hpp
+[INFO] [2026-04-03 13:59:53,492] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,492] Processing ./utils/include/pcl/gpu/utils/device/cutil_math.h
+[INFO] [2026-04-03 13:59:53,504] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,504] Processing ./utils/include/pcl/gpu/utils/device/warp.hpp
+[INFO] [2026-04-03 13:59:53,506] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,507] Processing ./utils/include/pcl/gpu/utils/device/algorithm.hpp
+[INFO] [2026-04-03 13:59:53,508] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,508] Processing ./utils/include/pcl/gpu/utils/device/cache.hpp
+[INFO] [2026-04-03 13:59:53,508] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,508] Processing ./utils/include/pcl/gpu/utils/device/vector_math.hpp
+[INFO] [2026-04-03 13:59:53,510] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,510] Processing ./utils/include/pcl/gpu/utils/safe_call.hpp
+[INFO] [2026-04-03 13:59:53,511] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,511] Processing ./utils/include/pcl/gpu/utils/repacks.hpp
+[INFO] [2026-04-03 13:59:53,513] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,513] Processing ./surface/src/cuda/device.h
+[INFO] [2026-04-03 13:59:53,515] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,515] Processing ./surface/src/internal.h
+[INFO] [2026-04-03 13:59:53,516] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,516] Processing ./surface/include/pcl/gpu/surface/convex_hull.h
+[INFO] [2026-04-03 13:59:53,517] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,517] Processing ./kinfu_large_scale/tools/evaluation.h
+[INFO] [2026-04-03 13:59:53,519] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,519] Processing ./kinfu_large_scale/tools/openni_capture.h
+[INFO] [2026-04-03 13:59:53,520] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,520] Processing ./kinfu_large_scale/tools/color_handler.h
+[INFO] [2026-04-03 13:59:53,521] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,521] Processing ./kinfu_large_scale/src/estimate_combined.h
+[INFO] [2026-04-03 13:59:53,522] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,522] Processing ./kinfu_large_scale/src/cuda/utils.hpp
+[INFO] [2026-04-03 13:59:53,529] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,529] Processing ./kinfu_large_scale/src/cuda/device.hpp
+[INFO] [2026-04-03 13:59:53,531] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,531] Processing ./kinfu_large_scale/src/internal.h
+[INFO] [2026-04-03 13:59:53,538] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,538] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/tsdf_buffer.h
+[INFO] [2026-04-03 13:59:53,539] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,539] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/world_model.h
+[INFO] [2026-04-03 13:59:53,542] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,542] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/kinfu.h
+[INFO] [2026-04-03 13:59:53,548] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,548] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/raycaster.h
+[INFO] [2026-04-03 13:59:53,550] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,550] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/cyclical_buffer.h
+[INFO] [2026-04-03 13:59:53,555] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,555] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/standalone_marching_cubes.h
+[INFO] [2026-04-03 13:59:53,558] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,559] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/marching_cubes.h
+[INFO] [2026-04-03 13:59:53,560] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,561] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/color_volume.h
+[INFO] [2026-04-03 13:59:53,562] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,563] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/float3_operations.h
+[INFO] [2026-04-03 13:59:53,565] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,565] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/tsdf_volume.h
+[INFO] [2026-04-03 13:59:53,570] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,570] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/impl/world_model.hpp
+[INFO] [2026-04-03 13:59:53,576] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,576] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/impl/standalone_marching_cubes.hpp
+[INFO] [2026-04-03 13:59:53,580] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,581] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/screenshot_manager.h
+[INFO] [2026-04-03 13:59:53,582] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,583] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/point_intensity.h
+[INFO] [2026-04-03 13:59:53,584] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,584] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/device.h
+[INFO] [2026-04-03 13:59:53,586] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,586] Processing ./kinfu_large_scale/include/pcl/gpu/kinfu_large_scale/pixel_rgb.h
+[INFO] [2026-04-03 13:59:53,587] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,587] Processing ./tracking/src/cuda/device.hpp
+[INFO] [2026-04-03 13:59:53,587] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,588] Processing ./tracking/src/internal.h
+[INFO] [2026-04-03 13:59:53,589] CONVERTED refs by names:
+[INFO] [2026-04-03 13:59:53,589] Processing ./tracking/include/pcl/gpu/tracking/particle_filter.h
+[INFO] [2026-04-03 13:59:53,590] CONVERTED refs by names:
+use mapping:  /usr/local/musa/tools/../tools//include.json
+use mapping:  /usr/local/musa/tools/../tools//general.json
+  nv => mt: 1
+  nv => mt: 13
+  cuda_runtime.h => musa_runtime.h: 1
+  nv => mt: 36
+  nv => mt: 5
+  nv => mt: 12
+  cudaStream_t => musaStream_t: 2
+  cuda_runtime.h => musa_runtime.h: 1
+  __CUDACC__ => __MUSACC__: 2
+  cuda => musa: 2
+  cudaError_t => musaError_t: 4
+  cudaSuccess => musaSuccess: 2
+  cudaGetLastError => musaGetLastError: 1
+  NPP_ERROR => MUPP_ERROR: 1
+  NPP_NO_ERROR => MUPP_NO_ERROR: 1
+  nv => mt: 3
+  cudaStream_t => musaStream_t: 7
+  cudaStream_t => musaStream_t: 3
+  cuda => musa: 3
+  nv => mt: 1
+  cudaDeviceProp => musaDeviceProp: 12
+  nv => mt: 2
+  __CUDACC__ => __MUSACC__: 1
+  cudaDeviceProp => musaDeviceProp: 2
+  cudaStream_t => musaStream_t: 3
+  nv => mt: 2
+  cuda => musa: 11
+  cudaHostRegister => musaHostRegister: 2
+  cudaStreamCreate => musaStreamCreate: 2
+  cudaHostUnregister => musaHostUnregister: 1
+  cudaStreamDestroy => musaStreamDestroy: 1
+  cudaMemcpyAsync => musaMemcpyAsync: 2
+  cudaMemcpyDeviceToHost => musaMemcpyDeviceToHost: 2
+  cudaMemcpy2DAsync => musaMemcpy2DAsync: 2
+  cudaMemcpyHostToDevice => musaMemcpyHostToDevice: 2
+  cudaStreamSynchronize => musaStreamSynchronize: 1
+  cudaStream_t => musaStream_t: 1
+  nv => mt: 17
+  cuda_runtime_api.h => musa_runtime_api.h: 1
+  cudaDeviceProp => musaDeviceProp: 2
+  cuda => musa: 5
+  nv => mt: 1
+  cuda_runtime.h => musa_runtime.h: 1
+  nv => mt: 1
+  nv => mt: 5
+  nv => mt: 10
+  __CUDA_ARCH__ => __MUSA_ARCH__: 1
+  nv => mt: 1
+  cuda => musa: 2
+  nv => mt: 3
+  __CUDACC__ => __MUSACC__: 1
+  nv => mt: 5
+  nv => mt: 20
+  nv => mt: 1
+  cuda_runtime_api.h => musa_runtime_api.h: 1
+  cuda => musa: 5
+  __CUDACC__ => __MUSACC__: 1
+  cudaError_t => musaError_t: 1
+  cudaSuccess => musaSuccess: 1
+  cudaGetErrorString => musaGetErrorString: 1
+  CUDART_NAN_F => MUSART_NAN_F: 1
+  nv => mt: 13
+  __CUDA_ARCH__ => __MUSA_ARCH__: 3
+  nv => mt: 21
+  cuda => musa: 1
+  cudaDeviceSynchronize => musaDeviceSynchronize: 1
+  nv => mt: 1
+  nv => mt: 2
+  cudaEvent_t => musaEvent_t: 2
+  cudaEventCreate => musaEventCreate: 4
+  cudaEventDestroy => musaEventDestroy: 4
+  cudaEventRecord => musaEventRecord: 4
+  cudaEventSynchronize => musaEventSynchronize: 2
+  cudaEventElapsedTime => musaEventElapsedTime: 2
+  cudaTextureReadMode => musaTextureReadMode: 4
+  cudaChannelFormatDesc => musaChannelFormatDesc: 4
+  cudaCreateChannelDesc => musaCreateChannelDesc: 4
+  cuda => musa: 5
+  cudaBindTexture2D => musaBindTexture2D: 2
+  cudaBindTexture => musaBindTexture: 2
+  cudaUnbindTexture => musaUnbindTexture: 1
+  CUDART_INF_F => MUSART_INF_F: 1
+  CUDART_NAN_F => MUSART_NAN_F: 1
+  __CUDACC__ => __MUSACC__: 1
+  cudaFuncAttributes => musaFuncAttributes: 1
+  cudaFuncGetAttributes => musaFuncGetAttributes: 1
+  __CUDA_ARCH__ => __MUSA_ARCH__: 1
+  cuda_runtime.h => musa_runtime.h: 1
+  __CUDACC__ => __MUSACC__: 1
+  nv => mt: 6
+  __CUDA_ARCH__ => __MUSA_ARCH__: 2
+  nv => mt: 1
+  __CUDA_ARCH__ => __MUSA_ARCH__: 1
+  nv => mt: 2
+  cuda => musa: 5
+  __CUDACC__ => __MUSACC__: 1
+  nv => mt: 1
+  cuda_runtime.h => musa_runtime.h: 1
+  nv => mt: 3
+  CUDART_NAN_F => MUSART_NAN_F: 1
+  nv => mt: 13
+  __CUDA_ARCH__ => __MUSA_ARCH__: 3
+  cuda => musa: 1
+  nv => mt: 23
+  cuda => musa: 1
+  cudaDeviceSynchronize => musaDeviceSynchronize: 1
+  cuda_runtime.h => musa_runtime.h: 1
+  nv => mt: 28
+  nv => mt: 2
+  cuda_runtime.h => musa_runtime.h: 1
+  nv => mt: 7
+  nv => mt: 2
+  nv => mt: 1
+  nv => mt: 5
+  curandState => murandState: 1
+  curand_normal => murand_normal: 1
+  curand.h => murand.h: 1
+  curand_kernel.h => murand_kernel.h: 1
+  curandState => murandState: 2
+  curandState => murandState: 1

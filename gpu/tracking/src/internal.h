@@ -4,8 +4,8 @@
 #include <pcl/gpu/containers/device_array.h>
 #include <pcl/gpu/utils/safe_call.hpp>
 
-#include <curand.h>
-#include <curand_kernel.h>
+#include <murand.h>
+#include <murand_kernel.h>
 
 namespace pcl
 {
@@ -21,7 +21,7 @@ namespace pcl
 		
 		
 		void 
-			initParticles (PtrSz<curandState> rng_states,
+			initParticles (PtrSz<murandState> rng_states,
 			DeviceArray<float>& initial_noise_mean, DeviceArray<float>& initial_noise_covariance,
 			const StateType& representative_state,
 			DeviceArray<StateType>& particles);
@@ -29,7 +29,7 @@ namespace pcl
 		void 
 			computeTracking ( const DeviceArray2D<PointType>& ref, const DeviceArray2D<PixelRGB>& ref_color,
 			const DeviceArray2D<PointType>& input, const DeviceArray2D<PixelRGB>& input_color,
-			PtrSz<curandState> rng_states, const DeviceArray<float>& step_noise_covariance,
+			PtrSz<murandState> rng_states, const DeviceArray<float>& step_noise_covariance,
 			DeviceArray<StateType>& particles,
 			StateType& representative_state, StateType& motion, float motion_ratio );
 		

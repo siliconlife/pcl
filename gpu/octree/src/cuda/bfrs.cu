@@ -40,6 +40,7 @@
 #include <thrust/iterator/counting_iterator.h>
 
 #include "internal.hpp"
+#include "pcl/gpu/utils/safe_call.hpp"
 
 #include "musa.h"
 
@@ -53,20 +54,19 @@ namespace pcl
         struct InSphere
         {    
             float x_, y_, z_, radius2_;
-            InSphere(float x, float y, float z, float radius) : x_(x), y_(y), z_(z), radius2_(radius * radius) {}
+            const OctreeImpl::PointType* points_;
+            
+            InSphere(float x, float y, float z, float radius, const OctreeImpl::PointType* points) 
+                : x_(x), y_(y), z_(z), radius2_(radius * radius), points_(points) {}
 
-            __device__ __host__ __forceinline__ bool operator()(const float3& point) const
+            __device__ __host__ __forceinline__ bool operator()(int idx) const
             {
+                const OctreeImpl::PointType& point = points_[idx];
                 float dx = point.x - x_;
                 float dy = point.y - y_;
                 float dz = point.z - z_;
 
                 return (dx * dx + dy * dy + dz * dz) < radius2_;
-            }
-
-            __device__ __host__ __forceinline__ bool operator()(const float4& point) const
-            {
-                return (*this)(make_float3(point.x, point.y, point.z));                
             }
         };
     }
@@ -85,16 +85,16 @@ void pcl::device::bruteForceRadiusSearch(const OctreeImpl::PointCloud& cloud, co
     if (buffer.size() < cloud.size())
         buffer.create(cloud.size());
 
-    InSphere cond(query.x, query.y, query.z, radius);
-
     device_ptr<const PointType> cloud_ptr((const PointType*)cloud.ptr());
     device_ptr<int> res_ptr(buffer.ptr());
     
     counting_iterator<int> first(0);
     counting_iterator<int> last = first + cloud.size();
     
+    InSphere cond(query.x, query.y, query.z, radius, (const PointType*)cloud.ptr());
+    
     //main bottle neck is a kernel call overhead/allocs
     //work time for 871k points ~0.8ms
-    int count = (int)(thrust::copy_if(first, last, cloud_ptr, res_ptr, cond) - res_ptr);
+    int count = (int)(thrust::copy_if(first, last, res_ptr, cond) - res_ptr);
     result = DeviceArray<int>(buffer.ptr(), count);
 }

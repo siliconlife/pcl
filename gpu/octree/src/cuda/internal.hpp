@@ -1,178 +1,97 @@
-/*
- * Software License Agreement (BSD License)
- *
- *  Copyright (c) 2011, Willow Garage, Inc.
- *  All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *
- *   * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *   * Redistributions in binary form must reproduce the above
- *     copyright notice, this list of conditions and the following
- *     disclaimer in the documentation and/or other materials provided
- *     with the distribution.
- *   * Neither the name of Willow Garage, Inc. nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- *  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- *  CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- *  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- *  POSSIBILITY OF SUCH DAMAGE.
- *
- *  Author: Anatoly Baskeheev, Itseez Ltd, (myname.mysurname@mycompany.com)
- */
+#ifndef PCL_GPU_OCTREE_CUDA_INTERNAL_HPP_
+#define PCL_GPU_OCTREE_CUDA_INTERNAL_HPP_
 
-#ifndef PCL_GPU_FEATURES_INTERNAL_HPP_
-#define PCL_GPU_FEATURES_INTERNAL_HPP_
-
+#include <vector>
 #include <pcl/gpu/containers/device_array.h>
 #include <pcl/gpu/octree/device_format.hpp>
+#include <pcl/gpu/utils/safe_call.hpp>
 
-#include <musa_runtime.h>
-
-#undef PI
-#ifndef PI
-    #define PI 3.1415926535897931f               
-#endif
+#include "musa.h"
 
 namespace pcl
 {
+    namespace gpu
+    {
+        typedef DeviceArray<float4> PointCloud;
+    }
+
     namespace device
-    {   
-        using pcl::gpu::DeviceArray;
-        using pcl::gpu::DeviceArray2D;
-        using pcl::gpu::NeighborIndices;
-
-        typedef float4 PointType;
-        typedef float4 NormalType;
-        typedef float4 PointXYZRGB;
-
-        typedef DeviceArray< PointType> PointCloud;        
-        typedef DeviceArray<NormalType> Normals;
-        typedef DeviceArray<int> Indices;
-
-        typedef DeviceArray< PointType> PointXYZRGBCloud;
-
-		template <int N> struct Histogram
-		{
-			float histogram[N];
-		};
-
-		typedef Histogram<125> PFHSignature125;
-		typedef Histogram<250> PFHRGBSignature250;
-		typedef Histogram<33>  FPFHSignature33;
-		typedef Histogram<308> VFHSignature308;
-
-        struct PPFSignature
+    {
+        struct OctreeGlobal
         {
-            float f1, f2, f3, f4;
-            float alpha_m;
+            int* nodes;
+            int* codes;
+            int* begs;
+            int* ends;
+            int* nodes_num;
+            int* parent;
+
+            OctreeGlobal() : nodes(0), codes(0), begs(0), ends(0), nodes_num(0), parent(0) {}
         };
 
-        struct PPFRGBSignature
+        struct OctreeGlobalWithBox : public OctreeGlobal
         {
-            float f1, f2, f3, f4;
-            float r_ratio, g_ratio, b_ratio;
-            float alpha_m;
-        };
-	
-        struct PrincipalCurvatures
-        {
-            union
-            {
-                float principal_curvature[3];
-                struct
-                {
-                    float principal_curvature_x;
-                    float principal_curvature_y;
-                    float principal_curvature_z;
-                };
-            };
-            float pc1;
-            float pc2;
+            float3 minp, maxp;
         };
 
-        // normals estimation
-        void computeNormals(const PointCloud& cloud, const NeighborIndices& nn_indices, Normals& normals);
-        void flipNormalTowardsViewpoint(const PointCloud& cloud, const float3& vp, Normals& normals);        
-        void flipNormalTowardsViewpoint(const PointCloud& cloud, const Indices& indices, const float3& vp, Normals& normals);
-
-        // pfh estimation        
-        void repackToAosForPfh(const PointCloud& cloud, const Normals& normals, const NeighborIndices& neighbours, DeviceArray2D<float>& data_rpk, int& max_elems_rpk);
-        void computePfh125(const DeviceArray2D<float>& data_rpk, int max_elems_rpk, const NeighborIndices& neighbours, DeviceArray2D<PFHSignature125>& features);
-
-        void repackToAosForPfhRgb(const PointCloud& cloud, const Normals& normals, const NeighborIndices& neighbours, DeviceArray2D<float>& data_rpk, int& max_elems_rpk);
-        void computePfhRgb250(const DeviceArray2D<float>& data_rpk, int max_elems_rpk, const NeighborIndices& neighbours, DeviceArray2D<PFHRGBSignature250>& features);
-
-
-        // fpfh estimation
-        void computeSPFH(const PointCloud& surface, const Normals& normals, const Indices& indices, const NeighborIndices& neighbours, DeviceArray2D<FPFHSignature33>& spfh33);
-        void computeFPFH(const PointCloud& cloud, const NeighborIndices& neighbours, const DeviceArray2D<FPFHSignature33>& spfh, DeviceArray2D<FPFHSignature33>& features);
-
-        void computeFPFH(const PointCloud& cloud, const Indices& indices, const PointCloud& surface, 
-            const NeighborIndices& neighbours, DeviceArray<int>& lookup, const DeviceArray2D<FPFHSignature33>& spfh, DeviceArray2D<FPFHSignature33>& features);
-
-        int computeUniqueIndices(size_t surface_size, const NeighborIndices& neighbours, DeviceArray<int>& unique_indices, DeviceArray<int>& lookup);
-
-        // ppf estimation         
-        void computePPF(const PointCloud& input, const Normals& normals, const Indices& indices, DeviceArray<PPFSignature>& output);
-        void computePPFRGB(const PointXYZRGBCloud& input, const Normals& normals, const Indices& indices, DeviceArray<PPFRGBSignature>& output);        
-        void computePPFRGBRegion(const PointXYZRGBCloud& cloud, const Normals& normals, const Indices& indices, 
-            const NeighborIndices& nn_indices, DeviceArray<PPFRGBSignature>& output);
-
-        //PrincipalCurvatures estimation
-        void computePointPrincipalCurvatures(const Normals& normals, const Indices& indices, const NeighborIndices& neighbours, 
-            DeviceArray<PrincipalCurvatures>& output, DeviceArray2D<float>& proj_normals_buf);
-
-
-        //vfh estimation
-        template<typename PointT> void compute3DCentroid(const DeviceArray<PointT>& cloud, float3& centroid);
-        template<typename PointT> void compute3DCentroid(const DeviceArray<PointT>& cloud,  const Indices& indices, float3& centroid);
-
-        template<typename PointT> float3 getMaxDistance(const DeviceArray<PointT>& cloud, const float3& pivot);        
-        template<typename PointT> float3 getMaxDistance(const DeviceArray<PointT>& cloud, const Indices& indices, const float3& pivot);
-
-        struct VFHEstimationImpl
+        class OctreeImpl
         {
-            float3 xyz_centroid;
-            float3 normal_centroid;
-            float3 viewpoint;
+        public:
+            typedef float4 PointType;
+            typedef DeviceArray<PointType> PointArray;
+            typedef PointArray PointCloud;
+            typedef PointArray Queries;
+            typedef DeviceArray<float> Radiuses;
+            typedef DeviceArray<int> BatchResult;
+            typedef DeviceArray<int> BatchResultSizes;
+            typedef DeviceArray<float> BatchResultSqrDists;
+            typedef DeviceArray<int> Indices;
+            typedef pcl::gpu::NeighborIndices NeighborIndices;
 
-            Indices indices;
+            static void get_gpu_arch_compiled_for(int& bin, int& ptr);
+
+            OctreeImpl() {}
+            ~OctreeImpl() {}
+
+            void setCloud(const PointCloud& input_points);
+            void build();
+            void radiusSearchHost(const PointType& center, float radius, std::vector<int>& out, int max_nn) const;
+            void approxNearestSearchHost(const PointType& query, int& out_index, float& sqr_dist) const;
+
+            void radiusSearch(const Queries& queries, float radius, NeighborIndices& results);
+            void radiusSearch(const Queries& queries, const Radiuses& radiuses, NeighborIndices& results);
+            void radiusSearch(const Queries& queries, const Indices& indices, float radius, NeighborIndices& results);
+            void approxNearestSearch(const Queries& queries, NeighborIndices& results) const;
+            void nearestKSearchBatch(const Queries& queries, int k, NeighborIndices& results) const;
+
             PointCloud points;
-            Normals normals;
+            DeviceArray2D<float> points_sorted;
+            DeviceArray<int> codes;
+            DeviceArray<int> indices;
+            OctreeGlobalWithBox octreeGlobal;
+            DeviceArray2D<int> storage;
 
-            bool normalize_distances;
-            bool size_component;
-            bool normalize_bins;
-       
-            void compute(DeviceArray<VFHSignature308>& feature);
+            struct OctreeDataHost
+            {
+                std::vector<int> nodes;
+                std::vector<int> codes;
+                std::vector<int> begs;
+                std::vector<int> ends;
+                std::vector<int> indices;
+                std::vector<float> points_sorted;
+                int points_sorted_step;
+                int downloaded;
+            } host_octree;
+
+            void internalDownload();
+
+        private:
+            template<typename BatchType>
+            void radiusSearchEx(BatchType& batch, const Queries& queries, NeighborIndices& results);
         };
 
-		//spinimages estimation
-		void computeSpinImagesOrigigNormal(bool radial, bool angular, float support_angle_cos, const Indices& indices, const PointCloud& input_cloud, const Normals& input_normals,
-			const PointCloud& surface, const Normals& normals, const NeighborIndices& neighbours, int min_neighb, int image_width, float bin_size, PtrStep<float> output);
-
-		void computeSpinImagesCustomAxes(bool radial, bool angular, float support_angle_cos, const Indices& indices, const PointCloud& input_cloud, const Normals& input_normals,
-			const PointCloud& surface, const Normals& normals, const NeighborIndices& neighbours, int min_neighb, int image_width, float bin_size, const float3& rotation_axis, PtrStep<float> output);
-
-		void computeSpinImagesCustomAxesCloud(bool radial, bool angular, float support_angle_cos, const Indices& indices, const PointCloud& input_cloud, const Normals& input_normals,
-			const PointCloud& surface, const Normals& normals, const NeighborIndices& neighbours, int min_neighb, int image_width, float bin_size, const Normals& rotation_axes_cloud, PtrStep<float> output);
-
-		void computeMask(const NeighborIndices& neighbours, int min_neighb, DeviceArray<unsigned char>& mask);
+        void bruteForceRadiusSearch(const OctreeImpl::PointCloud& cloud, const OctreeImpl::PointType& query, float radius, DeviceArray<int>& result, DeviceArray<int>& buffer);
     }
 }
 
-#endif /* PCL_GPU_FEATURES_INTERNAL_HPP_ */
+#endif

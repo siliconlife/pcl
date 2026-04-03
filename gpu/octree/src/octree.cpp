@@ -39,7 +39,7 @@
 #include <pcl/gpu/utils/safe_call.hpp>
 
 #include "internal.hpp"
-#include "cuda_runtime.h"
+#include "musa_runtime.h"
 #include <pcl/gpu/utils/device/static_check.hpp>
 #include <pcl/exceptions.h>
 
@@ -56,10 +56,10 @@ pcl::gpu::Octree::Octree() : cloud_(0), impl(0)
     Static<sizeof(PointType) == sizeof(OctreeImpl::PointType)>::check();
 
     int device;
-    cudaSafeCall( cudaGetDevice( &device ) );
+    cudaSafeCall( musaGetDevice( &device ) );
     
-    cudaDeviceProp prop;
-    cudaSafeCall( cudaGetDeviceProperties( &prop, device) );
+    musaDeviceProp prop;
+    cudaSafeCall( musaGetDeviceProperties( &prop, device) );
 
     if (prop.major < 2)
         pcl::gpu::error("This code requires devices with compute capability >= 2.0", __FILE__, __LINE__);

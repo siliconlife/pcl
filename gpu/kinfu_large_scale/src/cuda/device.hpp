@@ -44,7 +44,7 @@
 
 #include "internal.h"
 
-#include "pointer_shift.cu" // contains primitive needed by all cuda functions dealing with rolling tsdf buffer
+#include "pointer_shift.cu" // contains primitive needed by all musa functions dealing with rolling tsdf buffer
 
 namespace pcl
 {

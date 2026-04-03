@@ -38,7 +38,7 @@
 #ifndef PCL_TSDF_BUFFER_STRUCT_H_
 #define PCL_TSDF_BUFFER_STRUCT_H_
 
-#include <cuda_runtime.h>
+#include <musa_runtime.h>
 //#include <boost/graph/buffer_concepts.hpp>
     
 namespace pcl

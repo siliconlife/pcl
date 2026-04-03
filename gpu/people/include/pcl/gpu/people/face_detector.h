@@ -45,7 +45,7 @@
 #include <string>
 #include <vector>
 
-#include <cuda_runtime_api.h>
+#include <musa_runtime_api.h>
 
 #include "NCVHaarObjectDetection.hpp"
 
@@ -101,7 +101,7 @@ namespace pcl
                      NCVVector<HaarStage64>               &h_haar_stages,
                      INCVMemAllocator                     &gpu_allocator,
                      INCVMemAllocator                     &cpu_allocator,
-                     cudaDeviceProp                       &device_properties,
+                     musaDeviceProp                       &device_properties,
                      Ncv32u                               width=640,
                      Ncv32u                               height=480,
                      NcvBool                              bFilterRects=false,
@@ -125,7 +125,7 @@ namespace pcl
             return largest_object_;
           }
 
-          /** \brief Set the cuda GPU to use **/
+          /** \brief Set the musa GPU to use **/
           void setDeviceId (int id);
 
           int getCols () const
@@ -160,7 +160,7 @@ namespace pcl
             cascade_file_name_ = cascadeFileName;
           }
 
-          /** \brief Get the cuda GPU device id in use **/
+          /** \brief Get the musa GPU device id in use **/
           int
           getDeviceId() {return cuda_dev_id_;}
 
@@ -169,7 +169,7 @@ namespace pcl
           bool                filter_rects_;        /** \brief rectangular filter **/
 
           int                 cuda_dev_id_;         /** \brief indicates which GPU to use for this **/
-          cudaDeviceProp      cuda_dev_prop_;
+          musaDeviceProp      cuda_dev_prop_;
 
           std::string         cascade_file_name_;
 

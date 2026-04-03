@@ -44,7 +44,7 @@
 #include <pcl/gpu/kinfu_large_scale/tsdf_buffer.h>
 #include <Eigen/Core>
 //#include <boost/graph/buffer_concepts.hpp>
-#include <cuda_runtime.h>
+#include <musa_runtime.h>
 #include <pcl/gpu/kinfu_large_scale/point_intensity.h>
 
 #include <pcl/gpu/kinfu_large_scale/world_model.h>

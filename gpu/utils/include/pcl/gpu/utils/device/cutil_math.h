@@ -23,12 +23,12 @@
 #ifndef CUTIL_MATH_H
 #define CUTIL_MATH_H
 
-#include "cuda_runtime.h"
+#include "musa_runtime.h"
 
 typedef unsigned int uint;
 typedef unsigned short ushort;
 
-#ifndef __CUDACC__
+#ifndef __MUSACC__
 #include <math.h>
 
 ////////////////////////////////////////////////////////////////////////////////

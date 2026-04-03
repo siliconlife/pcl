@@ -41,7 +41,7 @@
 #define PCL_GPU_PEOPLE_LABEL_COMMON_H_
 
 #include <pcl/gpu/containers/device_array.h>
-#include <cuda_runtime.h> // for float4, uchar4, delete this in future
+#include <musa_runtime.h> // for float4, uchar4, delete this in future
 
 namespace pcl
 {

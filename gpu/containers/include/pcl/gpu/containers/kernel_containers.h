@@ -39,7 +39,7 @@
 #define PCL_GPU_CONTAINERS_KERNEL_CONTAINERS_HPP_
 
 
-#if defined(__CUDACC__) 
+#if defined(__MUSACC__) 
     #define __PCL_GPU_HOST_DEVICE__ __host__ __device__ __forceinline__ 
 #else
     #define __PCL_GPU_HOST_DEVICE__

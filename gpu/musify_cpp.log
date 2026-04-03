@@ -1,0 +1,184 @@
+[INFO] [2026-04-03 14:02:29,405] Processing ./features/src/features.cpp
+[INFO] [2026-04-03 14:02:29,412] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,413] Processing ./features/test/test_fpfh.cpp
+[INFO] [2026-04-03 14:02:29,418] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,419] Processing ./features/test/test_vfh.cpp
+[INFO] [2026-04-03 14:02:29,422] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,423] Processing ./features/test/test_principal_curvatures.cpp
+[INFO] [2026-04-03 14:02:29,425] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,425] Processing ./features/test/test_pfh.cpp
+[INFO] [2026-04-03 14:02:29,431] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,431] Processing ./features/test/test_spinimages.cpp
+[INFO] [2026-04-03 14:02:29,435] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,435] Processing ./features/test/test_ppf.cpp
+[INFO] [2026-04-03 14:02:29,438] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,439] Processing ./features/test/test_normals.cpp
+[INFO] [2026-04-03 14:02:29,443] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,444] Processing ./examples/octree/src/octree_search.cpp
+[INFO] [2026-04-03 14:02:29,445] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,446] Processing ./examples/segmentation/src/seg.cpp
+[INFO] [2026-04-03 14:02:29,447] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,448] Processing ./people/tools/people_app.cpp
+[INFO] [2026-04-03 14:02:29,453] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,453] Processing ./people/tools/people_tracking.cpp
+[INFO] [2026-04-03 14:02:29,455] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,455] Processing ./people/tools/people_pcd_prob.cpp
+[INFO] [2026-04-03 14:02:29,460] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,461] Processing ./people/src/people_detector.cpp
+[INFO] [2026-04-03 14:02:29,466] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,467] Processing ./people/src/probability_processor.cpp
+[INFO] [2026-04-03 14:02:29,469] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,469] Processing ./people/src/person_attibs.cpp
+[INFO] [2026-04-03 14:02:29,471] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,471] Processing ./people/src/face_detector.cpp
+[INFO] [2026-04-03 14:02:29,481] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,482] Processing ./people/src/colormap.cpp
+[INFO] [2026-04-03 14:02:29,484] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,484] Processing ./people/src/organized_plane_detector.cpp
+[INFO] [2026-04-03 14:02:29,486] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,486] Processing ./people/src/trees.cpp
+[INFO] [2026-04-03 14:02:29,489] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,489] Processing ./people/src/bodyparts_detector.cpp
+[INFO] [2026-04-03 14:02:29,493] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,493] Processing ./octree/src/octree.cpp
+[INFO] [2026-04-03 14:02:29,495] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,496] Processing ./octree/test/test_host_radius_search.cpp
+[INFO] [2026-04-03 14:02:29,497] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,497] Processing ./octree/test/test_knn_search.cpp
+[INFO] [2026-04-03 14:02:29,500] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,500] Processing ./octree/test/test_approx_nearest.cpp
+[INFO] [2026-04-03 14:02:29,502] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,502] Processing ./octree/test/test_radius_search.cpp
+[INFO] [2026-04-03 14:02:29,505] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,505] Processing ./octree/test/perfomance.cpp
+[INFO] [2026-04-03 14:02:29,508] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,508] Processing ./octree/test/test_bfrs_gpu.cpp
+[INFO] [2026-04-03 14:02:29,510] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,510] Processing ./containers/src/error.cpp
+[INFO] [2026-04-03 14:02:29,511] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,511] Processing ./containers/src/device_memory.cpp
+[INFO] [2026-04-03 14:02:29,515] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,515] Processing ./containers/src/initialization.cpp
+[INFO] [2026-04-03 14:02:29,518] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,519] Processing ./kinfu/tools/capture.cpp
+[INFO] [2026-04-03 14:02:29,522] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,522] Processing ./kinfu/tools/kinfu_app.cpp
+[INFO] [2026-04-03 14:02:29,537] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,537] Processing ./kinfu/tools/record_tsdfvolume.cpp
+[INFO] [2026-04-03 14:02:29,543] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,543] Processing ./kinfu/tools/evaluation.cpp
+[INFO] [2026-04-03 14:02:29,546] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,546] Processing ./kinfu/tools/kinfu_app_sim.cpp
+[INFO] [2026-04-03 14:02:29,562] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,563] Processing ./kinfu/src/tsdf_volume.cpp
+[INFO] [2026-04-03 14:02:29,566] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,567] Processing ./kinfu/src/raycaster.cpp
+[INFO] [2026-04-03 14:02:29,569] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,569] Processing ./kinfu/src/color_volume.cpp
+[INFO] [2026-04-03 14:02:29,570] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,570] Processing ./kinfu/src/marching_cubes.cpp
+[INFO] [2026-04-03 14:02:29,577] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,577] Processing ./kinfu/src/kinfu.cpp
+[INFO] [2026-04-03 14:02:29,583] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,584] Processing ./segmentation/src/extract_clusters.cpp
+[INFO] [2026-04-03 14:02:29,584] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,585] Processing ./utils/src/repacks.cpp
+[INFO] [2026-04-03 14:02:29,585] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,585] Processing ./surface/src/convex_hull.cpp
+[INFO] [2026-04-03 14:02:29,587] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,587] Processing ./surface/test/test_pseudo_convex_hull.cpp
+[INFO] [2026-04-03 14:02:29,589] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,589] Processing ./kinfu_large_scale/tools/capture.cpp
+[INFO] [2026-04-03 14:02:29,593] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,593] Processing ./kinfu_large_scale/tools/standalone_texture_mapping.cpp
+[INFO] [2026-04-03 14:02:29,599] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,599] Processing ./kinfu_large_scale/tools/record_tsdfvolume.cpp
+[INFO] [2026-04-03 14:02:29,605] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,606] Processing ./kinfu_large_scale/tools/kinfuLS_app.cpp
+[INFO] [2026-04-03 14:02:29,623] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,624] Processing ./kinfu_large_scale/tools/record_maps_rgb.cpp
+[INFO] [2026-04-03 14:02:29,627] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,628] Processing ./kinfu_large_scale/tools/evaluation.cpp
+[INFO] [2026-04-03 14:02:29,631] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,631] Processing ./kinfu_large_scale/tools/kinfu_app_sim.cpp
+[INFO] [2026-04-03 14:02:29,648] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,649] Processing ./kinfu_large_scale/tools/process_kinfu_large_scale_output.cpp
+[INFO] [2026-04-03 14:02:29,653] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,654] Processing ./kinfu_large_scale/src/tsdf_volume.cpp
+[INFO] [2026-04-03 14:02:29,661] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,661] Processing ./kinfu_large_scale/src/raycaster.cpp
+[INFO] [2026-04-03 14:02:29,664] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,664] Processing ./kinfu_large_scale/src/color_volume.cpp
+[INFO] [2026-04-03 14:02:29,666] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,666] Processing ./kinfu_large_scale/src/world_model.cpp
+[INFO] [2026-04-03 14:02:29,667] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,667] Processing ./kinfu_large_scale/src/marching_cubes.cpp
+[INFO] [2026-04-03 14:02:29,674] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,675] Processing ./kinfu_large_scale/src/standalone_marching_cubes.cpp
+[INFO] [2026-04-03 14:02:29,677] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,677] Processing ./kinfu_large_scale/src/cyclical_buffer.cpp
+[INFO] [2026-04-03 14:02:29,680] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,681] Processing ./kinfu_large_scale/src/screenshot_manager.cpp
+[INFO] [2026-04-03 14:02:29,683] CONVERTED refs by names:
+[INFO] [2026-04-03 14:02:29,683] Processing ./kinfu_large_scale/src/kinfu.cpp
+[INFO] [2026-04-03 14:02:29,702] CONVERTED refs by names:
+use mapping:  /usr/local/musa/tools/../tools//include.json
+use mapping:  /usr/local/musa/tools/../tools//general.json
+  __CUDACC__ => __MUSACC__: 1
+  __CUDACC__ => __MUSACC__: 1
+  __CUDACC__ => __MUSACC__: 1
+  __CUDACC__ => __MUSACC__: 1
+  __CUDACC__ => __MUSACC__: 1
+  __CUDACC__ => __MUSACC__: 1
+  __CUDACC__ => __MUSACC__: 1
+  nv => mt: 1
+  nv => mt: 2
+  nv => mt: 3
+  nv => mt: 5
+  nv => mt: 4
+  nv => mt: 4
+  cuda_runtime_api.h => musa_runtime_api.h: 1
+  cuda => musa: 26
+  cudaError_t => musaError_t: 2
+  cudaSuccess => musaSuccess: 2
+  cudaSetDevice => musaSetDevice: 2
+  cudaGetDeviceProperties => musaGetDeviceProperties: 2
+  cudaDeviceProp => musaDeviceProp: 1
+  cudaStreamSynchronize => musaStreamSynchronize: 3
+  nv => mt: 3
+  cuda.h => musa.h: 1
+  cuda => musa: 1
+  cuda.h => musa.h: 1
+  cuda_runtime.h => musa_runtime.h: 1
+  cuda => musa: 2
+  cudaGetDevice => musaGetDevice: 1
+  cudaDeviceProp => musaDeviceProp: 1
+  cudaGetDeviceProperties => musaGetDeviceProperties: 1
+  nv => mt: 1
+  nv => mt: 1
+  nv => mt: 1
+  nv => mt: 2
+  cuda => musa: 16
+  cuda => musa: 11
+  cuDeviceGetAttribute => muDeviceGetAttribute: 1
+  nv => mt: 3
+  CUDART_VERSION => MUSART_VERSION: 3
+  CU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE => MU_DEVICE_ATTRIBUTE_MEMORY_CLOCK_RATE: 1
+  CU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH => MU_DEVICE_ATTRIBUTE_GLOBAL_MEMORY_BUS_WIDTH: 1
+  CU_DEVICE_ATTRIBUTE_L2_CACHE_SIZE => MU_DEVICE_ATTRIBUTE_L2_CACHE_SIZE: 1
+  nv => mt: 4
+  nv => mt: 13
+  nv => mt: 2
+  nv => mt: 6
+  nv => mt: 7
+  nv => mt: 26
+  nv => mt: 8
+  nv => mt: 21
+  nv => mt: 2
+  nv => mt: 13
+  nv => mt: 5
+  nv => mt: 2
+  nv => mt: 7
+  nv => mt: 1
+  nv => mt: 7
+  nv => mt: 46

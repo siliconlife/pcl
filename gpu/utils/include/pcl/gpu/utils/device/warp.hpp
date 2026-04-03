@@ -65,7 +65,7 @@ namespace pcl
             static __device__ __forceinline__ int laneMaskLe()
             {
 #ifndef __MUSA__
-#if (__CUDA_ARCH__ >= 200)
+#if (__MUSA_ARCH__ >= 200)
                 unsigned int ret;
 	            asm("mov.u32 %0, %lanemask_le;" : "=r"(ret) );
 	            return ret;
@@ -80,7 +80,7 @@ namespace pcl
             static __device__ __forceinline__ int laneMaskLt()
             {
 #ifndef __MUSA__
-#if (__CUDA_ARCH__ >= 200)
+#if (__MUSA_ARCH__ >= 200)
                 unsigned int ret;
 	            asm("mov.u32 %0, %lanemask_lt;" : "=r"(ret) );
 	            return ret;

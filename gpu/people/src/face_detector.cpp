@@ -43,7 +43,7 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
-#include <cuda_runtime_api.h>
+#include <musa_runtime_api.h>
 
 #define NVBIN_HAAR_SIZERESERVED     16
 #define NVBIN_HAAR_VERSION          0x1
@@ -58,8 +58,8 @@
 #define PCL_ASSERT_CUDA_RETURN(cudacall, errCode) \
     do \
     { \
-        cudaError_t res = cudacall; \
-        ncvAssertPrintReturn(cudaSuccess==res, "cudaError_t!=cudaSuccess", errCode); \
+        musaError_t res = cudacall; \
+        ncvAssertPrintReturn(musaSuccess==res, "musaError_t!=musaSuccess", errCode); \
     } while (0)
 
 using boost::property_tree::ptree;
@@ -71,8 +71,8 @@ pcl::gpu::people::FaceDetector::FaceDetector(int cols, int rows)
   cols_ = cols; rows_ = rows;
 
   cuda_dev_id_ = 0;
-  cudaSafeCall ( cudaSetDevice (cuda_dev_id_));
-  cudaSafeCall ( cudaGetDeviceProperties (&cuda_dev_prop_, cuda_dev_id_));
+  cudaSafeCall ( musaSetDevice (cuda_dev_id_));
+  cudaSafeCall ( musaGetDeviceProperties (&cuda_dev_prop_, cuda_dev_id_));
   PCL_DEBUG("[pcl::gpu::people::FaceDetector::FaceDetector] : (D) : Using GPU: %d ( %s ), arch= %d . %d\n",cuda_dev_id_, cuda_dev_prop_.name, cuda_dev_prop_.major, cuda_dev_prop_.minor);
 
 }
@@ -555,7 +555,7 @@ pcl::gpu::people::FaceDetector::NCVprocess(pcl::PointCloud<pcl::RGB>&           
                                            NCVVector<HaarStage64>               &h_haar_stages,
                                            INCVMemAllocator                     &gpu_allocator,
                                            INCVMemAllocator                     &cpu_allocator,
-                                           cudaDeviceProp                       &device_properties,
+                                           musaDeviceProp                       &device_properties,
                                            Ncv32u                               width,
                                            Ncv32u                               height,
                                            NcvBool                              bFilterRects,
@@ -591,7 +591,7 @@ pcl::gpu::people::FaceDetector::NCVprocess(pcl::PointCloud<pcl::RGB>&           
 
   ncv_return_status = h_src.copySolid(d_src, 0);
   PCL_ASSERT_NCVSTAT(ncv_return_status);
-  PCL_ASSERT_CUDA_RETURN(cudaStreamSynchronize(0), NCV_CUDA_ERROR);
+  PCL_ASSERT_CUDA_RETURN(musaStreamSynchronize(0), NCV_CUDA_ERROR);
 
   NCV_SKIP_COND_END
 
@@ -620,13 +620,13 @@ pcl::gpu::people::FaceDetector::NCVprocess(pcl::PointCloud<pcl::RGB>&           
                                                 0);
 
   PCL_ASSERT_NCVSTAT(ncv_return_status);
-  PCL_ASSERT_CUDA_RETURN(cudaStreamSynchronize(0), NCV_CUDA_ERROR);
+  PCL_ASSERT_CUDA_RETURN(musaStreamSynchronize(0), NCV_CUDA_ERROR);
 
   NCV_SKIP_COND_BEGIN
 
   ncv_return_status = d_src.copySolid(h_src, 0);
   PCL_ASSERT_NCVSTAT(ncv_return_status);
-  PCL_ASSERT_CUDA_RETURN(cudaStreamSynchronize(0), NCV_CUDA_ERROR);
+  PCL_ASSERT_CUDA_RETURN(musaStreamSynchronize(0), NCV_CUDA_ERROR);
 
   // Copy result back into output cloud
   for(int i=0; i<cloud_out.points.size(); i++)
@@ -720,8 +720,8 @@ void
 pcl::gpu::people::FaceDetector::setDeviceId( int id )
 {
   cuda_dev_id_ = id;
-  cudaSafeCall ( cudaSetDevice (cuda_dev_id_));
-  cudaSafeCall ( cudaGetDeviceProperties (&cuda_dev_prop_, cuda_dev_id_));
+  cudaSafeCall ( musaSetDevice (cuda_dev_id_));
+  cudaSafeCall ( musaGetDeviceProperties (&cuda_dev_prop_, cuda_dev_id_));
 }
 
 void

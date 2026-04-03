@@ -35,7 +35,7 @@
  */
 
 
-#if (defined(__GNUC__) && !defined(__CUDACC__) && (GTEST_GCC_VER_ >= 40000)) 
+#if (defined(__GNUC__) && !defined(__MUSACC__) && (GTEST_GCC_VER_ >= 40000)) 
     #define GTEST_USE_OWN_TR1_TUPLE 0
 #endif
 

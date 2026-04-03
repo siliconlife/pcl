@@ -39,7 +39,7 @@
 #define PCL_GPU_SURFACE_INTERNAL_H_
 
 #include <pcl/gpu/containers/device_array.h>
-#include <cuda_runtime.h>
+#include <musa_runtime.h>
 
 namespace pcl
 {

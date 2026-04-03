@@ -37,7 +37,7 @@
 #ifndef PCL_GPU_DEVICE_STATIC_CHECK_HPP_
 #define PCL_GPU_DEVICE_STATIC_CHECK_HPP_
 
-#if defined(__CUDACC__) 
+#if defined(__MUSACC__) 
     #define __PCL_GPU_HOST_DEVICE__ __host__ __device__ __forceinline__ 
 #else
     #define __PCL_GPU_HOST_DEVICE__

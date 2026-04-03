@@ -47,37 +47,37 @@ namespace pcl
     class TextureBinder
     {
     public:        
-      template<class T, enum cudaTextureReadMode readMode>
+      template<class T, enum musaTextureReadMode readMode>
       TextureBinder(const DeviceArray2D<T>& arr, const struct texture<T, 2, readMode>& tex) : texref(&tex)
       {
-        cudaChannelFormatDesc desc = cudaCreateChannelDesc<T>();  
-        cudaSafeCall( cudaBindTexture2D(0, tex, arr.ptr(), desc, arr.cols(), arr.rows(), arr.step()) );        
+        musaChannelFormatDesc desc = musaCreateChannelDesc<T>();  
+        cudaSafeCall( musaBindTexture2D(0, tex, arr.ptr(), desc, arr.cols(), arr.rows(), arr.step()) );        
       }
 
-      template<class T, enum cudaTextureReadMode readMode>
+      template<class T, enum musaTextureReadMode readMode>
       TextureBinder(const DeviceArray<T>& arr, const struct texture<T, 1, readMode> &tex) : texref(&tex)
       {
-        cudaChannelFormatDesc desc = cudaCreateChannelDesc<T>();  
-        cudaSafeCall( cudaBindTexture(0, tex, arr.ptr(), desc, arr.sizeBytes()) );
+        musaChannelFormatDesc desc = musaCreateChannelDesc<T>();  
+        cudaSafeCall( musaBindTexture(0, tex, arr.ptr(), desc, arr.sizeBytes()) );
       }
 
-      template<class T, enum cudaTextureReadMode readMode>
+      template<class T, enum musaTextureReadMode readMode>
       TextureBinder(const PtrStepSz<T>& arr, const struct texture<T, 2, readMode>& tex) : texref(&tex)
       {
-        cudaChannelFormatDesc desc = cudaCreateChannelDesc<T>();  
-        cudaSafeCall( cudaBindTexture2D(0, tex, arr.data, desc, arr.cols, arr.rows, arr.step) );        
+        musaChannelFormatDesc desc = musaCreateChannelDesc<T>();  
+        cudaSafeCall( musaBindTexture2D(0, tex, arr.data, desc, arr.cols, arr.rows, arr.step) );        
       }
 
-      template<class T, enum cudaTextureReadMode readMode>
+      template<class T, enum musaTextureReadMode readMode>
       TextureBinder(const PtrSz<T>& arr, const struct texture<T, 1, readMode> &tex) : texref(&tex)
       {
-        cudaChannelFormatDesc desc = cudaCreateChannelDesc<T>();  
-        cudaSafeCall( cudaBindTexture(0, tex, arr.data, desc, arr.size * arr.elemSize()) );
+        musaChannelFormatDesc desc = musaCreateChannelDesc<T>();  
+        cudaSafeCall( musaBindTexture(0, tex, arr.data, desc, arr.size * arr.elemSize()) );
       }
 
       ~TextureBinder()
       {
-        cudaSafeCall( cudaUnbindTexture(texref) );
+        cudaSafeCall( musaUnbindTexture(texref) );
       }
     private:
       const struct textureReference *texref;    
