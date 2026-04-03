@@ -73,7 +73,6 @@ namespace pcl
 }
 
 #if defined(MUSA_VERSION) && MUSA_VERSION == 4000
-    //workaround of bug in Thrust
     typedef thrust::counting_iterator<int, thrust::use_default, thrust::use_default, thrust::use_default> It;
     template<> struct thrust::iterator_difference<It> { typedef int type; };
 #endif
@@ -96,6 +95,6 @@ void pcl::device::bruteForceRadiusSearch(const OctreeImpl::PointCloud& cloud, co
     
     //main bottle neck is a kernel call overhead/allocs
     //work time for 871k points ~0.8ms
-    int count = (int)(thrust::copy_if(first, last, first, res_ptr, cond) - res_ptr);
+    int count = (int)(thrust::copy_if(first, last, cloud_ptr, res_ptr, cond) - res_ptr);
     result = DeviceArray<int>(buffer.ptr(), count);
 }

@@ -60,6 +60,7 @@ cmake "$PCL_DIR" \
     -DBUILD_GPU=ON \
     -DBUILD_CUDA=OFF \
     -DBUILD_gpu_octree=OFF \
+    -DBUILD_gpu_features=OFF \
     -DBUILD_filters=OFF \
     -DBUILD_surface=OFF \
     -DBUILD_tools=OFF \
