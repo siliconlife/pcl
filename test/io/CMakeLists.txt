@@ -12,7 +12,7 @@ PCL_ADD_TEST(compression_range_coder test_range_coder
 
 PCL_ADD_TEST (io_grabbers test_grabbers
               FILES test_grabbers.cpp
-              LINK_WITH pcl_gtest pcl_io
+              LINK_WITH pcl_gtest pcl_io lz4
               ARGUMENTS "${PCL_SOURCE_DIR}/test/grabber_sequences")
 # Uses VTK readers to verify            
 if (VTK_FOUND AND NOT ANDROID)

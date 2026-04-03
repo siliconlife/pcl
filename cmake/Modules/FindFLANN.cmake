@@ -50,6 +50,16 @@ endif(NOT FLANN_LIBRARY_DEBUG)
 set(FLANN_INCLUDE_DIRS ${FLANN_INCLUDE_DIR})
 set(FLANN_LIBRARIES optimized ${FLANN_LIBRARY} debug ${FLANN_LIBRARY_DEBUG})
 
+# If pkg-config found FLANN with lz4 dependency, include it
+if(PC_FLANN_FOUND AND PC_FLANN_LIBRARIES)
+  # Filter out flann libraries as they're already included above
+  foreach(lib ${PC_FLANN_LIBRARIES})
+    if(NOT lib MATCHES "flann")
+      list(APPEND FLANN_LIBRARIES ${lib})
+    endif()
+  endforeach()
+endif()
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(FLANN DEFAULT_MSG FLANN_LIBRARY FLANN_INCLUDE_DIR)
 
