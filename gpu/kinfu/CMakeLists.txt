@@ -1,7 +1,7 @@
 set(SUBSYS_NAME gpu_kinfu)
 set(SUBSYS_PATH gpu/kinfu)
 set(SUBSYS_DESC "Kinect Fusion implementation (MUSA)")
-set(SUBSYS_DEPS common io gpu_containers geometry search visualization)
+set(SUBSYS_DEPS common io gpu_containers geometry search)
 
 set(build FALSE)
 
@@ -19,8 +19,6 @@ PCL_SET_SUBSYS_INCLUDE_DIR("${SUBSYS_NAME}" "${SUBSYS_PATH}")
 mark_as_advanced("BUILD_${SUBSYS_NAME}")
 
 if (build)
-    REMOVE_VTK_DEFINITIONS()
-    
     set(MUSA_ARCH_FLAG "--offload-arch=mp_22")
     set(MUSA_LIB_DIR "/usr/local/musa/lib")
     
@@ -44,11 +42,7 @@ if (build)
         add_definitions(-DPCLAPI_EXPORTS)
     endif()
 
-    set_source_files_properties(${cuda} PROPERTIES 
-        COMPILE_FLAGS "-mtgpu ${MUSA_ARCH_FLAG}"
-        LANGUAGE CXX)
-
-    PCL_ADD_LIBRARY("${LIB_NAME}" "${SUBSYS_NAME}" ${srcs} ${incs} ${cuda})
+    PCL_CUDA_ADD_LIBRARY("${LIB_NAME}" "${SUBSYS_NAME}" ${srcs} ${incs} ${cuda})
     target_link_libraries("${LIB_NAME}" 
         pcl_gpu_containers 
         ${MUSA_LIB_DIR}/libmusart.so
@@ -60,10 +54,8 @@ if (build)
 
     PCL_ADD_INCLUDES("${SUBSYS_NAME}" "${SUBSYS_PATH}" ${incs})
 
-    if (BUILD_visualization)
-        add_subdirectory(test)
-        add_subdirectory(tools)
-    endif()
+    add_subdirectory(test)
+    add_subdirectory(tools)
 endif()
 
 

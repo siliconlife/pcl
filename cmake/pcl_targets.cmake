@@ -284,6 +284,8 @@ macro(PCL_CUDA_ADD_LIBRARY _name _component)
             -I${PROJECT_SOURCE_DIR}/gpu/utils/include
             -I${PROJECT_SOURCE_DIR}/gpu/octree/include
             -I${PROJECT_SOURCE_DIR}/gpu/octree/src
+            -I${PROJECT_SOURCE_DIR}/gpu/surface/src
+            -I${PROJECT_SOURCE_DIR}/gpu/tracking/src
             -isystem /usr/include/eigen3
         )
         

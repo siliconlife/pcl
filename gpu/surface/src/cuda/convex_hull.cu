@@ -35,7 +35,7 @@
  *
  */
 
-#include "internal.h"
+#include "../internal.h"
 #include "device.h"
 #include <limits>
 
