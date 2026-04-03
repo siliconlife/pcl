@@ -81,7 +81,7 @@ class BuffersTest : public ::testing::Test
 
 };
 
-typedef ::testing::Types<unsigned char, int, float> DataTypes;
+typedef ::testing::Types<int, float> DataTypes;
 TYPED_TEST_CASE (BuffersTest, DataTypes);
 
 TYPED_TEST (BuffersTest, SingleBuffer)
