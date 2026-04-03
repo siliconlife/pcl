@@ -40,6 +40,11 @@ if(build)
     add_subdirectory(octree)
     add_subdirectory(search)
     add_subdirectory(sample_consensus)
+    
+    # Add GPU tests if MUSA/CUDA is enabled
+    if(WITH_MUSA OR WITH_CUDA)
+        add_subdirectory(gpu)
+    endif()
 
     PCL_ADD_TEST(search test_search
                  FILES test_search.cpp
