@@ -108,6 +108,7 @@ TEST (PCL, PCDGrabber)
 
 }
 
+#ifdef PCL_BUILT_WITH_VTK
 TEST (PCL, ImageGrabberTIFF)
 {
   // Get all clouds from the grabber
@@ -188,6 +189,7 @@ TEST (PCL, ImageGrabberTIFF)
     }
   }
 }
+#endif
 
 TEST (PCL, ImageGrabberPCLZF)
 {
@@ -360,6 +362,7 @@ TEST (PCL, ImageGrabberTimestamps)
   EXPECT_EQ (timediff, 254471); // 20121214T142256.068683 - 20121214T142255.814212 
 }
 
+#ifdef PCL_BUILT_WITH_VTK
 TEST (PCL, ImageGrabberSetIntrinsicsTIFF)
 {
   pcl::ImageGrabber<PointT> grabber (tiff_dir_, 0, false, false);
@@ -435,6 +438,7 @@ TEST (PCL, ImageGrabberSetIntrinsicsTIFF)
   }
 
 }
+#endif
 
 TEST (PCL, ImageGrabberSetIntrinsicsPCLZF)
 {
