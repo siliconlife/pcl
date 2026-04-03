@@ -48,37 +48,36 @@ echo ""
 
 # Step 1: Install and Build GTest
 echo "=== Step 1: Install and Build GTest ==="
+
+if [ ! -f /usr/lib/libgtest.so ]; then
+    echo "  Installing libgtest-dev..."
+    sudo apt-get update -qq 2>/dev/null || true
+    sudo apt-get install -y -qq libgtest-dev cmake 2>/dev/null || true
     
-    if [ ! -f /usr/lib/libgtest.so ]; then
-        echo "  Installing libgtest-dev..."
-        sudo apt-get update -qq 2>/dev/null || true
-        sudo apt-get install -y -qq libgtest-dev cmake 2>/dev/null || true
-        
-        GTEST_SRC=""
-        if [ -d "/usr/src/gtest" ]; then
-            GTEST_SRC="/usr/src/gtest"
-        elif [ -d "/usr/src/googletest/googletest" ]; then
-            GTEST_SRC="/usr/src/googletest/googletest"
-        fi
-        
-        if [ -n "$GTEST_SRC" ] && [ -f "$GTEST_SRC/CMakeLists.txt" ]; then
-            echo "  Building GTest shared library..."
-            cd "$GTEST_SRC"
-            sudo cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .
-            sudo make -j$(nproc)
-            sudo cp lib/libgtest.so lib/libgtest_main.so /usr/lib/ 2>/dev/null || true
-            sudo ldconfig
-            echo "  GTest shared library built"
-        fi
+    GTEST_SRC=""
+    if [ -d "/usr/src/gtest" ]; then
+        GTEST_SRC="/usr/src/gtest"
+    elif [ -d "/usr/src/googletest/googletest" ]; then
+        GTEST_SRC="/usr/src/googletest/googletest"
     fi
     
-    if [ -f /usr/lib/libgtest.so ] || [ -f /usr/lib/libgtest.a ]; then
-        echo "  GTest ready: $(ls /usr/lib/libgtest* 2>/dev/null | tr '\n' ' ')"
-    else
-        echo "  Warning: GTest not found"
+    if [ -n "$GTEST_SRC" ] && [ -f "$GTEST_SRC/CMakeLists.txt" ]; then
+        echo "  Building GTest shared library..."
+        cd "$GTEST_SRC"
+        sudo cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=/usr .
+        sudo make -j$(nproc)
+        sudo cp lib/libgtest.so lib/libgtest_main.so /usr/lib/ 2>/dev/null || true
+        sudo ldconfig
+        echo "  GTest shared library built"
     fi
-    echo ""
 fi
+
+if [ -f /usr/lib/libgtest.so ] || [ -f /usr/lib/libgtest.a ]; then
+    echo "  GTest ready: $(ls /usr/lib/libgtest* 2>/dev/null | tr '\n' ' ')"
+else
+    echo "  Warning: GTest not found"
+fi
+echo ""
 
 # Step 2: Prepare build directory
 echo "=== Step 2: Prepare build directory ==="
@@ -204,51 +203,50 @@ ls -1 lib/libpcl_gpu*.so 2>/dev/null || echo "  None found"
 # Step 6: Run tests
 echo ""
 echo "=== Step 6: Run tests ==="
-    cd "$BUILD_DIR"
-    
-    export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
-    
-    echo "Running common tests..."
-    cd "$BUILD_DIR/test/common"
-    for test in test_common test_centroid test_eigen test_gaussian test_intensity; do
-        if [ -x "$test" ]; then
-            echo "  Running $test..."
-            ./$test --gtest_color=yes 2>&1 | tail -5 || true
-        fi
-    done
-    
-    echo "Running geometry tests..."
-    cd "$BUILD_DIR/test/geometry"
-    for test in test_mesh test_mesh_io test_mesh_data; do
-        if [ -x "$test" ]; then
-            echo "  Running $test..."
-            ./$test --gtest_color=yes 2>&1 | tail -5 || true
-        fi
-    done
-    
-    echo "Running io tests..."
-    cd "$BUILD_DIR/test/io"
-    for test in test_io; do
-        if [ -x "$test" ]; then
-            echo "  Running $test..."
-            ./$test --gtest_color=yes 2>&1 | tail -5 || true
-        fi
-    done
-    
-    echo "Running octree tests..."
-    cd "$BUILD_DIR/test/octree"
-    for test in test_octree; do
-        if [ -x "$test" ]; then
-            echo "  Running $test..."
-            ./$test --gtest_color=yes 2>&1 | tail -5 || true
-        fi
-    done
-    
-    echo ""
-    echo "=== Test Summary ==="
-    TEST_COUNT=$(find "$BUILD_DIR/test" -type f -executable -name "test_*" 2>/dev/null | wc -l)
-    echo "Test binaries built: $TEST_COUNT"
-fi
+cd "$BUILD_DIR"
+
+export LD_LIBRARY_PATH="$BUILD_DIR/lib:$LD_LIBRARY_PATH"
+
+echo "Running common tests..."
+cd "$BUILD_DIR/test/common"
+for test in test_common test_centroid test_eigen test_gaussian test_intensity; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo "Running geometry tests..."
+cd "$BUILD_DIR/test/geometry"
+for test in test_mesh test_mesh_io test_mesh_data; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo "Running io tests..."
+cd "$BUILD_DIR/test/io"
+for test in test_io; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo "Running octree tests..."
+cd "$BUILD_DIR/test/octree"
+for test in test_octree; do
+    if [ -x "$test" ]; then
+        echo "  Running $test..."
+        ./$test --gtest_color=yes 2>&1 | tail -5 || true
+    fi
+done
+
+echo ""
+echo "=== Test Summary ==="
+TEST_COUNT=$(find "$BUILD_DIR/test" -type f -executable -name "test_*" 2>/dev/null | wc -l)
+echo "Test binaries built: $TEST_COUNT"
 
 echo ""
 echo "============================================"
