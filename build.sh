@@ -144,8 +144,8 @@ case "$BUILD_MODE" in
             -DBUILD_gpu_octree=ON
             -DBUILD_gpu_features=ON
             -DBUILD_gpu_segmentation=ON
-            -DBUILD_gpu_surface=OFF
-            -DBUILD_gpu_tracking=OFF
+            -DBUILD_gpu_surface=ON
+            -DBUILD_gpu_tracking=ON
             -DBUILD_gpu_kinfu=OFF
             -DBUILD_gpu_kinfu_large_scale=OFF
             -DBUILD_gpu_people=OFF
@@ -163,8 +163,8 @@ case "$BUILD_MODE" in
             -DBUILD_gpu_octree=ON
             -DBUILD_gpu_features=ON
             -DBUILD_gpu_segmentation=ON
-            -DBUILD_gpu_surface=OFF
-            -DBUILD_gpu_tracking=OFF
+            -DBUILD_gpu_surface=ON
+            -DBUILD_gpu_tracking=ON
             -DBUILD_gpu_kinfu=OFF
             -DBUILD_gpu_kinfu_large_scale=OFF
             -DBUILD_gpu_people=OFF
@@ -196,12 +196,12 @@ case "$BUILD_MODE" in
         ;;
     gpu)
         echo "Building GPU modules..."
-        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_filters pcl_surface 2>&1 | tail -50
+        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_gpu_surface pcl_gpu_tracking pcl_filters pcl_surface 2>&1 | tail -50
         ;;
     all)
         echo "Building all modules (CPU + GPU)..."
         # First build GPU modules to ensure they're available
-        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_filters pcl_surface 2>&1 | tail -30
+        make -j$(nproc) pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_segmentation pcl_gpu_surface pcl_gpu_tracking pcl_filters pcl_surface 2>&1 | tail -30
         # Then build everything else
         make -j$(nproc) 2>&1 | tail -40
         ;;
