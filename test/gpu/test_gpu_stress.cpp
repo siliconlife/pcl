@@ -31,7 +31,7 @@ public:
         return std::chrono::duration<double, std::milli>(end_time - start_time).count();
     }
     double elapsed_seconds() {
-        return std::chrono::duration<double>(end_time - start_time).count();
+        return std::chrono::duration<double>(std::chrono::high_resolution_clock::now() - start_time).count();
     }
 private:
     std::chrono::time_point<std::chrono::high_resolution_clock> start_time, end_time;
