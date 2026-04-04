@@ -61,14 +61,16 @@ pcl::gpu::Octree::Octree() : cloud_(0), impl(0)
     musaDeviceProp prop;
     cudaSafeCall( musaGetDeviceProperties( &prop, device) );
 
-    if (prop.major < 2)
-        pcl::gpu::error("This code requires devices with compute capability >= 2.0", __FILE__, __LINE__);
+    // MUSA: Removed compute capability check for MUSA GPU compatibility
+    // if (prop.major < 2)
+    //     pcl::gpu::error("This code requires devices with compute capability >= 2.0", __FILE__, __LINE__);
 
     int bin, ptx;
     OctreeImpl::get_gpu_arch_compiled_for(bin, ptx);
 
-    if (bin < 20 && ptx < 20)
-        pcl::gpu::error("This must be compiled for compute capability >= 2.0", __FILE__, __LINE__);    
+    // MUSA: Removed compute capability check for MUSA GPU compatibility  
+    // if (bin < 20 && ptx < 20)
+    //     pcl::gpu::error("This must be compiled for compute capability >= 2.0", __FILE__, __LINE__);    
 
     impl = new OctreeImpl();        
     built_ = false;

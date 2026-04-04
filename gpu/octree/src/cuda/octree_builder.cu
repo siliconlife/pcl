@@ -396,7 +396,8 @@ void pcl::device::OctreeImpl::build()
     ssb.points_number = (int)codes.size();
     //printFuncAttrib(singleStepKernel);
 
-    cudaSafeCall( musaFuncSetCacheConfig(singleStepKernel, musaFuncCachePreferL1) );
+    // MUSA: musaFuncSetCacheConfig may not be supported, commenting out
+    // cudaSafeCall( musaFuncSetCacheConfig(singleStepKernel, musaFuncCachePreferL1) );
 
     singleStepKernel<<<GRID_SIZE, CTA_SIZE>>>(ssb);
     cudaSafeCall( musaGetLastError() );
