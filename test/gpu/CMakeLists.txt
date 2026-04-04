@@ -26,6 +26,6 @@ if(BUILD_GPU)
         PCL_ADD_TEST(gpu_stress_test test_gpu_stress
                      FILES test_gpu_stress.cpp
                      LINK_WITH pcl_gtest pcl_common pcl_gpu_containers pcl_gpu_octree
-                     ARGUMENTS "${PCL_SOURCE_DIR}")
+                     ARGUMENTS "${PCL_SOURCE_DIR}" "5")
     endif()
 endif()
