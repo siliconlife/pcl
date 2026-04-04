@@ -41,8 +41,8 @@ if(build)
     add_subdirectory(search)
     add_subdirectory(sample_consensus)
     
-    # Add GPU tests if MUSA/CUDA is enabled
-    if(WITH_MUSA OR WITH_CUDA)
+    # Add GPU tests if GPU build is enabled
+    if(BUILD_GPU)
         add_subdirectory(gpu)
     endif()
 

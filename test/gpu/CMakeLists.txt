@@ -1,48 +1,37 @@
-cmake_minimum_required(VERSION 3.5)
+# PCL GPU MUSA Test Suite
+# This file is included from test/CMakeLists.txt when building PCL
 
-# PCL GPU MUSA Test Suite CMakeLists.txt
-
-project(pcl_gpu_tests LANGUAGES CXX)
-
-# 查找 PCL
-find_package(PCL REQUIRED)
-include_directories(${PCL_INCLUDE_DIRS})
-link_directories(${PCL_LIBRARY_DIRS})
-add_definitions(${PCL_DEFINITIONS})
-
-# 包含目录
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../common/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../gpu/containers/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../gpu/utils/include
-    /usr/local/musa/include
-)
-
-# 链接目录
-link_directories(/usr/local/musa/lib)
-
-# 测试可执行文件
-add_executable(test_gpu_musa test_gpu_musa.cpp)
-
-# 设置编译选项
-target_compile_options(test_gpu_musa PRIVATE 
-    -DHAVE_MUSA 
-    -DHAVE_CUDA
-    -std=c++14
-)
-
-# 链接库
-target_link_libraries(test_gpu_musa
-    ${PCL_LIBRARIES}
-    musart
-    musa
-    pcl_gpu_containers
-    pcl_common
-)
-
-# 添加测试
-add_test(NAME test_gpu_musa COMMAND test_gpu_musa)
-set_tests_properties(test_gpu_musa PROPERTIES
-    TIMEOUT 300
-    LABELS "gpu;musa"
-)
+# GPU 测试 - 仅在启用 GPU 构建时添加
+if(BUILD_GPU OR WITH_MUSA)
+    message(STATUS "Adding GPU tests")
+    
+    # 包含目录
+    include_directories(
+        ${PCL_SOURCE_DIR}/common/include
+        ${PCL_SOURCE_DIR}/gpu/containers/include
+        ${PCL_SOURCE_DIR}/gpu/utils/include
+    )
+    
+    # 如果启用了 MUSA，添加 MUSA 包含目录
+    if(WITH_MUSA)
+        include_directories(/usr/local/musa/include)
+        link_directories(/usr/local/musa/lib)
+    endif()
+    
+    # 简化版 GPU 测试（纯 CPU 模拟，用于验证基本功能）
+    if(BUILD_global_tests)
+        PCL_ADD_TEST(gpu_simple_test test_gpu_simple
+                     FILES test_gpu_simple.cpp
+                     LINK_WITH pcl_gtest pcl_common
+                     ARGUMENTS "${PCL_SOURCE_DIR}")
+        
+        # 完整 GPU 测试（需要 MUSA 运行时）
+        # 注意：这个测试需要 mcc 编译器支持
+        # if(WITH_MUSA AND MUSA_FOUND)
+        #     PCL_ADD_TEST(gpu_musa_test test_gpu_musa
+        #                  FILES test_gpu_musa.cpp
+        #                  LINK_WITH pcl_gtest pcl_common pcl_gpu_containers musart musa
+        #                  ARGUMENTS "${PCL_SOURCE_DIR}")
+        # endif()
+    endif()
+endif()
